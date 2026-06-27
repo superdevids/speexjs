@@ -1,0 +1,59 @@
+{
+  "name": "@jscore/dep-exray",
+  "version": "0.1.0",
+  "description": "Dependency health scanner — detect bloat, security issues, and suggest replacements",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "dep-exray": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "picocolors": "^1.1.0"
+  },
+  "keywords": [
+    "dependency-scanner",
+    "npm-audit",
+    "bloat-detection",
+    "security",
+    "typescript"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/jscore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/jscore/issues"
+  },
+  "homepage": "https://github.com/yourusername/jscore#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

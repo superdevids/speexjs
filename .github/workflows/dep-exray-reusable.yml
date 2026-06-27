@@ -1,0 +1,32 @@
+name: Dependency Scan (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: false
+        type: string
+        default: '.'
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run dep-exray
+        id: scan
+        uses: ./.github/actions/dep-exray-scan
+        with:
+          path: ${{ inputs.path }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Check for issues
+        if: steps.scan.outputs.has-issues == 'true'
+        run: |
+          echo "⚠️ dep-exray found issues in the project!"
+          echo "${{ steps.scan.outputs.report }}"
+          exit 1

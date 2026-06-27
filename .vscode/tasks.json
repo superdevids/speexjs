@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "compile",
+      "path": "extensions/vscode-dep-exray",
+      "problemMatcher": "$tsc-watch",
+      "label": "npm: compile (vscode-dep-exray)",
+      "detail": "compile extension"
+    }
+  ]
+}

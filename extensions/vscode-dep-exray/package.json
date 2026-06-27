@@ -1,0 +1,100 @@
+{
+  "name": "vscode-dep-exray",
+  "displayName": "dep-exray",
+  "description": "Dependency health scanner — detect bloat, security issues, and suggest replacements",
+  "version": "0.1.0",
+  "publisher": "jscore",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/jscore"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "dependencies",
+    "npm",
+    "package.json",
+    "bloat",
+    "security",
+    "scanner"
+  ],
+  "activationEvents": [
+    "onLanguage:json",
+    "onCommand:dep-exray.scan"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dep-exray.scan",
+        "title": "dep-exray: Scan Dependencies"
+      },
+      {
+        "command": "dep-exray.scanWorkspace",
+        "title": "dep-exray: Scan Workspace Dependencies"
+      },
+      {
+        "command": "dep-exray.applyReplacement",
+        "title": "dep-exray: Apply Replacement",
+        "icon": "$(lightbulb)"
+      }
+    ],
+    "configuration": {
+      "title": "dep-exray",
+      "properties": {
+        "dep-exray.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable dep-exray diagnostics"
+        },
+        "dep-exray.showReplacementHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show replacement suggestions as hints"
+        },
+        "dep-exray.scanOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-scan when opening package.json"
+        }
+      }
+    },
+    "menus": {
+      "editor/title/context": [
+        {
+          "when": "resourceFilename == 'package.json'",
+          "command": "dep-exray.scan",
+          "group": "navigation"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "depExrayResults",
+          "name": "dep-exray Results"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "tsc --noEmit",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.7.0"
+  }
+}

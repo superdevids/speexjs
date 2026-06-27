@@ -1,0 +1,48 @@
+name: 'dep-exray Scan'
+description: 'Scan JavaScript/TypeScript project dependencies for bloat, security issues, and replacement suggestions'
+inputs:
+  path:
+    description: 'Project path to scan'
+    required: false
+    default: '.'
+  json:
+    description: 'Output as JSON'
+    required: false
+    default: 'false'
+  github-token:
+    description: 'GitHub token for posting PR comments'
+    required: true
+outputs:
+  report:
+    description: 'Scan report text'
+    value: ${{ steps.scan.outputs.report }}
+  has-issues:
+    description: 'Whether issues were found (true/false)'
+    value: ${{ steps.scan.outputs.has-issues }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install dep-exray
+      shell: bash
+      run: npm install -g @jscore/dep-exray
+
+    - name: Run dep-exray scan
+      id: scan
+      shell: bash
+      run: |
+        REPORT=$(dep-exray ${{ inputs.path }} ${{ inputs.json == 'true' && '--json' || '' }})
+        echo "report<<EOF" >> $GITHUB_OUTPUT
+        echo "$REPORT" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+        if echo "$REPORT" | grep -q "HIGH IMPACT\|SECURITY"; then
+          echo "has-issues=true" >> $GITHUB_OUTPUT
+        else
+          echo "has-issues=false" >> $GITHUB_OUTPUT
+        fi

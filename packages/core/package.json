@@ -1,0 +1,103 @@
+{
+  "name": "@jscore/core",
+  "version": "0.1.0",
+  "description": "Zero-dependency JavaScript standard library — core, math, date, collection, string, async, io, & type utilities",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./core": {
+      "import": "./dist/core/index.js",
+      "types": "./dist/core/index.d.ts"
+    },
+    "./math": {
+      "import": "./dist/math/index.js",
+      "types": "./dist/math/index.d.ts"
+    },
+    "./date": {
+      "import": "./dist/date/index.js",
+      "types": "./dist/date/index.d.ts"
+    },
+    "./collection": {
+      "import": "./dist/collection/index.js",
+      "types": "./dist/collection/index.d.ts"
+    },
+    "./string": {
+      "import": "./dist/string/index.js",
+      "types": "./dist/string/index.d.ts"
+    },
+    "./async": {
+      "import": "./dist/async/index.js",
+      "types": "./dist/async/index.d.ts"
+    },
+    "./io": {
+      "import": "./dist/io/index.js",
+      "types": "./dist/io/index.d.ts"
+    },
+    "./type": {
+      "import": "./dist/type/index.js",
+      "types": "./dist/type/index.d.ts"
+    },
+    "./crypto": {
+      "import": "./dist/crypto/index.js",
+      "types": "./dist/crypto/index.d.ts"
+    },
+    "./path": {
+      "import": "./dist/path/index.js",
+      "types": "./dist/path/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "size": "size-limit",
+    "bench": "vitest bench"
+  },
+  "devDependencies": {
+    "@size-limit/file": "^11.0.0",
+    "@types/node": "^26.0.1",
+    "size-limit": "^11.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "5 KB"
+    }
+  ],
+  "keywords": [
+    "utilities",
+    "standard-library",
+    "typescript",
+    "zero-dependency"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/jscore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/jscore/issues"
+  },
+  "homepage": "https://github.com/yourusername/jscore#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
