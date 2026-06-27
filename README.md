@@ -3,8 +3,8 @@
 > **JavaScript ecosystem tools — Standard Library + Dependency Scanner**
 
 ```
-@jscore/core       → Zero-dependency JS standard library (10 modules, 100+ functions)
-@jscore/dep-exray   → Dependency health scanner & replacement engine
+jscore-core       → Zero-dependency JS standard library (10 modules, 100+ functions) — **[npm](https://www.npmjs.com/package/jscore-core)**
+jscore-dep-exray   → Dependency health scanner & replacement engine — **[npm](https://www.npmjs.com/package/jscore-dep-exray)**
 vscode-dep-exray    → VS Code extension for inline diagnostics
 ```
 
@@ -12,7 +12,7 @@ vscode-dep-exray    → VS Code extension for inline diagnostics
 
 ## 📦 Packages
 
-### `@jscore/core` — Standard Library for JavaScript
+### `jscore-core` — Standard Library for JavaScript
 
 **Kenapa harus pake?**
 - **Zero dependency** — gak perlu install 20 package cuma buat utility dasar.
@@ -21,9 +21,9 @@ vscode-dep-exray    → VS Code extension for inline diagnostics
 - **Modern** — ESM, target ES2022, optimized buat Node 18+ dan modern browser.
 
 ```bash
-npm install @jscore/core
+npm install jscore-core
 # atau
-pnpm add @jscore/core
+pnpm add jscore-core
 ```
 
 #### Modules
@@ -44,13 +44,13 @@ pnpm add @jscore/core
 #### Contoh
 
 ```typescript
-import { deepClone, debounce, retry } from '@jscore/core'
-import { formatDate, addDays } from '@jscore/core/date'
-import { groupBy, shuffle } from '@jscore/core/collection'
-import { sleep, parallelMap } from '@jscore/core/async'
-import { isNil, assertDefined } from '@jscore/core/type'
-import { generateToken, constantTimeEqual } from '@jscore/core/crypto'
-import { join, basename } from '@jscore/core/path'
+import { deepClone, debounce, retry } from 'jscore-core'
+import { formatDate, addDays } from 'jscore-core/date'
+import { groupBy, shuffle } from 'jscore-core/collection'
+import { sleep, parallelMap } from 'jscore-core/async'
+import { isNil, assertDefined } from 'jscore-core/type'
+import { generateToken, constantTimeEqual } from 'jscore-core/crypto'
+import { join, basename } from 'jscore-core/path'
 
 // Deep clone dengan cyclic reference support
 const cloned = deepClone({ a: 1, b: { c: new Date() } })
@@ -71,12 +71,12 @@ console.log(constantTimeEqual(apiKey, apiKey)) // true
 
 ---
 
-### `@jscore/dep-exray` — Dependency Health Scanner
+### `jscore-dep-exray` — Dependency Health Scanner
 
 **Scan project lo buat nemuin dependency yang gak kepake, bloated, atau punya CVE.**
 
 ```bash
-npx @jscore/dep-exray .
+npx jscore-dep-exray .
 # atau setelah global install
 dep-exray /path/to/project
 dep-exray /path/to/project --json
@@ -84,7 +84,7 @@ dep-exray /path/to/project --json
 
 #### Features
 
-- ✅ **Deteksi replacement** — lodash → `@jscore/core`, moment → `@jscore/core/date`, uuid → native `crypto.randomUUID()`
+- ✅ **Deteksi replacement** — lodash → `jscore-core`, moment → `jscore-core/date`, uuid → native `crypto.randomUUID()`
 - ✅ **Ukuran dependency** — estimasi size dalam MB/KB
 - ✅ **Security check** — CVE detection dari known database
 - ✅ **Auto-PR ready** — replacement dengan confidence tinggi bisa auto-PR
@@ -103,9 +103,9 @@ dep-exray /path/to/project --json
 ├──────────────────────────────────────────────────────────┤
 │ 🟢 HIGH IMPACT REPLACEMENTS (3)                            │
 ├──────────────────────────────────────────────────────────┤
-│ ❌ lodash (4.2MB) → @jscore/core (~5KB)                    │
+│ ❌ lodash (4.2MB) → jscore-core (~5KB)                    │
 │    └─ [Auto-PR ready] ✓ 100% behavior match               │
-│ ❌ moment (2.5MB) → @jscore/core/date (<1KB)               │
+│ ❌ moment (2.5MB) → jscore-core/date (<1KB)               │
 │    └─ [Auto-PR ready] ✓ 98% behavior match                │
 │ ❌ uuid (30KB) → crypto.randomUUID() (0KB)                 │
 │    └─ [Auto-PR ready] ✓ 100% native replacement           │
@@ -215,25 +215,25 @@ pnpm ext:compile
 
 | Package | Test Files | Tests |
 |---------|-----------|-------|
-| `@jscore/core` | 10 | 392 |
-| `@jscore/dep-exray` | 4 | 36 |
+| `jscore-core` | 10 | 392 |
+| `jscore-dep-exray` | 4 | 36 |
 | **Total** | **14** | **428** |
 
 ## 📊 Bundle Size
 
 | Import | Size |
 |--------|------|
-| `@jscore/core` (all 10 modul) | ~24 KB |
-| `@jscore/core/core` | ~6 KB |
-| `@jscore/core/date` | ~8 KB |
-| `@jscore/core/math` | ~3 KB |
-| `@jscore/core/async` | ~2 KB |
-| `@jscore/core/collection` | ~3 KB |
-| `@jscore/core/string` | ~4 KB |
-| `@jscore/core/io` | ~3 KB |
-| `@jscore/core/type` | ~3 KB |
-| `@jscore/core/crypto` | ~4 KB |
-| `@jscore/core/path` | ~3 KB |
+| `jscore-core` (all 10 modul) | ~24 KB |
+| `jscore-core/core` | ~6 KB |
+| `jscore-core/date` | ~8 KB |
+| `jscore-core/math` | ~3 KB |
+| `jscore-core/async` | ~2 KB |
+| `jscore-core/collection` | ~3 KB |
+| `jscore-core/string` | ~4 KB |
+| `jscore-core/io` | ~3 KB |
+| `jscore-core/type` | ~3 KB |
+| `jscore-core/crypto` | ~4 KB |
+| `jscore-core/path` | ~3 KB |
 
 ## 📁 Project Structure
 
@@ -249,7 +249,7 @@ jscore/
 │       ├── dep-exray-reusable.yml
 │       └── dep-exray-scheduled.yml  # Weekly scan
 ├── packages/
-│   ├── core/                 # @jscore/core — Standard Library
+│   ├── core/                 # jscore-core — Standard Library
 │   │   ├── src/
 │   │   │   ├── core/        # deepClone, debounce, retry, dll
 │   │   │   ├── math/        # add, sub, clamp, dll
@@ -262,7 +262,7 @@ jscore/
 │   │   │   ├── crypto/      # hash, generateToken, base64, dll
 │   │   │   └── path/        # join, resolve, basename, dll
 │   │   └── tests/           # 392 tests
-│   └── dep-exray/           # @jscore/dep-exray
+│   └── dep-exray/           # jscore-dep-exray
 │       ├── src/
 │       │   ├── cli.ts       # Commander.js CLI
 │       │   ├── scanner/     # Scanner engine

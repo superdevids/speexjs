@@ -69,7 +69,7 @@ describe('scanProject', () => {
     const lodashReplacement = result.highImpactReplacements.find(r => r.packageName === 'lodash')
     expect(lodashReplacement).toBeTruthy()
     expect(lodashReplacement!.confidence).toBe('high')
-    expect(lodashReplacement!.replacement).toContain('@jscore/core')
+    expect(lodashReplacement!.replacement).toContain('jscore-core')
   })
 
   it('should detect security issues for packages with known CVEs', async () => {

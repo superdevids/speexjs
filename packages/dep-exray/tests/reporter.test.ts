@@ -11,8 +11,8 @@ function makeMockResult(overrides: Partial<ScanResult> = {}): ScanResult {
     highImpactReplacements: [
       {
         packageName: 'lodash',
-        reason: 'Most lodash functions have direct replacements in @jscore/core',
-        replacement: '@jscore/core',
+        reason: 'Most lodash functions have direct replacements in jscore-core',
+        replacement: 'jscore-core',
         estimatedSizeReduction: '4.2 MB → 5 KB',
         confidence: 'high',
         autoPrReady: true,
@@ -22,7 +22,7 @@ function makeMockResult(overrides: Partial<ScanResult> = {}): ScanResult {
       {
         packageName: 'axios',
         reason: 'Native fetch covers most use cases',
-        replacement: 'native fetch + @jscore/core/async/retry',
+        replacement: 'native fetch + jscore-core/async/retry',
         estimatedSizeReduction: '1.6 MB → 5 KB',
         confidence: 'medium',
         autoPrReady: false,
@@ -64,7 +64,7 @@ describe('generateReport', () => {
     const result = makeMockResult()
     const output = generateReport(result)
     expect(output).toContain('lodash')
-    expect(output).toContain('@jscore/core')
+    expect(output).toContain('jscore-core')
     expect(output).toContain('HIGH IMPACT')
   })
 

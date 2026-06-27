@@ -1,5 +1,5 @@
 {
-  "name": "@jscore/core",
+  "name": "jscore-core",
   "version": "0.1.0",
   "description": "Zero-dependency JavaScript standard library — core, math, date, collection, string, async, io, & type utilities",
   "type": "module",
