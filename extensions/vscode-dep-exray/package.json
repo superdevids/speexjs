@@ -3,11 +3,11 @@
   "displayName": "dep-exray",
   "description": "Dependency health scanner — detect bloat, security issues, and suggest replacements",
   "version": "0.1.0",
-  "publisher": "jscore",
+  "publisher": "superjs",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/jscore"
+    "url": "https://github.com/superdevids/superjs"
   },
   "engines": {
     "vscode": "^1.85.0"

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { generateReport } from '../src/reporter/index.js'
-import type { ScanResult } from '../src/types.js'
+import { generateReport } from '../src/dep-exray/reporter/index.js'
+import type { ScanResult } from '../src/dep-exray/types.js'
 
 function makeMockResult(overrides: Partial<ScanResult> = {}): ScanResult {
   return {

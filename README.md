@@ -1,29 +1,29 @@
-# 🔧 jscore
+﻿# superjs
 
-> **JavaScript ecosystem tools — Standard Library + Dependency Scanner**
+> **superJS — Semua JavaScript utility dalam 1 package — Standard Library + Dependency Scanner**
 
 ```
-jscore-core       → Zero-dependency JS standard library (10 modules, 100+ functions) — **[npm](https://www.npmjs.com/package/jscore-core)**
-jscore-dep-exray   → Dependency health scanner & replacement engine — **[npm](https://www.npmjs.com/package/jscore-dep-exray)**
-vscode-dep-exray    → VS Code extension for inline diagnostics
+npm install superjs-core
 ```
+
+Satu package buat semua kebutuhan JavaScript: utility functions (deepClone, debounce, camelCase, formatDate, dll), async helpers, crypto, path manipulation, **plus** dependency health scanner (deteksi bloat + security issues).
 
 ---
 
-## 📦 Packages
+## Package
 
-### `jscore-core` — Standard Library for JavaScript
+### `superjs-core` — All-in-One JavaScript Toolkit
 
 **Kenapa harus pake?**
-- **Zero dependency** — gak perlu install 20 package cuma buat utility dasar.
+- **Satu package, semua fungsi** — gak perlu install 20 package cuma buat utility dasar.
 - **Tree-shakeable** — import fungsi yang lo butuh aja, sisanya gak masuk bundle.
 - **TypeScript strict** — full type safety, no `any`.
 - **Modern** — ESM, target ES2022, optimized buat Node 18+ dan modern browser.
 
 ```bash
-npm install jscore-core
+npm install superjs-core
 # atau
-pnpm add jscore-core
+pnpm add superjs-core
 ```
 
 #### Modules
@@ -40,262 +40,125 @@ pnpm add jscore-core
 | `type` | 20+ type guards (isString, isNil, assertDefined, ensureArray, getType, dll) | — |
 | `crypto` | hash, randomHex, base64Encode/Decode, generateToken, generateOTP, xorCipher, checksum, constantTimeEqual | Node crypto |
 | `path` | join, resolve, basename, dirname, extname, normalize, isAbsolute, relative, parse, format | Node path |
-
+| `dep-exray` | scanProject, analyzeUsage, generateReport, KNOWN_MAPPINGS, KNOWN_CVES | dep-checker tools |
 #### Contoh
 
 ```typescript
-import { deepClone, debounce, retry } from 'jscore-core'
-import { formatDate, addDays } from 'jscore-core/date'
-import { groupBy, shuffle } from 'jscore-core/collection'
-import { sleep, parallelMap } from 'jscore-core/async'
-import { isNil, assertDefined } from 'jscore-core/type'
-import { generateToken, constantTimeEqual } from 'jscore-core/crypto'
-import { join, basename } from 'jscore-core/path'
+import { deepClone, debounce, retry } from "superjs-core"
+import { formatDate, addDays } from "superjs-core/date"
+import { groupBy, shuffle } from "superjs-core/collection"
+import { sleep, parallelMap } from "superjs-core/async"
+import { isNil, assertDefined } from "superjs-core/type"
+import { generateToken, constantTimeEqual } from "superjs-core/crypto"
+import { join, basename } from "superjs-core/path"
+import { scanProject } from "superjs-core/dep-exray"
 
-// Deep clone dengan cyclic reference support
 const cloned = deepClone({ a: 1, b: { c: new Date() } })
-
-// Safe math (0.1 + 0.2 = 0.3 ✅)
 console.log(add(0.1, 0.2)) // 0.3
-
-// Date formatting tanpa moment
-console.log(formatDate(new Date(), 'DD/MM/YYYY')) // "27/06/2026"
-
-// Parallel map dengan concurrency limit
+console.log(formatDate(new Date(), "DD/MM/YYYY")) // "27/06/2026"
 const results = await parallelMap([1,2,3,4,5], async (n) => n * 2, 2)
-
-// Token generation
-const apiKey = generateToken(32) // 64-character hex string
+const apiKey = generateToken(32)
 console.log(constantTimeEqual(apiKey, apiKey)) // true
+const report = await scanProject({ path: "./my-project" })
+console.log(report.totalEstimatedSize) // "2.3 MB"
 ```
 
 ---
 
-### `jscore-dep-exray` — Dependency Health Scanner
+### dep-exray — Dependency Health Scanner (built-in)
 
-**Scan project lo buat nemuin dependency yang gak kepake, bloated, atau punya CVE.**
+**Scan project lo buat nemuin dependency yang gak kepake, bloated, atau punya CVE — langsung dari `superjs-core`.**
 
 ```bash
-npx jscore-dep-exray .
-# atau setelah global install
-dep-exray /path/to/project
-dep-exray /path/to/project --json
+# Via CLI
+npx dep-exray .
+npx dep-exray /path/to/project --json --verbose
 ```
 
 #### Features
 
-- ✅ **Deteksi replacement** — lodash → `jscore-core`, moment → `jscore-core/date`, uuid → native `crypto.randomUUID()`
-- ✅ **Ukuran dependency** — estimasi size dalam MB/KB
-- ✅ **Security check** — CVE detection dari known database
-- ✅ **Auto-PR ready** — replacement dengan confidence tinggi bisa auto-PR
-- ✅ **JSON output** — `--json` buat integrasi CI/CD
-- ✅ **Usage analyzer** — deteksi apakah dependency beneran dipake di codebase
-
-#### Output
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                    dep-exray Report                       │
-├──────────────────────────────────────────────────────────┤
-│  📦 PROJECT: my-app                                       │
-│  📊 DEPENDENCIES: 42 direct + 283 transitive              │
-│  💾 TOTAL SIZE: 487.2 MB                                  │
-├──────────────────────────────────────────────────────────┤
-│ 🟢 HIGH IMPACT REPLACEMENTS (3)                            │
-├──────────────────────────────────────────────────────────┤
-│ ❌ lodash (4.2MB) → jscore-core (~5KB)                    │
-│    └─ [Auto-PR ready] ✓ 100% behavior match               │
-│ ❌ moment (2.5MB) → jscore-core/date (<1KB)               │
-│    └─ [Auto-PR ready] ✓ 98% behavior match                │
-│ ❌ uuid (30KB) → crypto.randomUUID() (0KB)                 │
-│    └─ [Auto-PR ready] ✓ 100% native replacement           │
-├──────────────────────────────────────────────────────────┤
-│ 🔴 SECURITY (2)                                            │
-├──────────────────────────────────────────────────────────┤
-│ CVE-2021-3807 in ansi-regex → update to v6.0.1+           │
-└──────────────────────────────────────────────────────────┘
-```
+- Deteksi replacement — lodash ke superjs-core, moment ke superjs-core/date, uuid ke native crypto.randomUUID()
+- Ukuran dependency — estimasi size dalam MB/KB
+- Security check — CVE detection dari known database
+- Auto-PR ready — replacement dengan confidence tinggi bisa auto-PR
+- JSON output — --json buat integrasi CI/CD
+- Usage analyzer — deteksi apakah dependency beneran dipake di codebase
 
 ---
 
-### `vscode-dep-exray` — VS Code Extension
+### VS Code Extension — vscode-dep-exray
 
 **Inline diagnostics + tree view untuk package.json.**
 
-- 🔍 **Diagnostics** — lihat langsung di `package.json` mana dependency yang bisa di-replace
-- 🗂️ **Tree View** — panel sidebar dengan grup High/Medium/Security
-- ⚡ **Auto-scan** — scan otomatis tiap buka/save `package.json`
-- 🎯 **Quick Fix** — klik replacement suggestion buat apply
+- Diagnostics — lihat langsung di package.json mana dependency yang bisa di-replace
+- Tree View — panel sidebar dengan grup High/Medium/Security
+- Auto-scan — scan otomatis tiap buka/save package.json
+- Quick Fix — klik replacement suggestion buat apply
 
 Location: `extensions/vscode-dep-exray/`
 
 ---
 
-## 🤖 GitHub Actions
+## GitHub Actions
 
 ### PR Scan (Auto)
 
-Setiap PR yang ubah `package.json` atau lockfiles bakal otomatis di-scan:
-
-```yaml
-# .github/workflows/dep-exray-pr.yml — sudah include
-```
+Setiap PR yang ubah package.json atau lockfiles bakal otomatis di-scan oleh workflow yang sudah include.
 
 ### Scheduled Scan (Weekly)
 
-Scan otomatis tiap Senin jam 8 pagi, bikin issue kalo ada masalah:
-
-```yaml
-# .github/workflows/dep-exray-scheduled.yml — sudah include
-```
-
-### Reusable Workflow
-
-Panggil dari workflow lain:
-
-```yaml
-jobs:
-  depscan:
-    uses: ./.github/workflows/dep-exray-reusable.yml
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-```
+Scan otomatis tiap minggu, bikin issue kalo ada masalah.
 
 ---
 
-## 🚀 NPM Publish
-
-Packages ready to publish:
+## Quick Start
 
 ```bash
+git clone <repo-url> superjs
+cd superjs
+cd packages/core
+npm install
+
 # Build
-pnpm build
+npx tsup
 
-# Test
-pnpm test
-
-# Bump version & publish
-pnpm changeset        # Create changeset
-pnpm ci:version       # Bump versions
-pnpm ci:publish       # Publish to npm
-```
-
-Publish otomatis via GitHub Actions tiap merge ke `main` (file `.github/workflows/publish.yml`).
-
-**Setup NPM Token:**
-```bash
-pnpm config set "//registry.npmjs.org/:_authToken" <your-token> --global
-```
-
----
-
-## 🚀 Quick Start
-
-```bash
-# Clone & install
-git clone <repo-url> jscore
-cd jscore
-pnpm install
-
-# Build semua package
-pnpm build
-
-# Test semua package
-pnpm test
+# Test (428 tests)
+npx vitest run
 
 # Scan project sendiri
-node packages/dep-exray/dist/cli.js .
-
-# VS Code Extension
-pnpm ext:install
-pnpm ext:compile
+npx dep-exray .
 ```
 
-## 🧪 Test Stats
+---
 
-| Package | Test Files | Tests |
-|---------|-----------|-------|
-| `jscore-core` | 10 | 392 |
-| `jscore-dep-exray` | 4 | 36 |
-| **Total** | **14** | **428** |
-
-## 📊 Bundle Size
-
-| Import | Size |
-|--------|------|
-| `jscore-core` (all 10 modul) | ~24 KB |
-| `jscore-core/core` | ~6 KB |
-| `jscore-core/date` | ~8 KB |
-| `jscore-core/math` | ~3 KB |
-| `jscore-core/async` | ~2 KB |
-| `jscore-core/collection` | ~3 KB |
-| `jscore-core/string` | ~4 KB |
-| `jscore-core/io` | ~3 KB |
-| `jscore-core/type` | ~3 KB |
-| `jscore-core/crypto` | ~4 KB |
-| `jscore-core/path` | ~3 KB |
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-jscore/
-├── .changeset/              # Changeset config for versioning
-├── .github/
-│   ├── actions/
-│   │   └── dep-exray-scan/  # Reusable composite action
-│   └── workflows/
-│       ├── publish.yml       # Auto-publish on merge to main
-│       ├── dep-exray-pr.yml  # Scan on PR
-│       ├── dep-exray-reusable.yml
-│       └── dep-exray-scheduled.yml  # Weekly scan
+superjs/
+├── .github/workflows/
+│   ├── publish.yml
+│   ├── dep-exray-pr.yml
+│   ├── dep-exray-reusable.yml
+│   └── dep-exray-scheduled.yml
 ├── packages/
-│   ├── core/                 # jscore-core — Standard Library
-│   │   ├── src/
-│   │   │   ├── core/        # deepClone, debounce, retry, dll
-│   │   │   ├── math/        # add, sub, clamp, dll
-│   │   │   ├── date/        # formatDate, parseDate, dll
-│   │   │   ├── collection/  # groupBy, shuffle, sortBy, dll
-│   │   │   ├── string/      # camelCase, uuid, nanoid, dll
-│   │   │   ├── async/       # sleep, parallelMap, dll
-│   │   │   ├── io/          # parseCsv, safeJsonParse, dll
-│   │   │   ├── type/        # 20+ type guards
-│   │   │   ├── crypto/      # hash, generateToken, base64, dll
-│   │   │   └── path/        # join, resolve, basename, dll
-│   │   └── tests/           # 392 tests
-│   └── dep-exray/           # jscore-dep-exray
+│   └── core/                    # superjs-core — ALL-IN-ONE
 │       ├── src/
-│       │   ├── cli.ts       # Commander.js CLI
-│       │   ├── scanner/     # Scanner engine
-│       │   ├── reporter/    # Pretty report generator
-│       │   └── analyzer/    # Usage analyzer
-│       └── tests/           # 36 tests
+│       │   ├── index.ts         # Barrel exports
+│       │   ├── core/            # deepClone, debounce, dll
+│       │   ├── math/            # add, sub, clamp, dll
+│       │   ├── date/            # formatDate, parseDate, dll
+│       │   ├── collection/      # groupBy, shuffle, sortBy, dll
+│       │   ├── string/          # camelCase, uuid, nanoid, dll
+│       │   ├── async/           # sleep, parallelMap, dll
+│       │   ├── io/              # parseCsv, safeJsonParse, dll
+│       │   ├── type/            # 20+ type guards
+│       │   ├── crypto/          # hash, generateToken, base64, dll
+│       │   ├── path/            # join, resolve, basename, dll
+│       │   └── dep-exray/       # Dependency scanner
+│       └── tests/               # 428 tests
 ├── extensions/
-│   └── vscode-dep-exray/    # VS Code Extension
-│       ├── src/
-│       │   ├── extension.ts           # Entry point
-│       │   ├── diagnosticProvider.ts   # Inline diagnostics
-│       │   ├── depExrayProvider.ts     # Tree view
-│       │   └── scanner.ts             # Built-in scanner
-│       └── test-fixtures/
+│   └── vscode-dep-exray/        # VS Code Extension
 ├── CONTRIBUTING.md
 ├── LICENSE
 └── README.md
 ```
-
-## 🗺️ Roadmap
-
-- [x] **v0.1 — Core library** (8 modul, 100+ functions) ✅
-- [x] **v0.2 — More functions** (crypto, path — 20 new functions) ✅
-- [x] **v0.3 — dep-exray GitHub Action** (PR scan + scheduled + reusable) ✅
-- [x] **v0.4 — VS Code Extension** (inline hints + tree view) ✅
-- [x] **NPM Publish Setup** (changesets, CI/CD, auto-publish) ✅
-- [ ] **v0.5 — Auto-PR generator** (beneran bikin PR replace library)
-- [ ] **v1.0 — Stable API** (setelah feedback komunitas)
-
-## 📝 License
-
-MIT
-
----
-
-> Dibuat dengan ❤️ sama programmer JS buat programmer JS.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { KNOWN_MAPPINGS, KNOWN_CVES } from '../src/known-mappings.js'
+import { KNOWN_MAPPINGS, KNOWN_CVES } from '../src/dep-exray/known-mappings.js'
 
 describe('KNOWN_MAPPINGS', () => {
   it('should have at least one entry', () => {

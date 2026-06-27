@@ -1,11 +1,14 @@
 {
-  "name": "jscore-core",
-  "version": "0.1.1",
-  "description": "Zero-dependency JavaScript standard library — core, math, date, collection, string, async, io, & type utilities",
+  "name": "superjs-core",
+  "version": "0.3.0",
+  "description": "Zero-dependency JavaScript standard library + dependency health scanner — core, math, date, collection, string, async, io, type, crypto, path & dep-exray",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "dep-exray": "./dist/dep-exray/cli.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -50,6 +53,34 @@
     "./path": {
       "import": "./dist/path/index.js",
       "types": "./dist/path/index.d.ts"
+    },
+    "./dep-exray": {
+      "import": "./dist/dep-exray/index.js",
+      "types": "./dist/dep-exray/index.d.ts"
+    },
+    "./dep-exray/scanner": {
+      "import": "./dist/dep-exray/scanner/index.js",
+      "types": "./dist/dep-exray/scanner/index.d.ts"
+    },
+    "./dep-exray/analyzer": {
+      "import": "./dist/dep-exray/analyzer/index.js",
+      "types": "./dist/dep-exray/analyzer/index.d.ts"
+    },
+    "./dep-exray/reporter": {
+      "import": "./dist/dep-exray/reporter/index.js",
+      "types": "./dist/dep-exray/reporter/index.d.ts"
+    },
+    "./dep-exray/types": {
+      "import": "./dist/dep-exray/types.js",
+      "types": "./dist/dep-exray/types.d.ts"
+    },
+    "./dep-exray/known-mappings": {
+      "import": "./dist/dep-exray/known-mappings.js",
+      "types": "./dist/dep-exray/known-mappings.d.ts"
+    },
+    "./dep-exray/cli": {
+      "import": "./dist/dep-exray/cli.js",
+      "types": "./dist/dep-exray/cli.d.ts"
     }
   },
   "files": [
@@ -65,37 +96,46 @@
     "size": "size-limit",
     "bench": "vitest bench"
   },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "picocolors": "^1.1.0"
+  },
   "devDependencies": {
     "@size-limit/file": "^11.0.0",
     "@types/node": "^26.0.1",
     "size-limit": "^11.0.0",
     "tsup": "^8.3.0",
     "typescript": "^5.7.0",
+    "vite": "^8.1.0",
     "vitest": "^2.1.0"
   },
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "5 KB"
+      "limit": "10 KB"
     }
   ],
   "keywords": [
     "utilities",
     "standard-library",
     "typescript",
-    "zero-dependency"
+    "zero-dependency",
+    "dependency-scanner",
+    "npm-audit",
+    "bloat-detection",
+    "security"
   ],
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/jscore.git"
+    "url": "git+https://github.com/superdevids/superjs.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/jscore/issues"
+    "url": "https://github.com/superdevids/superjs/issues"
   },
-  "homepage": "https://github.com/yourusername/jscore#readme",
+  "homepage": "https://github.com/superdevids/superjs#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

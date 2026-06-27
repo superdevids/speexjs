@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
-import { analyzeUsage } from '../src/analyzer/index.js'
+import { analyzeUsage } from '../src/dep-exray/analyzer/index.js'
 
 let tmpDir: string
 

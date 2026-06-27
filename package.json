@@ -1,32 +1,14 @@
 {
-  "name": "jscore",
+  "name": "superjs",
   "version": "0.1.0",
-  "publishConfig": {
-    "access": "public"
-  },
   "private": true,
-  "description": "JavaScript ecosystem tools — standard library + dependency scanner",
+  "description": "JavaScript ecosystem tools monorepo — superjs-core",
   "scripts": {
-    "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "lint": "pnpm -r lint",
-    "clean": "pnpm -r clean",
-    "changeset": "changeset",
-    "ci:version": "changeset version",
-    "ci:publish": "changeset publish",
-    "version": "changeset version",
-    "release": "pnpm build && changeset publish",
     "ext:install": "cd extensions\\vscode-dep-exray && npm install",
     "ext:compile": "cd extensions\\vscode-dep-exray && npm run compile",
     "ext:package": "cd extensions\\vscode-dep-exray && npx vsce package"
   },
-  "devDependencies": {
-    "@changesets/cli": "^2.27.0",
-    "typescript": "^5.7.0"
-  },
   "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=9.0.0"
-  },
-  "packageManager": "pnpm@9.15.0"
+    "node": ">=18.0.0"
+  }
 }

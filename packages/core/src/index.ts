@@ -177,3 +177,20 @@ export {
   castArray,
   getType,
 } from './type/index.js'
+
+// ─── dep-exray (dependency scanner) ───────────────────────────
+export {
+  scanProject,
+  generateReport,
+  analyzeUsage,
+  KNOWN_MAPPINGS,
+  KNOWN_CVES,
+} from './dep-exray/index.js'
+
+export type {
+  ScanResult,
+  ReplacementSuggestion,
+  SecurityIssue,
+  DependencyInfo,
+  ScannerConfig,
+} from './dep-exray/index.js'

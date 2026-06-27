@@ -30,7 +30,7 @@ runs:
 
     - name: Install dep-exray
       shell: bash
-      run: npm install -g @jscore/dep-exray
+      run: npm install -g superjs-dep-exray
 
     - name: Run dep-exray scan
       id: scan
