@@ -8,3 +8,5 @@ coverage/
 *.log
 .DS_Store
 Thumbs.db
+extensions/vscode-dep-exray/*.vsix
+extensions/vscode-dep-exray/out/
