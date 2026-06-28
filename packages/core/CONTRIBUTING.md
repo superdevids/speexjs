@@ -1,4 +1,4 @@
-# Kontribusi ke speedx-core
+# Kontribusi ke speexjs-core
 
 ## Setup Development
 

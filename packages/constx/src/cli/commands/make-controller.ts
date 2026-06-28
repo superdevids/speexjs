@@ -35,8 +35,8 @@ export function makeController(name: string): void {
 
   mkdirSync(targetDir, { recursive: true })
 
-  const content = `import { Controller, get, post, put, del } from 'speedx/server'
-import type { RouteContext } from 'speedx/server/router'
+  const content = `import { Controller, get, post, put, del } from 'speexjs/server'
+import type { RouteContext } from 'speexjs/server/router'
 
 export class ${className} extends Controller {
   @get('/')

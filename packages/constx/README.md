@@ -1,23 +1,23 @@
-# speedx 🚀
+# speexjs 🚀
 
 **Fullstack JavaScript/TypeScript Framework — Server + Client + RPC + Schema + Database + Auth**
 **🇮🇩 Indonesia First, Built for the World**
 
 ```bash
-npm install speedx
+npm install speexjs
 ```
 
 > Zero external dependencies. Only Node.js built-in modules.
 
 ---
 
-## 📦 Kenapa speedx?
+## 📦 Kenapa speexjs?
 
-| Masalah | Solusi speedx |
+| Masalah | Solusi speexjs |
 |---------|---------------|
-| Next.js terlalu berat & vendor lock-in | speedx ringan, zero-dep, engine-swappable |
-| Express terlalu minimalis | speedx Laravel-like: routing, middleware, controller, DI, ORM |
-| Laravel pakai PHP | speedx TypeScript native, end-to-end type safe |
+| Next.js terlalu berat & vendor lock-in | speexjs ringan, zero-dep, engine-swappable |
+| Express terlalu minimalis | speexjs Laravel-like: routing, middleware, controller, DI, ORM |
+| Laravel pakai PHP | speexjs TypeScript native, end-to-end type safe |
 | Fetch API ribet | SuperRequest/SuperResponse wrapper sendiri — lebih mudah |
 | Framework asing untuk Indonesia | 🇮🇩 NIK, NPWP, Phone, Rupiah, terbilang built-in |
 | React/Vue dependency berat | Signal-based VDOM sendiri — ringan, cepat |
@@ -68,7 +68,7 @@ npm install speedx
 | **Signals** | `signal()`, `computed()`, `effect()`, `batch()`, `untracked()` |
 | **VDOM** | `h()`, `render()`, `patch()`, `hydrate()` — Virtual DOM sendiri |
 | **SSR** | `renderToString()`, `renderToStream()`, `ServerRenderer` |
-| **JSX** | Full JSX support via `jsxImportSource: \"@SpeedX/vdom\"` |
+| **JSX** | Full JSX support via `jsxImportSource: \"@SpeexJS/vdom\"` |
 | **Router** | File-based routing, guards, reactive current/params/query |
 | **Adapters** | `FrameworkAdapter` interface — React/Vue integration |
 
@@ -84,12 +84,12 @@ npm install speedx
 
 | Perintah | Fungsi |
 |----------|--------|
-| `speedx init [name]` | Scaffold project baru (blank/fullstack/api-only) |
-| `speedx make:controller <name>` | Generate controller |
-| `speedx make:middleware <name>` | Generate middleware |
-| `speedx make:schema <name>` | Generate schema |
-| `speedx list-routes` | Lihat semua route yang terdaftar |
-| `speedx serve` | Jalankan development server |
+| `speexjs init [name]` | Scaffold project baru (blank/fullstack/api-only) |
+| `speexjs make:controller <name>` | Generate controller |
+| `speexjs make:middleware <name>` | Generate middleware |
+| `speexjs make:schema <name>` | Generate schema |
+| `speexjs list-routes` | Lihat semua route yang terdaftar |
+| `speexjs serve` | Jalankan development server |
 
 ---
 
@@ -98,32 +98,32 @@ npm install speedx
 ### 1. Install
 
 ```bash
-npm install speedx
+npm install speexjs
 ```
 
 ### 2. Buat File Server
 
 ```typescript
 // src/index.ts
-import { speedx } from 'speedx/server'
+import { speexjs } from 'speexjs/server'
 
-const app = speedx()
+const app = speexjs()
 
 app.get('/', async ({ response }) => {
-  return response.html('<h1>speedx 🚀</h1>')
+  return response.html('<h1>speexjs 🚀</h1>')
 })
 
 app.get('/api/hello', async ({ response }) => {
   return response.json({ message: 'Halo Dunia!' })
 })
 
-app.listen(3000, () => console.log('speedx running on http://localhost:3000'))
+app.listen(3000, () => console.log('speexjs running on http://localhost:3000'))
 ```
 
 ### 3. Jalankan
 
 ```bash
-npx speedx serve
+npx speexjs serve
 # atau
 node --loader ts-node src/index.ts
 ```
@@ -135,9 +135,9 @@ node --loader ts-node src/index.ts
 ### Server Routing
 
 ```typescript
-import { speedx } from 'speedx/server'
+import { speexjs } from 'speexjs/server'
 
-const app = speedx()
+const app = speexjs()
 
 // Basic routes
 app.get('/users', handler)
@@ -170,7 +170,7 @@ app.get('/users/:id', handler).name('users.show')
 ### Controller
 
 ```typescript
-import { Controller, get, post, put, del } from 'speedx/server'
+import { Controller, get, post, put, del } from 'speexjs/server'
 
 @controller('/api/users')
 export class UserController extends Controller {
@@ -211,7 +211,7 @@ export class UserController extends Controller {
 ### Schema Validation
 
 ```typescript
-import { s } from 'speedx/schema'
+import { s } from 'speexjs/schema'
 
 // Buat schema
 const UserSchema = s.object({
@@ -237,7 +237,7 @@ if (!result.success) {
 ### Database Query Builder
 
 ```typescript
-import { DatabaseConnection } from 'speedx/server/database'
+import { DatabaseConnection } from 'speexjs/server/database'
 
 const db = new DatabaseConnection({
   driver: 'mysql',        // mysql | sqlite | postgresql
@@ -282,16 +282,16 @@ const result = await db.raw('SELECT * FROM users WHERE age > ?', [18])
 ### Authentication
 
 ```typescript
-import { speedx } from 'speedx/server'
-import { AuthManager, SessionGuard } from 'speedx/server/auth'
+import { speexjs } from 'speexjs/server'
+import { AuthManager, SessionGuard } from 'speexjs/server/auth'
 
-const app = speedx()
+const app = speexjs()
 
 // Setup auth
 const auth = new AuthManager()
 auth.guard('session', new SessionGuard({
   table: 'users',
-  cookieName: 'speedx_session',
+  cookieName: 'speexjs_session',
 }))
 
 // Login route
@@ -312,7 +312,7 @@ app.get('/profile', async ({ response }, next) => {
 }).middleware(['auth'])
 
 // Authorization Gate
-import { Gate } from 'speedx/server/gate'
+import { Gate } from 'speexjs/server/gate'
 
 const gate = new Gate()
 gate.define('update-post', (user, post) => user.id === post.user_id)
@@ -327,7 +327,7 @@ app.put('/posts/:id', async ({ params, response }) => {
 ### Client — Signals + VDOM
 
 ```typescript
-import { signal, computed, effect, h, render } from 'speedx/client'
+import { signal, computed, effect, h, render } from 'speexjs/client'
 
 function Counter() {
   const count = signal(0)
@@ -352,7 +352,7 @@ Dengan JSX (`tsconfig.json`):
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@SpeedX/vdom"
+    "jsxImportSource": "@SpeexJS/vdom"
   }
 }
 ```
@@ -372,7 +372,7 @@ function Counter() {
 ### Cache
 
 ```typescript
-import { Cache } from 'speedx/server/cache'
+import { Cache } from 'speexjs/server/cache'
 
 const cache = new Cache({ store: 'memory', ttl: 3600 })
 
@@ -392,7 +392,7 @@ await cache.increment('visits')
 ### File Storage
 
 ```typescript
-import { createStorage } from 'speedx/server/storage'
+import { createStorage } from 'speexjs/server/storage'
 
 const storage = createStorage({
   defaultDisk: 'local',
@@ -415,7 +415,7 @@ const exists = await storage.exists('images/photo.jpg')
 ### Events
 
 ```typescript
-import { event } from 'speedx/server/events'
+import { event } from 'speexjs/server/events'
 
 // Listen
 event.on('user.registered', async (user) => {
@@ -435,9 +435,9 @@ await event.emit('user.registered', { id: 1, email: 'john@test.com' })
 
 ```typescript
 // === SERVER ===
-import { speedx } from 'speedx/server'
-import { rpc } from 'speedx/rpc'
-import { s } from 'speedx/schema'
+import { speexjs } from 'speexjs/server'
+import { rpc } from 'speexjs/rpc'
+import { s } from 'speexjs/schema'
 
 const api = rpc.create({
   procedures: {
@@ -456,12 +456,12 @@ const api = rpc.create({
   },
 })
 
-const app = speedx()
+const app = speexjs()
 app.post('/api/rpc', api.toHandler())
 app.listen(3000)
 
 // === CLIENT ===
-import { createClient } from 'speedx/rpc'
+import { createClient } from 'speexjs/rpc'
 
 const client = createClient({ baseUrl: 'http://localhost:3000/api' })
 const users = await client.call('users.list', { page: 1 })
@@ -491,7 +491,7 @@ const users = await client.call('users.list', { page: 1 })
 ## 🏗️ Arsitektur
 
 ```
-speedx/
+speexjs/
 ├── src/
 │   ├── index.ts              # Barrel export
 │   ├── native/               # Zero-dep utilities
@@ -519,7 +519,7 @@ speedx/
 
 ## 📋 Perbandingan dengan Framework Lain
 
-| Fitur | speedx | Next.js | Express | AdonisJS | Laravel |
+| Fitur | speexjs | Next.js | Express | AdonisJS | Laravel |
 |-------|---------|---------|---------|----------|---------|
 | Bahasa | TS/JS | TS/JS | JS | TS/JS | PHP |
 | Dependencies | **0** | Ratusan | Puluhan | Puluhan | Ratusan |
@@ -551,5 +551,5 @@ MIT — bebas digunakan, dimodifikasi, dan didistribusikan.
 
 ---
 
-**speedx — Fullstack JavaScript/TypeScript Framework**
+**speexjs — Fullstack JavaScript/TypeScript Framework**
 **🇮🇩 Dibuat oleh developer Indonesia, untuk developer dunia.**

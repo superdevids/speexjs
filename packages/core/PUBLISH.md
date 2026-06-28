@@ -6,7 +6,7 @@
 npm login
 ```
 
-## Cara Publish speedx-core
+## Cara Publish speexjs-core
 
 ```bash
 cd packages/core

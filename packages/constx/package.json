@@ -1,13 +1,13 @@
 {
     "name": "speexjs",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "Fullstack JavaScript/TypeScript framework Ã¢â‚¬â€ Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies. Ã°Å¸â€¡Â®Ã°Å¸â€¡Â© Indonesia First.",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "bin": {
-        "speedx": "dist/cli/index.js"
+        "speexjs": "dist/cli/index.js"
     },
     "exports": {
         ".": {
@@ -127,7 +127,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/superdevids/speedx.git"
+        "url": "git+https://github.com/superdevids/speexjs.git"
     },
     "license": "MIT",
     "engines": {

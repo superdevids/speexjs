@@ -1,9 +1,9 @@
-# speedx-core — Ringkasan Fitur Lengkap
+# speexjs-core — Ringkasan Fitur Lengkap
 
 > **Versi:** 0.4.4 | **License:** MIT | **Zero runtime dependencies**
 
 ```
-npm install speedx-core
+npm install speexjs-core
 ```
 
 ---
@@ -304,18 +304,18 @@ npm install speedx-core
 ## Referensi Cepat
 
 ```bash
-npm install speedx-core
+npm install speexjs-core
 
 # Import semua module
-import { deepClone, deepEqual, pipe } from 'speedx-core'
-import { formatDate, timeAgo, TIMEZONE_WIB } from 'speedx-core/date'
-import { groupBy, topoSort, deepGet } from 'speedx-core/collection'
-import { terbilang, formatRupiah, formatBytes } from 'speedx-core/string'
-import { Queue, Semaphore } from 'speedx-core/async'
-import { isNIK, isNPWP, isPhone } from 'speedx-core/validation'
-import { createError, MultiError } from 'speedx-core/error'
-import { Logger } from 'speedx-core/logger'
-import { hexToRgb, lighten, contrastRatio } from 'speedx-core/color'
-import { median, stddev, formatCurrency } from 'speedx-core/math'
-import { scanProject } from 'speedx-core/dep-exray'
+import { deepClone, deepEqual, pipe } from 'speexjs-core'
+import { formatDate, timeAgo, TIMEZONE_WIB } from 'speexjs-core/date'
+import { groupBy, topoSort, deepGet } from 'speexjs-core/collection'
+import { terbilang, formatRupiah, formatBytes } from 'speexjs-core/string'
+import { Queue, Semaphore } from 'speexjs-core/async'
+import { isNIK, isNPWP, isPhone } from 'speexjs-core/validation'
+import { createError, MultiError } from 'speexjs-core/error'
+import { Logger } from 'speexjs-core/logger'
+import { hexToRgb, lighten, contrastRatio } from 'speexjs-core/color'
+import { median, stddev, formatCurrency } from 'speexjs-core/math'
+import { scanProject } from 'speexjs-core/dep-exray'
 ```

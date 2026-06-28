@@ -1,4 +1,4 @@
-# Roadmap SpeedX Core
+# Roadmap SpeexJS Core
 
 ## v0.4.0 — Modul Indonesia & Error Foundation ✅ (Selesai)
 

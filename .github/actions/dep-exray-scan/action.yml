@@ -28,9 +28,9 @@ runs:
       with:
         node-version: 20
 
-    - name: Install speedx-core
+    - name: Install speexjs-core
       shell: bash
-      run: npm install -g speedx-core
+      run: npm install -g speexjs-core
 
     - name: Run dep-exray scan
       id: scan

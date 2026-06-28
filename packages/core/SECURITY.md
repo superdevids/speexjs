@@ -2,7 +2,7 @@
 
 ## Melaporkan Kerentanan
 
-Kalau lo nemu celah keamanan di speedx-core, lapor lewat email: adityasuperdev@gmail.com
+Kalau lo nemu celah keamanan di speexjs-core, lapor lewat email: adityasuperdev@gmail.com
 
 **JANGAN bikin GitHub issue publik untuk kerentanan keamanan.**
 
@@ -18,7 +18,7 @@ Lo bakal dapet respon dalam 48 jam. Kalo belum ada kabar, follow-up lewat email.
 
 ## Ruang Lingkup
 
-- Package npm speedx-core
+- Package npm speexjs-core
 - CLI tool dep-exray
 - GitHub Actions workflows
 

@@ -41,5 +41,5 @@ export class ServerRenderer {
 }
 
 export function generateHydrationScript(): string {
-  return '<script>(function(){var d=document.createElement("div");d.setAttribute("data-speedx-hydrated","");document.body.appendChild(d)})();</script>'
+  return '<script>(function(){var d=document.createElement("div");d.setAttribute("data-speexjs-hydrated","");document.body.appendChild(d)})();</script>'
 }

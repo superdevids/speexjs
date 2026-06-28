@@ -1,9 +1,9 @@
-﻿# speedx-core
+﻿# speexjs-core
 
 > **JavaScript toolkit all-in-one buat developer Indonesia — Standard Library + Dependency Scanner + 🇮🇩 Validasi NIK/NPWP/Phone + Logger + Typed Errors**
 
 ```bash
-npm install speedx-core
+npm install speexjs-core
 ```
 
 Satu package buat semua kebutuhan JavaScript lo: utility functions, async helpers, crypto, path manipulation, typed errors, structured logging, **plus** dependency health scanner dan validasi data Indonesia (NIK, NPWP, Phone).
@@ -56,14 +56,14 @@ Satu package buat semua kebutuhan JavaScript lo: utility functions, async helper
 ## Contoh Kode
 
 ```typescript
-import { deepClone } from "speedx-core"
-import { formatDate, timeAgo, TIMEZONE_WIB } from "speedx-core/date"
-import { Queue } from "speedx-core/async"
-import { uuid, maskString, terbilang, formatRupiah, formatBytes } from "speedx-core/string"
-import { isNIK, isNPWP, isPhone } from "speedx-core/validation"
-import { createError } from "speedx-core/error"
-import { Logger } from "speedx-core/logger"
-import { hexToRgb, contrastRatio } from "speedx-core/color"
+import { deepClone } from "speexjs-core"
+import { formatDate, timeAgo, TIMEZONE_WIB } from "speexjs-core/date"
+import { Queue } from "speexjs-core/async"
+import { uuid, maskString, terbilang, formatRupiah, formatBytes } from "speexjs-core/string"
+import { isNIK, isNPWP, isPhone } from "speexjs-core/validation"
+import { createError } from "speexjs-core/error"
+import { Logger } from "speexjs-core/logger"
+import { hexToRgb, contrastRatio } from "speexjs-core/color"
 
 // Validasi data Indonesia
 isNIK("3201010203940001")     // true
@@ -107,7 +107,7 @@ npx dep-exray /path/to/project --json --verbose
 ```
 
 ### Fitur
-- Deteksi replacement: lodash → speedx-core, moment → speedx-core/date, uuid → native crypto.randomUUID()
+- Deteksi replacement: lodash → speexjs-core, moment → speexjs-core/date, uuid → native crypto.randomUUID()
 - Estimasi ukuran dependency
 - CVE detection
 - JSON output untuk CI/CD
@@ -118,8 +118,8 @@ npx dep-exray /path/to/project --json --verbose
 ## Quick Start
 
 ```bash
-git clone https://github.com/superdevids/speedx.git
-cd speedx/packages/core
+git clone https://github.com/superdevids/speexjs.git
+cd speexjs/packages/core
 npm install
 npx tsup              # Build
 npx vitest run        # Test (828 tests)

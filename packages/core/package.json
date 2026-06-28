@@ -159,12 +159,12 @@
                       },
     "repository":  {
                        "type":  "git",
-                       "url":  "git+https://github.com/superdevids/speedx.git"
+                       "url":  "git+https://github.com/superdevids/speexjs.git"
                    },
     "bugs":  {
-                 "url":  "https://github.com/superdevids/speedx/issues"
+                 "url":  "https://github.com/superdevids/speexjs/issues"
              },
-    "homepage":  "https://github.com/superdevids/speedx#readme",
+    "homepage":  "https://github.com/superdevids/speexjs#readme",
     "license":  "MIT",
     "engines":  {
                     "node":  "\u003e=18.0.0"

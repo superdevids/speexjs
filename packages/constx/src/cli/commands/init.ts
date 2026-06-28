@@ -19,12 +19,12 @@ const TEMPLATES: Record<string, TemplateContent> = {
             type: 'module',
             private: true,
             scripts: {
-              dev: 'SpeedX serve',
-              build: 'SpeedX build',
+              dev: 'SpeexJS serve',
+              build: 'SpeexJS build',
               start: 'node dist/index.js',
             },
             dependencies: {
-              SpeedX: 'latest',
+              SpeexJS: 'latest',
             },
             devDependencies: {
               '@types/node': '^26.0.1',
@@ -55,24 +55,24 @@ const TEMPLATES: Record<string, TemplateContent> = {
         null,
         2,
       ),
-      'src/index.ts': `import { SpeedX } from 'speedx/server'
+      'src/index.ts': `import { SpeexJS } from 'speexjs/server'
 
-const app = SpeedX()
+const app = SpeexJS()
 
 const PORT = Number(process.env.PORT) || 3000
 
 app.get('/', async ({ response }) => {
-  return response.html('<h1>SpeedX 🚀</h1>')
+  return response.html('<h1>SpeexJS 🚀</h1>')
 })
 
 app.listen(PORT, () => {
-  console.log(\`SpeedX running on http://localhost:\${PORT}\`)
+  console.log(\`SpeexJS running on http://localhost:\${PORT}\`)
 })
 `,
-      'src/app.ts': `import { SpeedX } from 'speedx/server'
+      'src/app.ts': `import { SpeexJS } from 'speexjs/server'
 
 export function createApp() {
-  const app = SpeedX()
+  const app = SpeexJS()
   return app
 }
 `,
@@ -107,12 +107,12 @@ dist/
             type: 'module',
             private: true,
             scripts: {
-              dev: 'SpeedX serve',
+              dev: 'SpeexJS serve',
               build: 'tsc',
               start: 'node dist/server/index.js',
             },
             dependencies: {
-              SpeedX: 'latest',
+              SpeexJS: 'latest',
             },
             devDependencies: {
               '@types/node': '^26.0.1',
@@ -135,7 +135,7 @@ dist/
             isolatedModules: true,
             resolveJsonModule: true,
             jsx: 'react-jsx',
-            jsxImportSource: '@SpeedX/vdom',
+            jsxImportSource: '@SpeexJS/vdom',
             outDir: './dist',
             rootDir: './src',
           },
@@ -145,12 +145,12 @@ dist/
         null,
         2,
       ),
-      'src/server/index.ts': `import { SpeedX } from 'speedx/server'
+      'src/server/index.ts': `import { SpeexJS } from 'speexjs/server'
 import { UserController } from './controllers/user.controller.js'
 
 const PORT = Number(process.env.PORT) || 3000
 
-const app = SpeedX()
+const app = SpeexJS()
 
 app.controller(UserController)
 
@@ -161,7 +161,7 @@ app.get('/', async ({ response }) => {
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>SpeedX Fullstack</title>
+      <title>SpeexJS Fullstack</title>
     </head>
     <body>
       <div id="root"></div>
@@ -172,10 +172,10 @@ app.get('/', async ({ response }) => {
 })
 
 app.listen(PORT, () => {
-  console.log(\`SpeedX running on http://localhost:\${PORT}\`)
+  console.log(\`SpeexJS running on http://localhost:\${PORT}\`)
 })
 `,
-      'src/server/controllers/user.controller.ts': `import { Controller, get, post } from 'speedx/server'
+      'src/server/controllers/user.controller.ts': `import { Controller, get, post } from 'speexjs/server'
 
 export class UserController extends Controller {
   @get('/users')
@@ -205,8 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     root.innerHTML = \`
       <div style="text-align:center;padding:2rem">
-        <h1>SpeedX Fullstack</h1>
-        <p>Welcome to SpeedX!</p>
+        <h1>SpeexJS Fullstack</h1>
+        <p>Welcome to SpeexJS!</p>
       </div>
     \`
   }
@@ -262,12 +262,12 @@ dist/
             type: 'module',
             private: true,
             scripts: {
-              dev: 'SpeedX serve',
+              dev: 'SpeexJS serve',
               build: 'tsc',
               start: 'node dist/index.js',
             },
             dependencies: {
-              SpeedX: 'latest',
+              SpeexJS: 'latest',
             },
             devDependencies: {
               '@types/node': '^26.0.1',
@@ -298,21 +298,21 @@ dist/
         null,
         2,
       ),
-      'src/index.ts': `import { SpeedX } from 'speedx/server'
+      'src/index.ts': `import { SpeexJS } from 'speexjs/server'
 
 const PORT = Number(process.env.PORT) || 3000
 
-const app = SpeedX()
+const app = SpeexJS()
 
 app.get('/api/health', async ({ response }) => {
   return response.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
 app.listen(PORT, () => {
-  console.log(\`SpeedX API running on http://localhost:\${PORT}\`)
+  console.log(\`SpeexJS API running on http://localhost:\${PORT}\`)
 })
 `,
-      'src/controllers/health.controller.ts': `import { Controller, get } from 'speedx/server'
+      'src/controllers/health.controller.ts': `import { Controller, get } from 'speexjs/server'
 
 export class HealthController extends Controller {
   @get('/health')
@@ -324,7 +324,7 @@ export class HealthController extends Controller {
   }
 }
 `,
-      'src/middleware/auth.ts': `import type { RouteContext } from 'speedx/server/router'
+      'src/middleware/auth.ts': `import type { RouteContext } from 'speexjs/server/router'
 
 export function auth() {
   return async (ctx: RouteContext, next: () => Promise<void>) => {
@@ -434,7 +434,7 @@ export async function initProject(
 
   console.log()
   console.log(`${colors.bold('╔════════════════════════════════════╗')}`)
-  console.log(`${colors.bold('║')}        ${colors.green('SpeedX 🚀 Project Created')}${colors.bold('       ║')}`)
+  console.log(`${colors.bold('║')}        ${colors.green('SpeexJS 🚀 Project Created')}${colors.bold('       ║')}`)
   console.log(`${colors.bold('╚════════════════════════════════════╝')}`)
   console.log()
   console.log(`  ${colors.bold('Name:')}     ${toPascalCase(name)}`)

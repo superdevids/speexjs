@@ -1,8 +1,8 @@
-# Contributing to SpeedX
+# Contributing to SpeexJS
 
 > **Bahasa Indonesia** · *English version below*
 
-Terima kasih atas minat Anda untuk berkontribusi ke **SpeedX**! Kami sangat menghargai kontribusi dari komunitas, baik berupa laporan bug, permintaan fitur, maupun pull request.
+Terima kasih atas minat Anda untuk berkontribusi ke **SpeexJS**! Kami sangat menghargai kontribusi dari komunitas, baik berupa laporan bug, permintaan fitur, maupun pull request.
 
 ---
 
@@ -20,7 +20,7 @@ Terima kasih atas minat Anda untuk berkontribusi ke **SpeedX**! Kami sangat meng
 
 ## Laporan Bug
 
-Jika Anda menemukan bug, harap laporkan melalui [GitHub Issues](https://github.com/superdevids/SpeedX/issues).
+Jika Anda menemukan bug, harap laporkan melalui [GitHub Issues](https://github.com/superdevids/SpeexJS/issues).
 
 **Sebelum melaporkan:**
 
@@ -30,7 +30,7 @@ Jika Anda menemukan bug, harap laporkan melalui [GitHub Issues](https://github.c
 
 **Informasi yang diperlukan:**
 
-- Versi SpeedX yang digunakan
+- Versi SpeexJS yang digunakan
 - Versi Node.js (`node --version`)
 - Sistem operasi
 - Kode minimal untuk mereproduksi masalah
@@ -41,7 +41,7 @@ Jika Anda menemukan bug, harap laporkan melalui [GitHub Issues](https://github.c
 
 ## Pengajuan Fitur Baru
 
-Kami terbuka untuk ide-ide baru! Silakan ajukan fitur melalui [GitHub Issues](https://github.com/superdevids/SpeedX/issues) dengan label `enhancement`.
+Kami terbuka untuk ide-ide baru! Silakan ajukan fitur melalui [GitHub Issues](https://github.com/superdevids/SpeexJS/issues) dengan label `enhancement`.
 
 **Panduan:**
 
@@ -59,8 +59,8 @@ Kami terbuka untuk ide-ide baru! Silakan ajukan fitur melalui [GitHub Issues](ht
 1. **Fork** repository ke akun GitHub Anda.
 2. **Clone** fork Anda ke lokal:
    ```bash
-   git clone https://github.com/USERNAME/SpeedX.git
-   cd SpeedX
+   git clone https://github.com/USERNAME/SpeexJS.git
+   cd SpeexJS
    ```
 3. **Buat branch** baru untuk perubahan Anda:
    ```bash
@@ -120,7 +120,7 @@ Kami menggunakan [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Zero Dependencies
 
-SpeedX berkomitmen untuk **zero runtime dependencies**. Semua fungsionalitas harus diimplementasikan tanpa menggunakan package npm eksternal (kecuali devDependencies untuk build/testing).
+SpeexJS berkomitmen untuk **zero runtime dependencies**. Semua fungsionalitas harus diimplementasikan tanpa menggunakan package npm eksternal (kecuali devDependencies untuk build/testing).
 
 ### Testing
 
@@ -158,8 +158,8 @@ SpeedX berkomitmen untuk **zero runtime dependencies**. Semua fungsionalitas har
 
 ```bash
 # Clone repository
-git clone https://github.com/superdevids/SpeedX.git
-cd SpeedX
+git clone https://github.com/superdevids/SpeexJS.git
+cd SpeexJS
 
 # Install dependencies (hanya devDependencies)
 npm install
@@ -200,19 +200,19 @@ npm run dev
 # Link untuk testing lokal di project lain
 npm link
 cd /path/to/project
-npm link SpeedX
+npm link SpeexJS
 ```
 
 ---
 
 ## Struktur Monorepo
 
-SpeedX menggunakan **monorepo** dengan struktur sebagai berikut:
+SpeexJS menggunakan **monorepo** dengan struktur sebagai berikut:
 
 ```
-SpeedX/
+SpeexJS/
 ├── packages/
-│   └── SpeedX/              # Package utama (framework)
+│   └── SpeexJS/              # Package utama (framework)
 │       ├── src/
 │       │   ├── index.ts      # Entry point utama
 │       │   ├── native/       # Core helpers (zero-dependency)
@@ -251,47 +251,47 @@ SpeedX/
 
 | Import Path | Deskripsi |
 |---|---|
-| `SpeedX` | Main entry (schema, server, client, rpc) |
-| `SpeedX/server` | Server framework |
-| `SpeedX/server/http` | HTTP layer |
-| `SpeedX/server/router` | Router |
-| `SpeedX/server/middleware` | Middleware |
-| `SpeedX/server/controller` | Controller |
-| `SpeedX/server/container` | DI Container |
-| `SpeedX/server/auth` | Authentication |
-| `SpeedX/server/gate` | Authorization |
-| `SpeedX/server/cache` | Cache system |
-| `SpeedX/server/storage` | File storage |
-| `SpeedX/server/events` | Event system |
-| `SpeedX/server/database` | Database layer |
-| `SpeedX/client` | Client framework |
-| `SpeedX/client/signals` | Reactive signals |
-| `SpeedX/client/vdom` | Virtual DOM |
-| `SpeedX/client/vdom/jsx-runtime` | JSX runtime |
-| `SpeedX/rpc` | RPC system |
-| `SpeedX/schema` | Schema validation |
+| `SpeexJS` | Main entry (schema, server, client, rpc) |
+| `SpeexJS/server` | Server framework |
+| `SpeexJS/server/http` | HTTP layer |
+| `SpeexJS/server/router` | Router |
+| `SpeexJS/server/middleware` | Middleware |
+| `SpeexJS/server/controller` | Controller |
+| `SpeexJS/server/container` | DI Container |
+| `SpeexJS/server/auth` | Authentication |
+| `SpeexJS/server/gate` | Authorization |
+| `SpeexJS/server/cache` | Cache system |
+| `SpeexJS/server/storage` | File storage |
+| `SpeexJS/server/events` | Event system |
+| `SpeexJS/server/database` | Database layer |
+| `SpeexJS/client` | Client framework |
+| `SpeexJS/client/signals` | Reactive signals |
+| `SpeexJS/client/vdom` | Virtual DOM |
+| `SpeexJS/client/vdom/jsx-runtime` | JSX runtime |
+| `SpeexJS/rpc` | RPC system |
+| `SpeexJS/schema` | Schema validation |
 
 ---
 
 ## Lisensi
 
-Dengan berkontribusi ke SpeedX, Anda setuju bahwa kontribusi Anda akan dilisensikan di bawah [MIT License](LICENSE).
+Dengan berkontribusi ke SpeexJS, Anda setuju bahwa kontribusi Anda akan dilisensikan di bawah [MIT License](LICENSE).
 
 ---
 
 ---
 
-# Contributing to SpeedX
+# Contributing to SpeexJS
 
 > *English version*
 
-Thank you for your interest in contributing to **SpeedX**! We appreciate all contributions, including bug reports, feature requests, and pull requests.
+Thank you for your interest in contributing to **SpeexJS**! We appreciate all contributions, including bug reports, feature requests, and pull requests.
 
 ---
 
 ## Reporting Bugs
 
-Report bugs via [GitHub Issues](https://github.com/superdevids/SpeedX/issues).
+Report bugs via [GitHub Issues](https://github.com/superdevids/SpeexJS/issues).
 
 **Before reporting:**
 
@@ -300,7 +300,7 @@ Report bugs via [GitHub Issues](https://github.com/superdevids/SpeedX/issues).
 
 **Required information:**
 
-- SpeedX version
+- SpeexJS version
 - Node.js version
 - Operating system
 - Minimal reproduction code
@@ -311,7 +311,7 @@ Report bugs via [GitHub Issues](https://github.com/superdevids/SpeedX/issues).
 
 ## Feature Requests
 
-Submit feature requests via [GitHub Issues](https://github.com/superdevids/SpeedX/issues) with the `enhancement` label.
+Submit feature requests via [GitHub Issues](https://github.com/superdevids/SpeexJS/issues) with the `enhancement` label.
 
 - Describe the problem, not just the solution.
 - Provide clear use cases.
@@ -353,8 +353,8 @@ Submit feature requests via [GitHub Issues](https://github.com/superdevids/Speed
 ## Development Setup
 
 ```bash
-git clone https://github.com/superdevids/SpeedX.git
-cd SpeedX
+git clone https://github.com/superdevids/SpeexJS.git
+cd SpeexJS
 npm install
 npm run build
 npm test
@@ -364,4 +364,4 @@ npm test
 
 ## License
 
-By contributing to SpeedX, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing to SpeexJS, you agree that your contributions will be licensed under the [MIT License](LICENSE).

@@ -1,4 +1,4 @@
-# SpeedX Framework — Ringkasan Lengkap
+# SpeexJS Framework — Ringkasan Lengkap
 
 > **Fullstack JavaScript/TypeScript Framework** — Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero Dependencies. 🇮🇩 Indonesia First.
 >
@@ -32,7 +32,7 @@
 
 ## 1. Native Core
 
-> Lokasi: `SpeedX` (main entry) | File: `src/native/`
+> Lokasi: `SpeexJS` (main entry) | File: `src/native/`
 
 ### args.ts — Argument Parsing
 
@@ -170,12 +170,12 @@
 
 ## 2. Schema
 
-> Import: `SpeedX/schema` | File: `src/schema/`
+> Import: `SpeexJS/schema` | File: `src/schema/`
 
 ### Factory Namespace `s`
 
 ```ts
-import { s } from 'SpeedX/schema'
+import { s } from 'SpeexJS/schema'
 ```
 
 #### Primitives
@@ -308,7 +308,7 @@ import { s } from 'SpeedX/schema'
 
 ## 3. Server / HTTP
 
-> Import: `SpeedX/server/http` | File: `src/server/http/`
+> Import: `SpeexJS/server/http` | File: `src/server/http/`
 
 ### SuperRequest
 
@@ -424,7 +424,7 @@ import { s } from 'SpeedX/schema'
 
 ## 4. Server / Router
 
-> Import: `SpeedX/server/router` | File: `src/server/router/`
+> Import: `SpeexJS/server/router` | File: `src/server/router/`
 
 ### Router Class
 
@@ -476,7 +476,7 @@ interface RouteContext {
 
 ## 5. Server / Middleware
 
-> Import: `SpeedX/server/middleware` | File: `src/server/middleware/`
+> Import: `SpeexJS/server/middleware` | File: `src/server/middleware/`
 
 ### Built-in Middleware (10)
 
@@ -512,7 +512,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 6. Server / Controller
 
-> Import: `SpeedX/server/controller` | File: `src/server/controller/`
+> Import: `SpeexJS/server/controller` | File: `src/server/controller/`
 
 ### Base Controller
 
@@ -546,7 +546,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 7. Server / Container
 
-> Import: `SpeedX/server/container` | File: `src/server/container/`
+> Import: `SpeexJS/server/container` | File: `src/server/container/`
 
 ### Container (DI)
 
@@ -565,7 +565,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 8. Server / Engine
 
-> Import: `SpeedX/server/engine` | File: `src/server/engine/`
+> Import: `SpeexJS/server/engine` | File: `src/server/engine/`
 
 | Class / Interface | Deskripsi |
 |---|---|
@@ -577,7 +577,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 9. Server / Auth
 
-> Import: `SpeedX/server/auth` | File: `src/server/auth/`
+> Import: `SpeexJS/server/auth` | File: `src/server/auth/`
 
 ### AuthManager
 
@@ -630,7 +630,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 10. Server / Gate
 
-> Import: `SpeedX/server/gate` | File: `src/server/gate/`
+> Import: `SpeexJS/server/gate` | File: `src/server/gate/`
 
 ### Gate Class
 
@@ -657,7 +657,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 11. Server / Cache
 
-> Import: `SpeedX/server/cache` | File: `src/server/cache/`
+> Import: `SpeexJS/server/cache` | File: `src/server/cache/`
 
 ### Cache Class
 
@@ -687,7 +687,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 12. Server / Storage
 
-> Import: `SpeedX/server/storage` | File: `src/server/storage/`
+> Import: `SpeexJS/server/storage` | File: `src/server/storage/`
 
 ### Storage Class
 
@@ -721,7 +721,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 13. Server / Events
 
-> Import: `SpeedX/server/events` | File: `src/server/events/`
+> Import: `SpeexJS/server/events` | File: `src/server/events/`
 
 ### Event Class
 
@@ -752,7 +752,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 14. Server / Database
 
-> Import: `SpeedX/server/database` | File: `src/server/database/`
+> Import: `SpeexJS/server/database` | File: `src/server/database/`
 
 ### Connection
 
@@ -945,7 +945,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 15. Server / Helpers
 
-> Import: `SpeedX/server` (via helpers) | File: `src/server/helpers.ts`
+> Import: `SpeexJS/server` (via helpers) | File: `src/server/helpers.ts`
 
 ### URLBuilder
 
@@ -980,9 +980,9 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 16. Client
 
-> Import: `SpeedX/client` | File: `src/client/`
+> Import: `SpeexJS/client` | File: `src/client/`
 
-### Signals (`SpeedX/client/signals`)
+### Signals (`SpeexJS/client/signals`)
 
 | Class / Function | Deskripsi |
 |---|---|
@@ -1004,7 +1004,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 | `toSignal(val)` | Konversi ke Signal |
 | `mergeSignals(signals)` | Gabung multiple signals |
 
-### VDOM (`SpeedX/client/vdom`)
+### VDOM (`SpeexJS/client/vdom`)
 
 | Function | Deskripsi |
 |---|---|
@@ -1022,12 +1022,12 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 | Export | Deskripsi |
 |---|---|
-| `createElement(tag, props, ...children)` | JSX factory (`SpeedX/client/vdom/jsx`) |
+| `createElement(tag, props, ...children)` | JSX factory (`SpeexJS/client/vdom/jsx`) |
 | `jsx(tag, props, key?)` | Automatic JSX runtime |
 | `jsxs(tag, props, key?)` | JSX with multiple children |
 | `Fragment` | JSX Fragment |
 
-### Server Render (`SpeedX/client/render`)
+### Server Render (`SpeexJS/client/render`)
 
 | Function | Deskripsi |
 |---|---|
@@ -1040,7 +1040,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 |---|---|
 | `defineAdapter(framework)` | Definisikan adapter framework |
 
-### Client Router (`SpeedX/client/router`)
+### Client Router (`SpeexJS/client/router`)
 
 | Class / Type | Deskripsi |
 |---|---|
@@ -1052,7 +1052,7 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 17. RPC
 
-> Import: `SpeedX/rpc` | File: `src/rpc/`
+> Import: `SpeexJS/rpc` | File: `src/rpc/`
 
 ### RpcServer
 
@@ -1087,19 +1087,19 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 18. CLI
 
-> Command: `SpeedX` (global) | File: `src/cli/`
+> Command: `SpeexJS` (global) | File: `src/cli/`
 
 ### Commands
 
 | Command | Deskripsi |
 |---|---|
-| `SpeedX init [name]` | Buat project baru (blank/fullstack/api-only) |
-| `SpeedX make:controller <name>` | Generate controller file |
-| `SpeedX make:middleware <name>` | Generate middleware file |
-| `SpeedX make:schema <name>` | Generate schema file |
-| `SpeedX list-routes` | Lihat semua route |
-| `SpeedX serve` | Jalankan development server |
-| `SpeedX --help` | Tampilkan bantuan |
+| `SpeexJS init [name]` | Buat project baru (blank/fullstack/api-only) |
+| `SpeexJS make:controller <name>` | Generate controller file |
+| `SpeexJS make:middleware <name>` | Generate middleware file |
+| `SpeexJS make:schema <name>` | Generate schema file |
+| `SpeexJS list-routes` | Lihat semua route |
+| `SpeexJS serve` | Jalankan development server |
+| `SpeexJS --help` | Tampilkan bantuan |
 
 ### Options
 
@@ -1114,11 +1114,11 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 | Alias | Perintah |
 |---|---|
-| `SpeedX routes` | `list-routes` |
-| `SpeedX lr` | `list-routes` |
-| `SpeedX dev` | `serve` |
-| `SpeedX -v` | `version` |
-| `SpeedX -h` | `help` |
+| `SpeexJS routes` | `list-routes` |
+| `SpeexJS lr` | `list-routes` |
+| `SpeexJS dev` | `serve` |
+| `SpeexJS -v` | `version` |
+| `SpeexJS -h` | `help` |
 
 ### Generate Commands
 
@@ -1132,10 +1132,10 @@ type Middleware = (ctx: RouteContext, next: () => Promise<void>) => void | Promi
 
 ## 19. Entry Point (SuperApp)
 
-> Import: `SpeedX` | File: `src/server/index.ts`
+> Import: `SpeexJS` | File: `src/server/index.ts`
 
 ```ts
-import { SpeedX } from 'SpeedX'
+import { SpeexJS } from 'SpeexJS'
 ```
 
 ### SuperApp Class
@@ -1168,7 +1168,7 @@ import { SpeedX } from 'SpeedX'
 ### Factory
 
 ```ts
-function SpeedX(options?: AppOptions): SuperApp
+function SpeexJS(options?: AppOptions): SuperApp
 ```
 
 ---
@@ -1177,22 +1177,22 @@ function SpeedX(options?: AppOptions): SuperApp
 
 | Import | Modul |
 |---|---|
-| `SpeedX` | Schema, Server, Client, RPC (gabungan) |
-| `SpeedX/server` | SuperApp, Router, Middleware, Controller, Container, Engine, Auth, Gate, Cache, Storage, Events, Database, Helpers |
-| `SpeedX/server/http` | SuperRequest, SuperResponse, HeadersMap, HttpStatus, Cookies, Upload |
-| `SpeedX/server/router` | Router, RouteHandler, RouteContext |
-| `SpeedX/server/middleware` | Middleware, MiddlewarePipeline, 10 middleware factories |
-| `SpeedX/server/controller` | Controller, decorators (@controller, @get, @post, @put, @patch, @del) |
-| `SpeedX/server/container` | Container |
-| `SpeedX/server/auth` | AuthManager, SessionGuard, TokenGuard |
-| `SpeedX/server/gate` | Gate, AuthorizationError |
-| `SpeedX/server/cache` | Cache, cacheResponse |
-| `SpeedX/server/storage` | Storage, LocalDisk, createStorage |
-| `SpeedX/server/events` | Event, createEvent |
-| `SpeedX/server/database` | DatabaseConnection, QueryBuilder, SchemaBuilder, Migrator, Pagination, Seeder |
-| `SpeedX/client` | Signals, VDOM, Render, Router |
-| `SpeedX/client/signals` | Signal, Computed, Effect |
-| `SpeedX/client/vdom` | h, fragment, render, patch, hydrate, renderToString |
-| `SpeedX/client/vdom/jsx-runtime` | jsx, jsxs, Fragment |
-| `SpeedX/rpc` | RpcServer, RpcClient, types |
-| `SpeedX/schema` | s, all schema types, Infer |
+| `SpeexJS` | Schema, Server, Client, RPC (gabungan) |
+| `SpeexJS/server` | SuperApp, Router, Middleware, Controller, Container, Engine, Auth, Gate, Cache, Storage, Events, Database, Helpers |
+| `SpeexJS/server/http` | SuperRequest, SuperResponse, HeadersMap, HttpStatus, Cookies, Upload |
+| `SpeexJS/server/router` | Router, RouteHandler, RouteContext |
+| `SpeexJS/server/middleware` | Middleware, MiddlewarePipeline, 10 middleware factories |
+| `SpeexJS/server/controller` | Controller, decorators (@controller, @get, @post, @put, @patch, @del) |
+| `SpeexJS/server/container` | Container |
+| `SpeexJS/server/auth` | AuthManager, SessionGuard, TokenGuard |
+| `SpeexJS/server/gate` | Gate, AuthorizationError |
+| `SpeexJS/server/cache` | Cache, cacheResponse |
+| `SpeexJS/server/storage` | Storage, LocalDisk, createStorage |
+| `SpeexJS/server/events` | Event, createEvent |
+| `SpeexJS/server/database` | DatabaseConnection, QueryBuilder, SchemaBuilder, Migrator, Pagination, Seeder |
+| `SpeexJS/client` | Signals, VDOM, Render, Router |
+| `SpeexJS/client/signals` | Signal, Computed, Effect |
+| `SpeexJS/client/vdom` | h, fragment, render, patch, hydrate, renderToString |
+| `SpeexJS/client/vdom/jsx-runtime` | jsx, jsxs, Fragment |
+| `SpeexJS/rpc` | RpcServer, RpcClient, types |
+| `SpeexJS/schema` | s, all schema types, Infer |

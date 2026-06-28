@@ -1,4 +1,4 @@
-// SpeedX — Fullstack JavaScript/TypeScript Framework
+// SpeexJS — Fullstack JavaScript/TypeScript Framework
 // 🇮🇩 Indonesia First, Built for the World
 
 // Schema & Validation

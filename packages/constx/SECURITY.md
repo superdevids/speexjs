@@ -1,4 +1,4 @@
-# Security Policy — SpeedX
+# Security Policy — SpeexJS
 
 > **Bahasa Indonesia** · *English version below*
 
@@ -8,17 +8,17 @@
 
 ### Melaporkan Kerentanan Keamanan
 
-Kami sangat serius dalam menangani keamanan SpeedX. Jika Anda menemukan kerentanan keamanan, harap laporkan dengan **responsible disclosure**:
+Kami sangat serius dalam menangani keamanan SpeexJS. Jika Anda menemukan kerentanan keamanan, harap laporkan dengan **responsible disclosure**:
 
 **JANGAN** melaporkan kerentanan keamanan melalui GitHub Issues publik.
 
 **Cara melaporkan:**
 
-1. Kirim email ke **`keamanan@SpeedX.org`** (kode: `[SECURITY]`)
+1. Kirim email ke **`keamanan@SpeexJS.org`** (kode: `[SECURITY]`)
 2. Sertakan informasi berikut:
    - Deskripsi kerentanan
    - Langkah-langkah reproduksi
-   - Versi SpeedX yang terpengaruh
+   - Versi SpeexJS yang terpengaruh
    - Dampak potensial
    - Saran perbaikan (jika ada)
 
@@ -38,7 +38,7 @@ Kami sangat serius dalam menangani keamanan SpeedX. Jika Anda menemukan kerentan
 
 #### Cakupan Keamanan
 
-Area berikut termasuk dalam scope keamanan SpeedX:
+Area berikut termasuk dalam scope keamanan SpeexJS:
 
 - **Server**: Request validation, CSRF protection, helmet headers, session security, rate limiting
 - **Auth**: Password hashing (scrypt/PBKDF2), token management, session hijacking prevention
@@ -50,7 +50,7 @@ Area berikut termasuk dalam scope keamanan SpeedX:
 
 #### Di Luar Cakupan
 
-- Aplikasi yang dibangun menggunakan SpeedX (keamanan aplikasi adalah tanggung jawab pengembang)
+- Aplikasi yang dibangun menggunakan SpeexJS (keamanan aplikasi adalah tanggung jawab pengembang)
 - Plugin atau ekstensi pihak ketiga
 - Versi yang sudah tidak didukung
 
@@ -74,9 +74,9 @@ Kami mengikuti prinsip responsible disclosure:
 
 | Kanal | Detail |
 |---|---|
-| Email | `keamanan@SpeedX.org` |
+| Email | `keamanan@SpeexJS.org` |
 | Subjek | `[SECURITY]` + deskripsi singkat |
-| Enkripsi | PGP key tersedia di `https://SpeedX.org/security/pgp` |
+| Enkripsi | PGP key tersedia di `https://SpeexJS.org/security/pgp` |
 | Respons | 48 jam untuk konfirmasi |
 
 ---
@@ -85,13 +85,13 @@ Kami mengikuti prinsip responsible disclosure:
 
 ### Reporting Security Vulnerabilities
 
-We take the security of SpeedX seriously. If you discover a security vulnerability, please follow **responsible disclosure**:
+We take the security of SpeexJS seriously. If you discover a security vulnerability, please follow **responsible disclosure**:
 
 **DO NOT** report security vulnerabilities via public GitHub Issues.
 
 **How to report:**
 
-1. Email us at **`keamanan@SpeedX.org`** with subject prefix `[SECURITY]`
+1. Email us at **`keamanan@SpeexJS.org`** with subject prefix `[SECURITY]`
 2. Include:
    - Vulnerability description
    - Reproduction steps
@@ -132,7 +132,7 @@ We take the security of SpeedX seriously. If you discover a security vulnerabili
 
 | Channel | Detail |
 |---|---|
-| Email | `keamanan@SpeedX.org` |
+| Email | `keamanan@SpeexJS.org` |
 | Subject | `[SECURITY]` + brief description |
-| PGP | Available at `https://SpeedX.org/security/pgp` |
+| PGP | Available at `https://SpeexJS.org/security/pgp` |
 | Response | Within 48 hours |

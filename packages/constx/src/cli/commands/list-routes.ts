@@ -30,7 +30,7 @@ export function listRoutes(): void {
     console.log(
       `  ${colors.yellow('!')} Tidak ada route terdaftar. Buat controller dulu:`,
     )
-    console.log(`    ${colors.cyan('speedx make:controller <name>')}`)
+    console.log(`    ${colors.cyan('speexjs make:controller <name>')}`)
     return
   }
 
@@ -40,7 +40,7 @@ export function listRoutes(): void {
     console.log(
       `  ${colors.yellow('!')} Tidak ada route terdaftar. Buat controller dulu:`,
     )
-    console.log(`    ${colors.cyan('speedx make:controller <name>')}`)
+    console.log(`    ${colors.cyan('speexjs make:controller <name>')}`)
     return
   }
 

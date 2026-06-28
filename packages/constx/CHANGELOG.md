@@ -1,13 +1,13 @@
-# Changelog — SpeedX
+# Changelog — SpeexJS
 
-All notable changes to the SpeedX framework will be documented in this file.
+All notable changes to the SpeexJS framework will be documented in this file.
 
 ---
 
 ## [0.2.0] — 2026-06-28 — Zero Dependencies & Enterprise
 
 ### 🎉 Major Milestone
-**Zero external dependencies!** SpeedX sekarang 100% native Node.js.
+**Zero external dependencies!** SpeexJS sekarang 100% native Node.js.
 
 ### Added
 - **Native Foundation** — CLI argument parser, ANSI colors, structured logger (WIB/WITA/WIT)
@@ -33,15 +33,15 @@ All notable changes to the SpeedX framework will be documented in this file.
 
 ### Changed
 - **BREAKING**: Hapus `commander` — CLI sekarang native `process.argv`
-- **BREAKING**: Hapus `SpeedX-core` dependency — semua native
+- **BREAKING**: Hapus `SpeexJS-core` dependency — semua native
 - **BREAKING**: Hapus `picocolors` — ANSI colors sendiri
-- CLI commands sekarang langsung tersedia via `SpeedX <command>`
-- Package name tetap `SpeedX`, tapi sekarang zero dependencies
+- CLI commands sekarang langsung tersedia via `SpeexJS <command>`
+- Package name tetap `SpeexJS`, tapi sekarang zero dependencies
 
 ### Removed
 - `commander` — diganti native `parseArgs()`
 - `picocolors` — diganti native ANSI
-- `SpeedX-core` — semua fungsi diimplementasikan native
+- `SpeexJS-core` — semua fungsi diimplementasikan native
 
 ### Stats
 - 67 source files (+29 dari v0.1.0)
@@ -65,7 +65,7 @@ All notable changes to the SpeedX framework will be documented in this file.
 - **Engine** — Node.js default, swappable via `ServerEngine` interface
 - **Client Signals** — `signal()`, `computed()`, `effect()`, `batch()`, `untracked()`
 - **Client VDOM** — `h()`, `render()`, `patch()`, `hydrate()`, `renderToString()`
-- **Client JSX** — Full JSX support (`jsxImportSource: \"@SpeedX/vdom\"`)
+- **Client JSX** — Full JSX support (`jsxImportSource: \"@SpeexJS/vdom\"`)
 - **Client Router** — File-based routing with guards
 - **RPC** — Type-safe RPC server & client with schema validation
 - **CLI** — `init`, `make:controller`, `make:middleware`, `make:schema`, `list-routes`, `serve`
@@ -75,4 +75,4 @@ All notable changes to the SpeedX framework will be documented in this file.
 - 5.261 lines of code
 - 14 build entry points
 - 69 unit tests (schema)
-- Dependencies: `commander`, `SpeedX-core`, `picocolors`
+- Dependencies: `commander`, `SpeexJS-core`, `picocolors`

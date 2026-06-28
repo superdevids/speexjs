@@ -1,4 +1,4 @@
-# SpeedX Roadmap 🗺️
+# SpeexJS Roadmap 🗺️
 
 > **Current version:** v0.2.0 (Zero dependencies, Native modules)
 > **Status:** Active Development
@@ -16,7 +16,7 @@
 - [x] Engine abstraction (Node.js default, swappable to Bun/Deno)
 - [x] Client Signals (`signal`, `computed`, `effect`, `batch`)
 - [x] Client VDOM (`h`, `render`, `patch`, `hydrate`, `renderToString`)
-- [x] Client JSX support (`jsxImportSource: \"@SpeedX/vdom\"`)
+- [x] Client JSX support (`jsxImportSource: \"@SpeexJS/vdom\"`)
 - [x] Client Router (file-based routing, guards)
 - [x] RPC (Type-safe server/client, HTTP + WebSocket transport)
 - [x] CLI (init, make:controller/middleware/schema, list-routes, serve)
@@ -87,12 +87,12 @@
 - [ ] **Two Factor Auth** — TOTP-based
 
 ### CLI
-- [ ] **`SpeedX make:model`** — generate model
-- [ ] **`SpeedX make:migration`** — generate migration
-- [ ] **`SpeedX make:seeder`** — generate seeder
-- [ ] **`SpeedX migrate`** — run migrations
-- [ ] **`SpeedX db:seed`** — run seeders
-- [ ] **`SpeedX route:list`** — enhanced route listing
+- [ ] **`SpeexJS make:model`** — generate model
+- [ ] **`SpeexJS make:migration`** — generate migration
+- [ ] **`SpeexJS make:seeder`** — generate seeder
+- [ ] **`SpeexJS migrate`** — run migrations
+- [ ] **`SpeexJS db:seed`** — run seeders
+- [ ] **`SpeexJS route:list`** — enhanced route listing
 
 ### Testing
 - [ ] Unit tests untuk Server module
@@ -106,8 +106,8 @@
 ## 🔜 v0.4.0 — Frontend Ecosystem
 
 ### Client
-- [ ] **React Adapter** — use React components with SpeedX server
-- [ ] **Vue Adapter** — use Vue components with SpeedX server
+- [ ] **React Adapter** — use React components with SpeexJS server
+- [ ] **Vue Adapter** — use Vue components with SpeexJS server
 - [ ] **SSR Streaming** — progressive HTML streaming
 - [ ] **Island Architecture** — partial hydration
 - [ ] **Image Optimization** — built-in image processing
@@ -136,7 +136,7 @@
 ### Infrastructure
 - [ ] **Dokumentasi Bahasa Indonesia** lengkap
 - [ ] **Dokumentasi English** lengkap
-- [ ] **Website** — SpeedX.dev
+- [ ] **Website** — SpeexJS.dev
 - [ ] **Benchmark** vs Express, Fastify, Next.js
 - [ ] **CLI Templates** — starter kits (blog, API, SaaS)
 - [ ] **VS Code Extension** — syntax highlighting, snippets
@@ -157,18 +157,18 @@
 | Dokumentasi EN/ID | 🔥🔥🔥 | 🟢 Small | P1 |
 | Queues | 🔥🔥 | 🔴 Large | P2 |
 | Broadcasting | 🔥🔥 | 🔴 Large | P2 |
-| Website SpeedX.dev | 🔥🔥 | 🟡 Medium | P2 |
+| Website SpeexJS.dev | 🔥🔥 | 🟡 Medium | P2 |
 | Benchmark | 🔥 | 🟡 Medium | P3 |
 
 ---
 
 ## 💡 Ide untuk Masa Depan
 
-- **SpeedX SaaS Starter** — boilerplate untuk SaaS apps (auth, billing, team)
-- **SpeedX Admin Panel** — auto-generated admin from schema
-- **SpeedX AI SDK** — integrasi LLM/AI (OpenAI, Anthropic, Google)
-- **SpeedX Mobile** — React Native / Flutter integration
-- **SpeedX Desktop** — Electron/Tauri integration
+- **SpeexJS SaaS Starter** — boilerplate untuk SaaS apps (auth, billing, team)
+- **SpeexJS Admin Panel** — auto-generated admin from schema
+- **SpeexJS AI SDK** — integrasi LLM/AI (OpenAI, Anthropic, Google)
+- **SpeexJS Mobile** — React Native / Flutter integration
+- **SpeexJS Desktop** — Electron/Tauri integration
 - **Plugin Marketplace** — ecosystem plugin system
 
 ---

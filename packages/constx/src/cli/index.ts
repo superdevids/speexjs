@@ -9,20 +9,20 @@ import { listRoutes } from './commands/list-routes.js'
 import { serve } from './commands/serve.js'
 
 function showHelp(): void {
-  console.log(`${colors.bold('SpeedX')} ${colors.cyan('v0.2.0')}`)
+  console.log(`${colors.bold('SpeexJS')} ${colors.cyan('v0.2.0')}`)
   console.log('Fullstack JavaScript/TypeScript Framework')
   console.log()
   console.log(`${colors.bold('Usage:')}`)
-  console.log('  SpeedX init [name] [options]        Buat project baru')
-  console.log('  SpeedX make:controller <name>        Generate controller')
-  console.log('  SpeedX make:middleware <name>        Generate middleware')
-  console.log('  SpeedX make:schema <name>            Generate schema')
-  console.log('  SpeedX list-routes                   Lihat semua route')
-  console.log('  SpeedX serve [options]               Jalankan server')
-  console.log('  SpeedX --help                        Bantuan ini')
+  console.log('  SpeexJS init [name] [options]        Buat project baru')
+  console.log('  SpeexJS make:controller <name>        Generate controller')
+  console.log('  SpeexJS make:middleware <name>        Generate middleware')
+  console.log('  SpeexJS make:schema <name>            Generate schema')
+  console.log('  SpeexJS list-routes                   Lihat semua route')
+  console.log('  SpeexJS serve [options]               Jalankan server')
+  console.log('  SpeexJS --help                        Bantuan ini')
   console.log()
   console.log(`${colors.bold('Aliases:')}`)
-  console.log('  SpeedX -v, --version                 Lihat versi')
+  console.log('  SpeexJS -v, --version                 Lihat versi')
   console.log()
   console.log(`${colors.bold('Options:')}`)
   console.log('  --template <type>    blank, fullstack, api-only')
@@ -43,7 +43,7 @@ async function main(): Promise<void> {
     case 'make:controller': {
       if (!parsed.args[0]) {
         console.error(colors.red('Nama controller diperlukan'))
-        console.log(`  ${colors.cyan('SpeedX make:controller <name>')}`)
+        console.log(`  ${colors.cyan('SpeexJS make:controller <name>')}`)
         process.exit(1)
       }
       await makeController(parsed.args[0])
@@ -52,7 +52,7 @@ async function main(): Promise<void> {
     case 'make:middleware': {
       if (!parsed.args[0]) {
         console.error(colors.red('Nama middleware diperlukan'))
-        console.log(`  ${colors.cyan('SpeedX make:middleware <name>')}`)
+        console.log(`  ${colors.cyan('SpeexJS make:middleware <name>')}`)
         process.exit(1)
       }
       await makeMiddleware(parsed.args[0])
@@ -61,7 +61,7 @@ async function main(): Promise<void> {
     case 'make:schema': {
       if (!parsed.args[0]) {
         console.error(colors.red('Nama schema diperlukan'))
-        console.log(`  ${colors.cyan('SpeedX make:schema <name>')}`)
+        console.log(`  ${colors.cyan('SpeexJS make:schema <name>')}`)
         process.exit(1)
       }
       await makeSchema(parsed.args[0])
@@ -87,7 +87,7 @@ async function main(): Promise<void> {
     case 'version':
     case '--version':
     case '-v': {
-      console.log('SpeedX v0.2.0')
+      console.log('SpeexJS v0.2.0')
       break
     }
     default: {
