@@ -201,3 +201,126 @@ export function randomInt(min: number, max: number): number {
 export function inRange(value: number, min: number, max: number): boolean {
   return value >= min && value <= max
 }
+
+// ─── Statistics ─────────────────────────────────────────
+
+/**
+ * Computes the median of an array of numbers.
+ *
+ * @param values - Array of numbers.
+ * @returns The median value.
+ * @throws {RangeError} If the array is empty.
+ */
+export function median(values: number[]): number {
+  if (values.length === 0) throw new RangeError('Cannot compute median of an empty array')
+  const sorted = [...values].sort((a, b) => a - b)
+  const mid = Math.floor(sorted.length / 2)
+  return sorted.length % 2 === 0 ? (sorted[mid - 1]! + sorted[mid]!) / 2 : sorted[mid]!
+}
+
+/**
+ * Computes the population standard deviation.
+ *
+ * @param values - Array of numbers.
+ * @returns The standard deviation.
+ * @throws {RangeError} If the array has fewer than 2 values.
+ */
+export function stddev(values: number[]): number {
+  if (values.length < 2) throw new RangeError('Need at least 2 values for stddev')
+  const mean = sum(values) / values.length
+  const sqDiffs = values.map((v) => (v - mean) ** 2)
+  return Math.sqrt(sqDiffs.reduce((a, b) => a + b, 0) / values.length)
+}
+
+/**
+ * Computes the sample standard deviation (Bessel's correction).
+ *
+ * @param values - Array of numbers.
+ * @returns The sample standard deviation.
+ * @throws {RangeError} If the array has fewer than 2 values.
+ */
+export function sampleStddev(values: number[]): number {
+  if (values.length < 2) throw new RangeError('Need at least 2 values for sample stddev')
+  const mean = sum(values) / values.length
+  const sqDiffs = values.map((v) => (v - mean) ** 2)
+  return Math.sqrt(sqDiffs.reduce((a, b) => a + b, 0) / (values.length - 1))
+}
+
+/**
+ * Computes the percentile value (0-100) using linear interpolation.
+ *
+ * @param values - Array of numbers.
+ * @param p - Percentile (0-100).
+ * @returns The percentile value.
+ * @throws {RangeError} If p is outside [0, 100] or array is empty.
+ */
+export function percentile(values: number[], p: number): number {
+  if (values.length === 0) throw new RangeError('Cannot compute percentile of empty array')
+  if (p < 0 || p > 100) throw new RangeError('Percentile must be between 0 and 100')
+  const sorted = [...values].sort((a, b) => a - b)
+  const rank = (p / 100) * (sorted.length - 1)
+  const lower = Math.floor(rank)
+  const upper = Math.ceil(rank)
+  if (lower === upper) return sorted[lower]!
+  return sorted[lower]! + (sorted[upper]! - sorted[lower]!) * (rank - lower)
+}
+
+/**
+ * Computes the Pearson correlation coefficient between two arrays.
+ *
+ * @param x - First array.
+ * @param y - Second array.
+ * @returns The correlation coefficient (-1 to 1).
+ * @throws {RangeError} If arrays have different lengths or fewer than 2 pairs.
+ */
+export function correlation(x: number[], y: number[]): number {
+  if (x.length !== y.length) throw new RangeError('Arrays must have the same length')
+  if (x.length < 2) throw new RangeError('Need at least 2 pairs for correlation')
+  const n = x.length
+  const meanX = sum(x) / n
+  const meanY = sum(y) / n
+  let num = 0
+  let denX = 0
+  let denY = 0
+  for (let i = 0; i < n; i++) {
+    const dx = x[i]! - meanX
+    const dy = y[i]! - meanY
+    num += dx * dy
+    denX += dx * dx
+    denY += dy * dy
+  }
+  if (denX === 0 || denY === 0) return 0
+  return num / Math.sqrt(denX * denY)
+}
+
+/**
+ * Formats a number as a currency string with locale support.
+ *
+ * @example formatCurrency(1500000) // "Rp1.500.000"
+ * @example formatCurrency(1500000, { notation: 'compact' }) // "Rp1,5 jt"
+ * @example formatCurrency(99.99, { locale: 'en-US', currency: 'USD' }) // "$99.99"
+ *
+ * @param value - The number to format.
+ * @param options - Formatting options.
+ * @returns The formatted currency string.
+ */
+export function formatCurrency(
+  value: number,
+  options?: { locale?: string; currency?: string; notation?: 'standard' | 'compact' },
+): string {
+  const locale = options?.locale ?? 'id-ID'
+  const currency = options?.currency ?? 'IDR'
+  const notation = options?.notation ?? 'standard'
+
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      notation,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(value)
+  } catch {
+    return `${currency} ${value.toLocaleString(locale)}`
+  }
+}

@@ -195,3 +195,64 @@ export function isEmpty(value: unknown): boolean {
 }
 
 export type SortDirection = 'asc' | 'desc'
+
+export function topoSort<T extends { id: string; dependencies?: string[] }>(items: T[]): T[] {
+  const adj = new Map<string, string[]>()
+  const inDegree = new Map<string, number>()
+  const itemMap = new Map<string, T>()
+
+  for (const item of items) {
+    itemMap.set(item.id, item)
+    if (!adj.has(item.id)) adj.set(item.id, [])
+    if (!inDegree.has(item.id)) inDegree.set(item.id, 0)
+  }
+
+  for (const item of items) {
+    if (item.dependencies) {
+      for (const depId of item.dependencies) {
+        adj.get(depId)?.push(item.id)
+        inDegree.set(item.id, (inDegree.get(item.id) ?? 0) + 1)
+      }
+    }
+  }
+
+  const queue: string[] = []
+  for (const [id, degree] of inDegree) {
+    if (degree === 0) queue.push(id)
+  }
+
+  const sorted: string[] = []
+  while (queue.length > 0) {
+    const id = queue.shift()!
+    sorted.push(id)
+    for (const neighbor of adj.get(id) ?? []) {
+      const newDegree = (inDegree.get(neighbor) ?? 1) - 1
+      inDegree.set(neighbor, newDegree)
+      if (newDegree === 0) queue.push(neighbor)
+    }
+  }
+
+  if (sorted.length !== items.length) {
+    throw new Error('Circular dependency detected')
+  }
+
+  return sorted.map(id => itemMap.get(id)!)
+}
+
+export function slidingWindows<T>(items: T[], size: number, step: number = 1): T[][] {
+  if (size <= 0 || items.length === 0 || step <= 0) return []
+  const result: T[][] = []
+  for (let i = 0; i + size <= items.length; i += step) {
+    result.push(items.slice(i, i + size))
+  }
+  return result
+}
+
+export function tumblingWindows<T>(items: T[], size: number): T[][] {
+  if (size <= 0 || items.length === 0) return []
+  const result: T[][] = []
+  for (let i = 0; i < items.length; i += size) {
+    result.push(items.slice(i, i + size))
+  }
+  return result
+}

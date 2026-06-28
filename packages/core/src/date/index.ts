@@ -466,3 +466,192 @@ export function calculateAge(birthDate: Date): number {
 
   return age
 }
+
+// ─── Time Ago & Time Remaining ───────────────────────────────────────────────
+
+interface LocaleLabels {
+  years: { single: string; plural: string }
+  months: { single: string; plural: string }
+  weeks: { single: string; plural: string }
+  days: { single: string; plural: string }
+  hours: { single: string; plural: string }
+  minutes: { single: string; plural: string }
+  seconds: { single: string; plural: string }
+}
+
+const LOCALE_LABELS: Record<string, LocaleLabels> = {
+  id: {
+    years: { single: 'tahun', plural: 'tahun' },
+    months: { single: 'bulan', plural: 'bulan' },
+    weeks: { single: 'minggu', plural: 'minggu' },
+    days: { single: 'hari', plural: 'hari' },
+    hours: { single: 'jam', plural: 'jam' },
+    minutes: { single: 'menit', plural: 'menit' },
+    seconds: { single: 'detik', plural: 'detik' },
+  },
+  en: {
+    years: { single: 'year', plural: 'years' },
+    months: { single: 'month', plural: 'months' },
+    weeks: { single: 'week', plural: 'weeks' },
+    days: { single: 'day', plural: 'days' },
+    hours: { single: 'hour', plural: 'hours' },
+    minutes: { single: 'minute', plural: 'minutes' },
+    seconds: { single: 'second', plural: 'seconds' },
+  },
+}
+
+function getSuffix(diffMs: number, kind: 'ago' | 'remaining', locale: string): string {
+  if (diffMs < 0) {
+    return locale === 'en' ? 'ago' : 'yang lalu'
+  }
+  if (kind === 'remaining') {
+    return locale === 'en' ? 'remaining' : 'lagi'
+  }
+  return locale === 'en' ? 'ago' : 'yang lalu'
+}
+
+function formatRelativeTime(absDiffMs: number, suffix: string, locale: string): string {
+  const labels = LOCALE_LABELS[locale] ?? LOCALE_LABELS.id!
+
+  const seconds = Math.floor(absDiffMs / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  const days = Math.floor(hours / 24)
+  const weeks = Math.floor(days / 7)
+  const months = Math.floor(days / 30.4375)
+  const years = Math.floor(days / 365.25)
+
+  let count: number
+  let unit: keyof LocaleLabels
+
+  if (years >= 1) { count = years; unit = 'years' }
+  else if (months >= 1) { count = months; unit = 'months' }
+  else if (weeks >= 1) { count = weeks; unit = 'weeks' }
+  else if (days >= 1) { count = days; unit = 'days' }
+  else if (hours >= 1) { count = hours; unit = 'hours' }
+  else if (minutes >= 1) { count = minutes; unit = 'minutes' }
+  else { count = Math.max(1, seconds); unit = 'seconds' }
+
+  const label = count === 1 ? labels[unit].single : labels[unit].plural
+  return `${count} ${label} ${suffix}`
+}
+
+/**
+ * Returns a human-readable relative time string (e.g. "5 menit yang lalu").
+ *
+ * @param date - The past date.
+ * @param options - Options with locale ('id' by default, 'en' supported).
+ * @returns A relative time string.
+ */
+export function timeAgo(date: Date, options?: { locale?: string }): string {
+  const diff = Date.now() - date.getTime()
+  const locale = options?.locale ?? 'id'
+  const suffix = getSuffix(diff, 'ago', locale)
+  return formatRelativeTime(Math.abs(diff), suffix, locale)
+}
+
+/**
+ * Shows the time remaining until a future date.
+ *
+ * @param target - The target future date.
+ * @param options - Options with locale ('id' by default, 'en' supported).
+ * @returns A relative time string.
+ */
+export function timeRemaining(target: Date, options?: { locale?: string }): string {
+  const diff = target.getTime() - Date.now()
+  const locale = options?.locale ?? 'id'
+  const suffix = getSuffix(diff, 'remaining', locale)
+  return formatRelativeTime(Math.abs(diff), suffix, locale)
+}
+
+// ─── Duration ────────────────────────────────────────────────────────────────
+
+/**
+ * Represents a duration split into calendar and time components.
+ */
+export interface Duration {
+  years: number
+  months: number
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
+}
+
+/**
+ * Formats a Duration object into a human-readable string.
+ *
+ * @example
+ * formatDuration({ hours: 2, minutes: 30, seconds: 15 }) // "2 jam 30 menit 15 detik"
+ * formatDuration({ hours: 2, minutes: 30 }, { locale: 'en' }) // "2 hours 30 minutes"
+ *
+ * @param duration - The duration to format.
+ * @param options - Options with locale ('id' by default, 'en' supported).
+ * @returns A formatted duration string.
+ */
+export function formatDuration(duration: Duration, options?: { locale?: string }): string {
+  const locale = options?.locale ?? 'id'
+  const labels = LOCALE_LABELS[locale] ?? LOCALE_LABELS.id!
+
+  const parts: string[] = []
+  const entries: [keyof Duration, number][] = [
+    ['years', duration.years],
+    ['months', duration.months],
+    ['days', duration.days],
+    ['hours', duration.hours],
+    ['minutes', duration.minutes],
+    ['seconds', duration.seconds],
+  ]
+
+  for (const [key, value] of entries) {
+    if (value > 0) {
+      const label = value === 1 ? labels[key].single : labels[key].plural
+      parts.push(`${value} ${label}`)
+    }
+  }
+
+  if (parts.length === 0) {
+    const label = labels.seconds.plural
+    return `0 ${label}`
+  }
+
+  return parts.join(' ')
+}
+
+// ─── Timezone Helpers ────────────────────────────────────────────────────────
+
+/** UTC+7 — Western Indonesia Time (WIB). */
+export const TIMEZONE_WIB = 7
+
+/** UTC+8 — Central Indonesia Time (WITA). */
+export const TIMEZONE_WITA = 8
+
+/** UTC+9 — Eastern Indonesia Time (WIT). */
+export const TIMEZONE_WIT = 9
+
+/**
+ * Converts a date to a specific timezone offset by returning a new Date whose
+ * local-time getters (getHours, getMinutes etc.) reflect the target timezone.
+ *
+ * @param date - The source date.
+ * @param offsetHours - The timezone offset in hours (e.g. 7 for WIB).
+ * @returns A new Date adjusted to the target timezone.
+ * @throws {InvalidDateError} If the input date is invalid.
+ */
+export function toTimezone(date: Date, offsetHours: number): Date {
+  if (!isValidDate(date)) throw new InvalidDateError(date)
+  const utcMs = date.getTime() + date.getTimezoneOffset() * 60000
+  return new Date(utcMs + offsetHours * 3600000)
+}
+
+/**
+ * Formats a date in a specific timezone using `formatDate` tokens.
+ *
+ * @param date - The source date.
+ * @param format - The format string (see `formatDate` for supported tokens).
+ * @param offsetHours - The timezone offset in hours.
+ * @returns The formatted date string.
+ */
+export function formatInTimezone(date: Date, format: string, offsetHours: number): string {
+  return formatDate(toTimezone(date, offsetHours), format)
+}

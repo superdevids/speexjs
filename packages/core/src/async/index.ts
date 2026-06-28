@@ -126,3 +126,10 @@ export interface Deferred<T> {
   resolve: (value: T) => void
   reject: (reason: unknown) => void
 }
+
+// ─── Queue, Semaphore, memoizeAsync ─────────────────────
+export { Queue } from './queue.js'
+export type { QueueOptions } from './queue.js'
+export { Semaphore } from './semaphore.js'
+export { memoizeAsync } from './memoize.js'
+export type { MemoizeAsyncOptions } from './memoize.js'

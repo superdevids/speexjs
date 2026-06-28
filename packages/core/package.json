@@ -1,6 +1,6 @@
 {
   "name": "superjs-core",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Zero-dependency JavaScript standard library + dependency health scanner — core, math, date, collection, string, async, io, type, crypto, path & dep-exray",
   "type": "module",
   "main": "./dist/index.js",

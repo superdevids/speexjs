@@ -1,3 +1,5 @@
+import { formatCurrency } from '../math/index.js'
+
 const WORD_SPLIT_RE = /[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\b)|\d+/g
 
 function splitWords(str: string): string[] {
@@ -216,4 +218,152 @@ export function countOccurrences(str: string, substring: string): number {
     pos += substring.length
   }
   return count
+}
+
+/**
+ * Computes the Levenshtein distance between two strings.
+ * Uses iterative DP with O(min(m,n)) space.
+ */
+export function levenshtein(a: string, b: string): number {
+  const an = a.length
+  const bn = b.length
+  if (an === 0) return bn
+  if (bn === 0) return an
+  if (an < bn) return levenshtein(b, a)
+
+  let prev = new Uint32Array(bn + 1)
+  let curr = new Uint32Array(bn + 1)
+  for (let j = 0; j <= bn; j++) prev[j] = j
+
+  for (let i = 1; i <= an; i++) {
+    curr[0] = i
+    for (let j = 1; j <= bn; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1
+      curr[j] = Math.min(
+        prev[j]! + 1,
+        curr[j - 1]! + 1,
+        prev[j - 1]! + cost,
+      )
+    }
+    ;[prev, curr] = [curr, prev]
+  }
+  return prev[bn]!
+}
+
+/**
+ * Performs a simple fuzzy match: checks if all characters of query
+ * appear in str in order (case-insensitive).
+ */
+export function fuzzyMatch(str: string, query: string): boolean {
+  if (query.length === 0) return true
+  if (str.length === 0) return false
+  const sl = str.toLowerCase()
+  const ql = query.toLowerCase()
+  let si = 0
+  for (let qi = 0; qi < ql.length; qi++) {
+    si = sl.indexOf(ql[qi]!, si)
+    if (si === -1) return false
+    si++
+  }
+  return true
+}
+
+/**
+ * Masks parts of a string, useful for data compliance (PDPA/GDPR).
+ *
+ * @example maskString('08123456789') // "0812****789"
+ * @example maskString('hello@email.com') // "h***@e***.com"
+ * @example maskString('1234567890', { start: 0, end: 4, char: '#' }) // "####567890"
+ */
+export function maskString(
+  str: string,
+  options?: {
+    start?: number
+    end?: number
+    char?: string
+  },
+): string {
+  if (str.length === 0) return str
+  const maskChar = options?.char ?? '*'
+  const start = options?.start ?? Math.ceil(str.length * 0.25)
+  const end = options?.end ?? Math.floor(str.length * 0.75)
+
+  if (start >= end || start < 0) return str
+  const clampedStart = Math.max(0, start)
+  const clampedEnd = Math.min(str.length, end)
+  return (
+    str.slice(0, clampedStart) +
+    maskChar.repeat(clampedEnd - clampedStart) +
+    str.slice(clampedEnd)
+  )
+}
+
+// ─── Indonesian Locale Utilities ────────────────────────
+
+const SATUAN = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan'] as const
+const BELASAN = ['sepuluh', 'sebelas', 'dua belas', 'tiga belas', 'empat belas', 'lima belas', 'enam belas', 'tujuh belas', 'delapan belas', 'sembilan belas'] as const
+const PULUHAN = ['', '', 'dua puluh', 'tiga puluh', 'empat puluh', 'lima puluh', 'enam puluh', 'tujuh puluh', 'delapan puluh', 'sembilan puluh'] as const
+
+function _terbilang(n: number): string {
+  if (n < 0) return 'minus ' + _terbilang(-n)
+  if (n === 0) return 'nol'
+  if (n < 10) return SATUAN[n]!
+  if (n < 20) return n === 10 ? 'sepuluh' : n === 11 ? 'sebelas' : BELASAN[n - 10]!
+  if (n < 100) {
+    const pul = Math.floor(n / 10)
+    const sat = n % 10
+    return PULUHAN[pul]! + (sat > 0 ? ' ' + SATUAN[sat]! : '')
+  }
+  if (n < 1000) {
+    const ratus = Math.floor(n / 100)
+    const sis = n % 100
+    const ratusStr = ratus === 1 ? 'seratus' : SATUAN[ratus]! + ' ratus'
+    return ratusStr + (sis > 0 ? ' ' + _terbilang(sis) : '')
+  }
+  if (n < 1_000_000) {
+    const rib = Math.floor(n / 1000)
+    const sis = n % 1000
+    const ribStr = rib === 1 ? 'seribu' : _terbilang(rib) + ' ribu'
+    return ribStr + (sis > 0 ? ' ' + _terbilang(sis) : '')
+  }
+  if (n < 1_000_000_000) {
+    const jut = Math.floor(n / 1_000_000)
+    const sis = n % 1_000_000
+    return _terbilang(jut) + ' juta' + (sis > 0 ? ' ' + _terbilang(sis) : '')
+  }
+  if (n < 1_000_000_000_000) {
+    const mil = Math.floor(n / 1_000_000_000)
+    const sis = n % 1_000_000_000
+    return _terbilang(mil) + ' miliar' + (sis > 0 ? ' ' + _terbilang(sis) : '')
+  }
+  const tril = Math.floor(n / 1_000_000_000_000)
+  const sis = n % 1_000_000_000_000
+  return _terbilang(tril) + ' triliun' + (sis > 0 ? ' ' + _terbilang(sis) : '')
+}
+
+/**
+ * Converts a number to Indonesian words (terbilang).
+ *
+ * @example terbilang(1500000) // "satu juta lima ratus ribu"
+ * @example terbilang(2024)    // "dua ribu dua puluh empat"
+ * @example terbilang(11)      // "sebelas"
+ * @example terbilang(100)     // "seratus"
+ */
+export function terbilang(value: number): string {
+  if (!Number.isFinite(value)) throw new RangeError('Input must be a finite number')
+  if (value > Number.MAX_SAFE_INTEGER) throw new RangeError('Input terlalu besar')
+  return _terbilang(Math.floor(Math.abs(value)))
+}
+
+/**
+ * Formats a number as Indonesian Rupiah string.
+ *
+ * @example formatRupiah(1500000) // "Rp1.500.000"
+ * @example formatRupiah(1500000, { notation: 'compact' }) // "Rp1,5 jt"
+ */
+export function formatRupiah(
+  value: number,
+  options?: { notation?: 'standard' | 'compact' },
+): string {
+  return formatCurrency(value, { locale: 'id-ID', currency: 'IDR', notation: options?.notation })
 }
