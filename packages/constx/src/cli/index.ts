@@ -9,20 +9,20 @@ import { listRoutes } from './commands/list-routes.js'
 import { serve } from './commands/serve.js'
 
 function showHelp(): void {
-  console.log(`${colors.bold('SuperJS')} ${colors.cyan('v0.2.0')}`)
+  console.log(`${colors.bold('ConstX')} ${colors.cyan('v0.2.0')}`)
   console.log('Fullstack JavaScript/TypeScript Framework')
   console.log()
   console.log(`${colors.bold('Usage:')}`)
-  console.log('  superjs init [name] [options]        Buat project baru')
-  console.log('  superjs make:controller <name>        Generate controller')
-  console.log('  superjs make:middleware <name>        Generate middleware')
-  console.log('  superjs make:schema <name>            Generate schema')
-  console.log('  superjs list-routes                   Lihat semua route')
-  console.log('  superjs serve [options]               Jalankan server')
-  console.log('  superjs --help                        Bantuan ini')
+  console.log('  ConstX init [name] [options]        Buat project baru')
+  console.log('  ConstX make:controller <name>        Generate controller')
+  console.log('  ConstX make:middleware <name>        Generate middleware')
+  console.log('  ConstX make:schema <name>            Generate schema')
+  console.log('  ConstX list-routes                   Lihat semua route')
+  console.log('  ConstX serve [options]               Jalankan server')
+  console.log('  ConstX --help                        Bantuan ini')
   console.log()
   console.log(`${colors.bold('Aliases:')}`)
-  console.log('  superjs -v, --version                 Lihat versi')
+  console.log('  ConstX -v, --version                 Lihat versi')
   console.log()
   console.log(`${colors.bold('Options:')}`)
   console.log('  --template <type>    blank, fullstack, api-only')
@@ -43,7 +43,7 @@ async function main(): Promise<void> {
     case 'make:controller': {
       if (!parsed.args[0]) {
         console.error(colors.red('Nama controller diperlukan'))
-        console.log(`  ${colors.cyan('superjs make:controller <name>')}`)
+        console.log(`  ${colors.cyan('ConstX make:controller <name>')}`)
         process.exit(1)
       }
       await makeController(parsed.args[0])
@@ -52,7 +52,7 @@ async function main(): Promise<void> {
     case 'make:middleware': {
       if (!parsed.args[0]) {
         console.error(colors.red('Nama middleware diperlukan'))
-        console.log(`  ${colors.cyan('superjs make:middleware <name>')}`)
+        console.log(`  ${colors.cyan('ConstX make:middleware <name>')}`)
         process.exit(1)
       }
       await makeMiddleware(parsed.args[0])
@@ -61,7 +61,7 @@ async function main(): Promise<void> {
     case 'make:schema': {
       if (!parsed.args[0]) {
         console.error(colors.red('Nama schema diperlukan'))
-        console.log(`  ${colors.cyan('superjs make:schema <name>')}`)
+        console.log(`  ${colors.cyan('ConstX make:schema <name>')}`)
         process.exit(1)
       }
       await makeSchema(parsed.args[0])
@@ -87,7 +87,7 @@ async function main(): Promise<void> {
     case 'version':
     case '--version':
     case '-v': {
-      console.log('SuperJS v0.2.0')
+      console.log('ConstX v0.2.0')
       break
     }
     default: {

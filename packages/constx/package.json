@@ -1,5 +1,5 @@
 {
-  "name": "superjs",
+  "name": "constx",
   "version": "0.2.0",
   "description": "Fullstack JavaScript/TypeScript framework — Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies. 🇮🇩 Indonesia First.",
   "type": "module",
@@ -7,7 +7,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "superjs": "dist/cli/index.js"
+    "constx": "dist/cli/index.js"
   },
   "exports": {
     ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
@@ -53,7 +53,7 @@
   },
   "keywords": ["fullstack", "framework", "typescript", "server", "client", "rpc", "validation", "database", "auth", "indonesia"],
   "publishConfig": { "access": "public" },
-  "repository": { "type": "git", "url": "git+https://github.com/superdevids/superjs.git" },
+  "repository": { "type": "git", "url": "git+https://github.com/superdevids/constx.git" },
   "license": "MIT",
   "engines": { "node": ">=18.0.0" }
 }

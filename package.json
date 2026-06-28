@@ -1,13 +1,13 @@
 {
-  "name": "superjs-monorepo",
+  "name": "constx-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "SuperJS Monorepo — superjs-core (utility library) + superjs (fullstack framework) 🇮🇩",
+  "description": "ConstX Monorepo — constx-core (utility library) + constx (fullstack framework) 🇮🇩",
   "scripts": {
     "build:core": "cd packages/core && npm run build",
-    "build:superjs": "cd packages/superjs && npm run build",
-    "build:all": "npm run build:core && npm run build:superjs",
+    "build:constx": "cd packages/constx && npm run build",
+    "build:all": "npm run build:core && npm run build:constx",
     "publish:core": "cd packages/core && npm publish",
-    "publish:superjs": "cd packages/superjs && npm publish"
+    "publish:constx": "cd packages/constx && npm publish"
   }
 }

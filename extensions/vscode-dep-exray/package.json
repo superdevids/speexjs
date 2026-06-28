@@ -3,11 +3,11 @@
   "displayName": "dep-exray",
   "description": "Dependency health scanner — detect bloat, security issues, and suggest replacements",
   "version": "0.1.0",
-  "publisher": "superjs",
+  "publisher": "constx",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/superdevids/superjs"
+    "url": "https://github.com/superdevids/constx"
   },
   "engines": {
     "vscode": "^1.85.0"

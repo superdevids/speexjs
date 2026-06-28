@@ -28,9 +28,9 @@ runs:
       with:
         node-version: 20
 
-    - name: Install superjs-core
+    - name: Install constx-core
       shell: bash
-      run: npm install -g superjs-core
+      run: npm install -g constx-core
 
     - name: Run dep-exray scan
       id: scan

@@ -56,7 +56,7 @@ export async function serve(options: Record<string, any>): Promise<void> {
 
       app.listen(port, host, () => {
         console.log()
-        console.log(`  ${colors.bold('SuperJS')} ${colors.green('running')}`)
+        console.log(`  ${colors.bold('ConstX')} ${colors.green('running')}`)
         console.log(`  ${colors.dim('→')}  ${colors.cyan(`http://${host}:${port}`)}`)
         console.log()
       })
@@ -79,7 +79,7 @@ export async function serve(options: Record<string, any>): Promise<void> {
 
       app.listen(port, host, () => {
         console.log()
-        console.log(`  ${colors.bold('SuperJS')} ${colors.green('running')}`)
+        console.log(`  ${colors.bold('ConstX')} ${colors.green('running')}`)
         console.log(`  ${colors.dim('→')}  ${colors.cyan(`http://${host}:${port}`)}`)
         console.log()
       })

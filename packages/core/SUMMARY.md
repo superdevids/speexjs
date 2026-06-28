@@ -1,9 +1,9 @@
-# superjs-core — Ringkasan Fitur Lengkap
+# constx-core — Ringkasan Fitur Lengkap
 
 > **Versi:** 0.4.4 | **License:** MIT | **Zero runtime dependencies**
 
 ```
-npm install superjs-core
+npm install constx-core
 ```
 
 ---
@@ -304,18 +304,18 @@ npm install superjs-core
 ## Referensi Cepat
 
 ```bash
-npm install superjs-core
+npm install constx-core
 
 # Import semua module
-import { deepClone, deepEqual, pipe } from 'superjs-core'
-import { formatDate, timeAgo, TIMEZONE_WIB } from 'superjs-core/date'
-import { groupBy, topoSort, deepGet } from 'superjs-core/collection'
-import { terbilang, formatRupiah, formatBytes } from 'superjs-core/string'
-import { Queue, Semaphore } from 'superjs-core/async'
-import { isNIK, isNPWP, isPhone } from 'superjs-core/validation'
-import { createError, MultiError } from 'superjs-core/error'
-import { Logger } from 'superjs-core/logger'
-import { hexToRgb, lighten, contrastRatio } from 'superjs-core/color'
-import { median, stddev, formatCurrency } from 'superjs-core/math'
-import { scanProject } from 'superjs-core/dep-exray'
+import { deepClone, deepEqual, pipe } from 'constx-core'
+import { formatDate, timeAgo, TIMEZONE_WIB } from 'constx-core/date'
+import { groupBy, topoSort, deepGet } from 'constx-core/collection'
+import { terbilang, formatRupiah, formatBytes } from 'constx-core/string'
+import { Queue, Semaphore } from 'constx-core/async'
+import { isNIK, isNPWP, isPhone } from 'constx-core/validation'
+import { createError, MultiError } from 'constx-core/error'
+import { Logger } from 'constx-core/logger'
+import { hexToRgb, lighten, contrastRatio } from 'constx-core/color'
+import { median, stddev, formatCurrency } from 'constx-core/math'
+import { scanProject } from 'constx-core/dep-exray'
 ```

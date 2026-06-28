@@ -1,23 +1,23 @@
-# SuperJS 🚀
+# constx 🚀
 
 **Fullstack JavaScript/TypeScript Framework — Server + Client + RPC + Schema + Database + Auth**
 **🇮🇩 Indonesia First, Built for the World**
 
 ```bash
-npm install superjs
+npm install constx
 ```
 
 > Zero external dependencies. Only Node.js built-in modules.
 
 ---
 
-## 📦 Kenapa SuperJS?
+## 📦 Kenapa constx?
 
-| Masalah | Solusi SuperJS |
+| Masalah | Solusi constx |
 |---------|---------------|
-| Next.js terlalu berat & vendor lock-in | SuperJS ringan, zero-dep, engine-swappable |
-| Express terlalu minimalis | SuperJS Laravel-like: routing, middleware, controller, DI, ORM |
-| Laravel pakai PHP | SuperJS TypeScript native, end-to-end type safe |
+| Next.js terlalu berat & vendor lock-in | constx ringan, zero-dep, engine-swappable |
+| Express terlalu minimalis | constx Laravel-like: routing, middleware, controller, DI, ORM |
+| Laravel pakai PHP | constx TypeScript native, end-to-end type safe |
 | Fetch API ribet | SuperRequest/SuperResponse wrapper sendiri — lebih mudah |
 | Framework asing untuk Indonesia | 🇮🇩 NIK, NPWP, Phone, Rupiah, terbilang built-in |
 | React/Vue dependency berat | Signal-based VDOM sendiri — ringan, cepat |
@@ -68,7 +68,7 @@ npm install superjs
 | **Signals** | `signal()`, `computed()`, `effect()`, `batch()`, `untracked()` |
 | **VDOM** | `h()`, `render()`, `patch()`, `hydrate()` — Virtual DOM sendiri |
 | **SSR** | `renderToString()`, `renderToStream()`, `ServerRenderer` |
-| **JSX** | Full JSX support via `jsxImportSource: \"@superjs/vdom\"` |
+| **JSX** | Full JSX support via `jsxImportSource: \"@ConstX/vdom\"` |
 | **Router** | File-based routing, guards, reactive current/params/query |
 | **Adapters** | `FrameworkAdapter` interface — React/Vue integration |
 
@@ -84,12 +84,12 @@ npm install superjs
 
 | Perintah | Fungsi |
 |----------|--------|
-| `superjs init [name]` | Scaffold project baru (blank/fullstack/api-only) |
-| `superjs make:controller <name>` | Generate controller |
-| `superjs make:middleware <name>` | Generate middleware |
-| `superjs make:schema <name>` | Generate schema |
-| `superjs list-routes` | Lihat semua route yang terdaftar |
-| `superjs serve` | Jalankan development server |
+| `constx init [name]` | Scaffold project baru (blank/fullstack/api-only) |
+| `constx make:controller <name>` | Generate controller |
+| `constx make:middleware <name>` | Generate middleware |
+| `constx make:schema <name>` | Generate schema |
+| `constx list-routes` | Lihat semua route yang terdaftar |
+| `constx serve` | Jalankan development server |
 
 ---
 
@@ -98,32 +98,32 @@ npm install superjs
 ### 1. Install
 
 ```bash
-npm install superjs
+npm install constx
 ```
 
 ### 2. Buat File Server
 
 ```typescript
 // src/index.ts
-import { superjs } from 'superjs/server'
+import { constx } from 'constx/server'
 
-const app = superjs()
+const app = constx()
 
 app.get('/', async ({ response }) => {
-  return response.html('<h1>SuperJS 🚀</h1>')
+  return response.html('<h1>constx 🚀</h1>')
 })
 
 app.get('/api/hello', async ({ response }) => {
   return response.json({ message: 'Halo Dunia!' })
 })
 
-app.listen(3000, () => console.log('SuperJS running on http://localhost:3000'))
+app.listen(3000, () => console.log('constx running on http://localhost:3000'))
 ```
 
 ### 3. Jalankan
 
 ```bash
-npx superjs serve
+npx constx serve
 # atau
 node --loader ts-node src/index.ts
 ```
@@ -135,9 +135,9 @@ node --loader ts-node src/index.ts
 ### Server Routing
 
 ```typescript
-import { superjs } from 'superjs/server'
+import { constx } from 'constx/server'
 
-const app = superjs()
+const app = constx()
 
 // Basic routes
 app.get('/users', handler)
@@ -170,7 +170,7 @@ app.get('/users/:id', handler).name('users.show')
 ### Controller
 
 ```typescript
-import { Controller, get, post, put, del } from 'superjs/server'
+import { Controller, get, post, put, del } from 'constx/server'
 
 @controller('/api/users')
 export class UserController extends Controller {
@@ -211,7 +211,7 @@ export class UserController extends Controller {
 ### Schema Validation
 
 ```typescript
-import { s } from 'superjs/schema'
+import { s } from 'constx/schema'
 
 // Buat schema
 const UserSchema = s.object({
@@ -237,7 +237,7 @@ if (!result.success) {
 ### Database Query Builder
 
 ```typescript
-import { DatabaseConnection } from 'superjs/server/database'
+import { DatabaseConnection } from 'constx/server/database'
 
 const db = new DatabaseConnection({
   driver: 'mysql',        // mysql | sqlite | postgresql
@@ -282,16 +282,16 @@ const result = await db.raw('SELECT * FROM users WHERE age > ?', [18])
 ### Authentication
 
 ```typescript
-import { superjs } from 'superjs/server'
-import { AuthManager, SessionGuard } from 'superjs/server/auth'
+import { constx } from 'constx/server'
+import { AuthManager, SessionGuard } from 'constx/server/auth'
 
-const app = superjs()
+const app = constx()
 
 // Setup auth
 const auth = new AuthManager()
 auth.guard('session', new SessionGuard({
   table: 'users',
-  cookieName: 'superjs_session',
+  cookieName: 'constx_session',
 }))
 
 // Login route
@@ -312,7 +312,7 @@ app.get('/profile', async ({ response }, next) => {
 }).middleware(['auth'])
 
 // Authorization Gate
-import { Gate } from 'superjs/server/gate'
+import { Gate } from 'constx/server/gate'
 
 const gate = new Gate()
 gate.define('update-post', (user, post) => user.id === post.user_id)
@@ -327,7 +327,7 @@ app.put('/posts/:id', async ({ params, response }) => {
 ### Client — Signals + VDOM
 
 ```typescript
-import { signal, computed, effect, h, render } from 'superjs/client'
+import { signal, computed, effect, h, render } from 'constx/client'
 
 function Counter() {
   const count = signal(0)
@@ -352,7 +352,7 @@ Dengan JSX (`tsconfig.json`):
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@superjs/vdom"
+    "jsxImportSource": "@ConstX/vdom"
   }
 }
 ```
@@ -372,7 +372,7 @@ function Counter() {
 ### Cache
 
 ```typescript
-import { Cache } from 'superjs/server/cache'
+import { Cache } from 'constx/server/cache'
 
 const cache = new Cache({ store: 'memory', ttl: 3600 })
 
@@ -392,7 +392,7 @@ await cache.increment('visits')
 ### File Storage
 
 ```typescript
-import { createStorage } from 'superjs/server/storage'
+import { createStorage } from 'constx/server/storage'
 
 const storage = createStorage({
   defaultDisk: 'local',
@@ -415,7 +415,7 @@ const exists = await storage.exists('images/photo.jpg')
 ### Events
 
 ```typescript
-import { event } from 'superjs/server/events'
+import { event } from 'constx/server/events'
 
 // Listen
 event.on('user.registered', async (user) => {
@@ -435,9 +435,9 @@ await event.emit('user.registered', { id: 1, email: 'john@test.com' })
 
 ```typescript
 // === SERVER ===
-import { superjs } from 'superjs/server'
-import { rpc } from 'superjs/rpc'
-import { s } from 'superjs/schema'
+import { constx } from 'constx/server'
+import { rpc } from 'constx/rpc'
+import { s } from 'constx/schema'
 
 const api = rpc.create({
   procedures: {
@@ -456,12 +456,12 @@ const api = rpc.create({
   },
 })
 
-const app = superjs()
+const app = constx()
 app.post('/api/rpc', api.toHandler())
 app.listen(3000)
 
 // === CLIENT ===
-import { createClient } from 'superjs/rpc'
+import { createClient } from 'constx/rpc'
 
 const client = createClient({ baseUrl: 'http://localhost:3000/api' })
 const users = await client.call('users.list', { page: 1 })
@@ -491,7 +491,7 @@ const users = await client.call('users.list', { page: 1 })
 ## 🏗️ Arsitektur
 
 ```
-superjs/
+constx/
 ├── src/
 │   ├── index.ts              # Barrel export
 │   ├── native/               # Zero-dep utilities
@@ -519,7 +519,7 @@ superjs/
 
 ## 📋 Perbandingan dengan Framework Lain
 
-| Fitur | SuperJS | Next.js | Express | AdonisJS | Laravel |
+| Fitur | constx | Next.js | Express | AdonisJS | Laravel |
 |-------|---------|---------|---------|----------|---------|
 | Bahasa | TS/JS | TS/JS | JS | TS/JS | PHP |
 | Dependencies | **0** | Ratusan | Puluhan | Puluhan | Ratusan |
@@ -551,5 +551,5 @@ MIT — bebas digunakan, dimodifikasi, dan didistribusikan.
 
 ---
 
-**SuperJS — Fullstack JavaScript/TypeScript Framework**
+**constx — Fullstack JavaScript/TypeScript Framework**
 **🇮🇩 Dibuat oleh developer Indonesia, untuk developer dunia.**

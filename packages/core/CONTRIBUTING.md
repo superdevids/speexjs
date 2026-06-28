@@ -1,4 +1,4 @@
-# Kontribusi ke superjs-core
+# Kontribusi ke constx-core
 
 ## Setup Development
 

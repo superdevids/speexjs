@@ -2,7 +2,7 @@
 
 ## Melaporkan Kerentanan
 
-Kalau lo nemu celah keamanan di superjs-core, lapor lewat email: adityasuperdev@gmail.com
+Kalau lo nemu celah keamanan di constx-core, lapor lewat email: adityasuperdev@gmail.com
 
 **JANGAN bikin GitHub issue publik untuk kerentanan keamanan.**
 
@@ -18,7 +18,7 @@ Lo bakal dapet respon dalam 48 jam. Kalo belum ada kabar, follow-up lewat email.
 
 ## Ruang Lingkup
 
-- Package npm superjs-core
+- Package npm constx-core
 - CLI tool dep-exray
 - GitHub Actions workflows
 

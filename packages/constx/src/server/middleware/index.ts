@@ -94,8 +94,8 @@ export interface SessionOptions {
 
 export function session(options?: SessionOptions): Middleware {
 	const opts = {
-		name: "superjs_session",
-		secret: "superjs-secret-change-in-production",
+		name: "constx_session",
+		secret: "constx-secret-change-in-production",
 		maxAge: 7200,
 		httpOnly: true,
 		secure: false,

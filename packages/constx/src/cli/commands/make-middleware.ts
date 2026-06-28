@@ -35,7 +35,7 @@ export function makeMiddleware(name: string): void {
 
   mkdirSync(targetDir, { recursive: true })
 
-  const content = `import type { RouteContext } from 'superjs/server/router'
+  const content = `import type { RouteContext } from 'constx/server/router'
 
 export function ${functionName}(options?: Record<string, unknown>) {
   return async (ctx: RouteContext, next: () => Promise<void>) => {

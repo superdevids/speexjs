@@ -88,14 +88,14 @@
 
 ### Dibenerin
 - Cross-platform `clean` script
-- GitHub Actions: dep-exray-scan pake superjs-core
+- GitHub Actions: dep-exray-scan pake constx-core
 - Hapus keyword "zero-dependency" yang misleading
 
 ## [0.3.0] - 2026-06-27
 
 ### Diubah
-- `superjs-dep-exray` digabung ke `superjs-core` jadi module built-in
-- Satu package: `npm install superjs-core` dapet semua
+- `constx-dep-exray` digabung ke `constx-core` jadi module built-in
+- Satu package: `npm install constx-core` dapet semua
 - 7 npm packages di-unpublish/deprecate
 
 ### Ditambahkan

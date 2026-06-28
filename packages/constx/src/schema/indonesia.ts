@@ -2,9 +2,9 @@ import { Schema, SchemaError } from './types.js'
 import { msg } from './messages.js'
 
 //
-// Validator functions below are derived from superjs-core/validation.
+// Validator functions below are derived from constx-core/validation.
 // When the monorepo workspace is active, these can be replaced with:
-//   import { isNIK, isNPWP, isPhone } from 'superjs-core/validation'
+//   import { isNIK, isNPWP, isPhone } from 'constx-core/validation'
 //
 
 // ─── NIK validator ──────────────────────────────────────────

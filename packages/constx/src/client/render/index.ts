@@ -41,5 +41,5 @@ export class ServerRenderer {
 }
 
 export function generateHydrationScript(): string {
-  return '<script>(function(){var d=document.createElement("div");d.setAttribute("data-superjs-hydrated","");document.body.appendChild(d)})();</script>'
+  return '<script>(function(){var d=document.createElement("div");d.setAttribute("data-constx-hydrated","");document.body.appendChild(d)})();</script>'
 }

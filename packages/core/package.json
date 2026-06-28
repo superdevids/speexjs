@@ -1,5 +1,5 @@
 {
-  "name": "superjs-core",
+  "name": "constx-core",
   "version": "0.7.0",
   "description": "JavaScript toolkit all-in-one buat developer Indonesia: validasi NIK/NPWP/Phone, terbilang, formatRupiah, timeAgo (WIB/WITA/WIT), deepClone, logger, dep scanner. 200+ fungsi, zero dependency.",
   "type": "module",
@@ -159,12 +159,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/superdevids/superjs.git"
+    "url": "git+https://github.com/superdevids/constx.git"
   },
   "bugs": {
-    "url": "https://github.com/superdevids/superjs/issues"
+    "url": "https://github.com/superdevids/constx/issues"
   },
-  "homepage": "https://github.com/superdevids/superjs#readme",
+  "homepage": "https://github.com/superdevids/constx#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

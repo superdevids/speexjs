@@ -35,8 +35,8 @@ export function makeController(name: string): void {
 
   mkdirSync(targetDir, { recursive: true })
 
-  const content = `import { Controller, get, post, put, del } from 'superjs/server'
-import type { RouteContext } from 'superjs/server/router'
+  const content = `import { Controller, get, post, put, del } from 'constx/server'
+import type { RouteContext } from 'constx/server/router'
 
 export class ${className} extends Controller {
   @get('/')

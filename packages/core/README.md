@@ -1,9 +1,9 @@
-﻿# superjs-core
+﻿# constx-core
 
 > **JavaScript toolkit all-in-one buat developer Indonesia — Standard Library + Dependency Scanner + 🇮🇩 Validasi NIK/NPWP/Phone + Logger + Typed Errors**
 
 ```bash
-npm install superjs-core
+npm install constx-core
 ```
 
 Satu package buat semua kebutuhan JavaScript lo: utility functions, async helpers, crypto, path manipulation, typed errors, structured logging, **plus** dependency health scanner dan validasi data Indonesia (NIK, NPWP, Phone).
@@ -56,14 +56,14 @@ Satu package buat semua kebutuhan JavaScript lo: utility functions, async helper
 ## Contoh Kode
 
 ```typescript
-import { deepClone } from "superjs-core"
-import { formatDate, timeAgo, TIMEZONE_WIB } from "superjs-core/date"
-import { Queue } from "superjs-core/async"
-import { uuid, maskString, terbilang, formatRupiah, formatBytes } from "superjs-core/string"
-import { isNIK, isNPWP, isPhone } from "superjs-core/validation"
-import { createError } from "superjs-core/error"
-import { Logger } from "superjs-core/logger"
-import { hexToRgb, contrastRatio } from "superjs-core/color"
+import { deepClone } from "constx-core"
+import { formatDate, timeAgo, TIMEZONE_WIB } from "constx-core/date"
+import { Queue } from "constx-core/async"
+import { uuid, maskString, terbilang, formatRupiah, formatBytes } from "constx-core/string"
+import { isNIK, isNPWP, isPhone } from "constx-core/validation"
+import { createError } from "constx-core/error"
+import { Logger } from "constx-core/logger"
+import { hexToRgb, contrastRatio } from "constx-core/color"
 
 // Validasi data Indonesia
 isNIK("3201010203940001")     // true
@@ -107,7 +107,7 @@ npx dep-exray /path/to/project --json --verbose
 ```
 
 ### Fitur
-- Deteksi replacement: lodash → superjs-core, moment → superjs-core/date, uuid → native crypto.randomUUID()
+- Deteksi replacement: lodash → constx-core, moment → constx-core/date, uuid → native crypto.randomUUID()
 - Estimasi ukuran dependency
 - CVE detection
 - JSON output untuk CI/CD
@@ -118,8 +118,8 @@ npx dep-exray /path/to/project --json --verbose
 ## Quick Start
 
 ```bash
-git clone https://github.com/superdevids/superjs.git
-cd superjs/packages/core
+git clone https://github.com/superdevids/constx.git
+cd constx/packages/core
 npm install
 npx tsup              # Build
 npx vitest run        # Test (828 tests)

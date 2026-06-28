@@ -38,17 +38,17 @@ interface PackageMapping {
 }
 
 const KNOWN_MAPPINGS: PackageMapping[] = [
-  { name: 'lodash', size: '4.2 MB', replacement: 'superjs-core', confidence: 'high', autoPrReady: true, reason: 'Most lodash functions have direct replacements in superjs-core with 99% API compatibility' },
-  { name: 'moment', size: '2.5 MB', replacement: 'superjs-core/date', confidence: 'high', autoPrReady: true, reason: 'Date utilities in superjs-core cover 95% of common moment use cases' },
-  { name: 'date-fns', size: '1.2 MB (tree-shaked ~50KB)', replacement: 'superjs-core/date', confidence: 'medium', autoPrReady: false, reason: 'Partially overlapping \u2014 superjs-core covers basic date ops but not all locale support' },
-  { name: 'axios', size: '1.6 MB', replacement: 'native fetch + superjs-core/async/retry', confidence: 'medium', autoPrReady: false, reason: 'Native fetch covers most use cases; needs manual review for interceptors' },
+  { name: 'lodash', size: '4.2 MB', replacement: 'constx-core', confidence: 'high', autoPrReady: true, reason: 'Most lodash functions have direct replacements in constx-core with 99% API compatibility' },
+  { name: 'moment', size: '2.5 MB', replacement: 'constx-core/date', confidence: 'high', autoPrReady: true, reason: 'Date utilities in constx-core cover 95% of common moment use cases' },
+  { name: 'date-fns', size: '1.2 MB (tree-shaked ~50KB)', replacement: 'constx-core/date', confidence: 'medium', autoPrReady: false, reason: 'Partially overlapping \u2014 constx-core covers basic date ops but not all locale support' },
+  { name: 'axios', size: '1.6 MB', replacement: 'native fetch + constx-core/async/retry', confidence: 'medium', autoPrReady: false, reason: 'Native fetch covers most use cases; needs manual review for interceptors' },
   { name: 'uuid', size: '30 KB', replacement: 'crypto.randomUUID() (native)', confidence: 'high', autoPrReady: true, reason: 'crypto.randomUUID() is available in all modern Node.js and browsers' },
-  { name: 'deepmerge', size: '15 KB', replacement: 'superjs-core', confidence: 'high', autoPrReady: true, reason: 'superjs-core provides deepMerge out of the box' },
+  { name: 'deepmerge', size: '15 KB', replacement: 'constx-core', confidence: 'high', autoPrReady: true, reason: 'constx-core provides deepMerge out of the box' },
   { name: 'chalk', size: '45 KB', replacement: 'picocolors', confidence: 'medium', autoPrReady: false, reason: 'picocolors is 3KB vs chalk 45KB with same API' },
-  { name: 'nanoid', size: '8 KB', replacement: 'superjs-core/string (nanoid)', confidence: 'high', autoPrReady: true, reason: 'superjs-core provides nanoid with same API' },
-  { name: 'dayjs', size: '50 KB', replacement: 'superjs-core/date', confidence: 'medium', autoPrReady: false, reason: 'Partially overlapping \u2014 covers basics but not all plugins' },
+  { name: 'nanoid', size: '8 KB', replacement: 'constx-core/string (nanoid)', confidence: 'high', autoPrReady: true, reason: 'constx-core provides nanoid with same API' },
+  { name: 'dayjs', size: '50 KB', replacement: 'constx-core/date', confidence: 'medium', autoPrReady: false, reason: 'Partially overlapping \u2014 covers basics but not all plugins' },
   { name: 'clsx', size: '5 KB', replacement: 'native template literals', confidence: 'high', autoPrReady: true, reason: 'Can be replaced with simple template literal conditional pattern' },
-  { name: 'lodash.merge', size: '25 KB', replacement: 'superjs-core', confidence: 'high', autoPrReady: true, reason: 'superjs-core provides deepMerge out of the box' },
+  { name: 'lodash.merge', size: '25 KB', replacement: 'constx-core', confidence: 'high', autoPrReady: true, reason: 'constx-core provides deepMerge out of the box' },
 ]
 
 const KNOWN_CVES: Record<string, { cve: string; severity: string; fix: string }[]> = {
@@ -64,7 +64,7 @@ const KNOWN_CVES: Record<string, { cve: string; severity: string; fix: string }[
 export async function runDepExrayScan(filePath: string): Promise<ScanResult> {
   try {
     const projectRoot = findProjectRoot(filePath)
-    const output = execSync(`npx --yes superjs-dep-exray "${projectRoot}" --json`, {
+    const output = execSync(`npx --yes constx-dep-exray "${projectRoot}" --json`, {
       encoding: 'utf-8',
       timeout: 30000,
       stdio: ['pipe', 'pipe', 'pipe'],

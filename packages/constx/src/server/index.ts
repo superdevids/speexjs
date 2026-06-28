@@ -257,7 +257,7 @@ export class SuperApp {
 	}
 }
 
-export function superjs(options?: AppOptions): SuperApp {
+export function constx(options?: AppOptions): SuperApp {
 	return new SuperApp(options);
 }
 

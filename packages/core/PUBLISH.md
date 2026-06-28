@@ -6,7 +6,7 @@
 npm login
 ```
 
-## Cara Publish superjs-core
+## Cara Publish constx-core
 
 ```bash
 cd packages/core
