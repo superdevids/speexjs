@@ -3,7 +3,7 @@
 ## v0.4.0 — Modul Indonesia & Error Foundation ✅ (Selesai)
 
 ### Modul Baru
-- ✅ **validation** — `isNIK()`, `isNPWP()`, `isPhone("id")`, `isEmail()`, `isURL()` — zero-dep, khusus Indonesia
+- ✅ **validation** — `isNIK()`, `parseNIK()`, `isNPWP()`, `isPlatNomor()`, `isPhone("id")`, `isKodepos()`, `isNoRekening()`, `isEmail()`, `isURL()` — zero-dep, khusus Indonesia
 - ✅ **error** — `createError()` factory, `MultiError`, typed error codes
 - ✅ **logger** — Structured logger zero-dep, child loggers, file transport
 - ✅ **color** — `hexToRgb()`, `lighten()`, `darken()`, `contrastRatio()`, `meetsWCAG()`

@@ -14,7 +14,7 @@ npx vitest run
 1. Tambah fungsi di module yang sesuai `packages/core/src/<module>/`
 2. Export dari `index.ts` module tersebut
 3. Tambah test di `packages/core/tests/`
-4. Jalankan `npx vitest run` (810 tests harus passing)
+4. Jalankan `npx vitest run` (828 tests harus passing)
 5. Jalankan `npx tsup` biar build sukses
 6. Update `SUMMARY.md` sama `README.md`
 

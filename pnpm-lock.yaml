@@ -6,7 +6,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
 
   packages/core:
     dependencies:
@@ -47,6 +51,9 @@ importers:
 
   packages/superjs:
     dependencies:
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
       superjs-core:
         specifier: workspace:*
         version: link:../core

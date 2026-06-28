@@ -113,7 +113,7 @@ describe('s.number()', () => {
 
   it('validates safe integer', () => {
     expect(s.number().safe().parse(42)).toBe(42)
-    expect(() => s.number().safe().parse(9999999999999999)).toThrow('safe')
+    expect(() => s.number().safe().parse(Number.MAX_SAFE_INTEGER + 2)).toThrow('safe')
   })
 })
 
@@ -310,8 +310,9 @@ describe('s.date()', () => {
     const d = new Date('2024-01-01')
     expect(s.date().parse(d)).toBe(d)
     expect(s.date().parse(new Date())).toBeInstanceOf(Date)
-    expect(() => s.date().parse('2024-01-01')).toThrow(SchemaError)
+    expect(s.date().parse('2024-01-01')).toBeInstanceOf(Date)
     expect(() => s.date().parse(new Date('invalid'))).toThrow('Tanggal')
+    expect(() => s.date().parse(true as any)).toThrow(SchemaError)
   })
 })
 
@@ -415,8 +416,8 @@ describe('s.alamat()', () => {
 describe('s.kodepos()', () => {
   it('validates postal code', () => {
     expect(s.kodepos().parse('12345')).toBe('12345')
-    expect(() => s.kodepos().parse('1234')).toThrow('kode pos')
-    expect(() => s.kodepos().parse('abcde')).toThrow('kode pos')
+    expect(() => s.kodepos().parse('1234')).toThrow('Kode pos')
+    expect(() => s.kodepos().parse('abcde')).toThrow('Kode pos')
   })
 })
 

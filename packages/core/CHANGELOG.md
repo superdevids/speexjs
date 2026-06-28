@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.4.4] - 2026-06-28
+
+### Diubah
+- Semua markdown file dipindah ke packages/core/ dan include di npm package
+- `files` di package.json: nambah `"*.md"` biar dokumentasi ikut ter-publish
+
+## [0.4.3] - 2026-06-28
+
+### Diubah
+- Markdown file dipindah dari root ke packages/core/
+
+## [0.4.2] - 2026-06-28
+
+### Ditambahkan
+- **validation** — `parseNIK()` extract data dari NIK (gender, provinsi, tanggal lahir)
+- **validation** — `isPlatNomor()` validasi plat kendaraan Indonesia (B 1234 CD)
+- **validation** — `isKodepos()` validasi kode pos Indonesia (5 digit)
+- **validation** — `isNoRekening()` validasi nomor rekening bank (8-16 digit)
+- 828 total tests (19 test files)
+
+## [0.4.1] - 2026-06-28
+
+### Diubah
+- Semua dokumentasi pake Bahasa Indonesia
+- Description npm: fokus ke developer Indonesia
+
 ## [0.4.0] - 2026-06-28
 
 ### Ditambahkan

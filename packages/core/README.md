@@ -17,8 +17,12 @@ Satu package buat semua kebutuhan JavaScript lo: utility functions, async helper
 | Fitur | Fungsi |
 |-------|--------|
 | **Validasi NIK** | `isNIK('3201010203940001')` — validasi 16 digit + tanggal lahir |
+| **Parse NIK** | `parseNIK('320101...')` — extract gender, provinsi, tanggal lahir |
 | **Validasi NPWP** | `isNPWP('12.345.678.9-012.344')` — dengan checksum otomatis |
+| **Validasi Plat Nomor** | `isPlatNomor('B 1234 CD')` — validasi plat kendaraan |
 | **Validasi Nomor HP** | `isPhone('08123456789')` — support semua prefix Indonesia |
+| **Validasi Kode Pos** | `isKodepos('16110')` — validasi kode pos 5 digit |
+| **Validasi No. Rekening** | `isNoRekening('1234567890')` — validasi 8-16 digit |
 | **Terbilang** | `terbilang(1500000)` → "satu juta lima ratus ribu" |
 | **Format Rupiah** | `formatRupiah(1500000)` → "Rp1.500.000" |
 | **Format Waktu** | `timeAgo(new Date(...))` → "5 detik yang lalu" |
@@ -42,7 +46,7 @@ Satu package buat semua kebutuhan JavaScript lo: utility functions, async helper
 | **crypto** | hash, base64, generateToken, generateOTP, constantTimeEqual |
 | **path** | join, resolve, basename, dirname, extname, normalize |
 | **color** | hexToRgb, rgbToHex, lighten, darken, contrastRatio, meetsWCAG |
-| **validation** | **isNIK**, **isNPWP**, **isPhone("id")**, isEmail, isURL |
+| **validation** | **isNIK**, **parseNIK**, **isNPWP**, **isPlatNomor**, **isPhone**, **isKodepos**, **isNoRekening**, isEmail, isURL |
 | **error** | createError (typed + HTTP status), TypedError, MultiError |
 | **logger** | Logger class, child loggers, console/JSON/file transports |
 | **dep-exray** | scanProject, generateReport, analyzeUsage, CLI: `npx dep-exray .` |
@@ -118,7 +122,7 @@ git clone https://github.com/superdevids/superjs.git
 cd superjs/packages/core
 npm install
 npx tsup              # Build
-npx vitest run        # Test (810 tests)
+npx vitest run        # Test (828 tests)
 npx dep-exray .       # Scan project sendiri
 ```
 
@@ -128,7 +132,7 @@ npx dep-exray .       # Scan project sendiri
 
 | File Tes | Jumlah |
 |----------|--------|
-| 18 file | **810** passing ✅ |
+| 19 file | **828** passing ✅ |
 
 ---
 
@@ -148,11 +152,11 @@ packages/core/
 │   ├── crypto/        # hash, generateToken, base64
 │   ├── path/          # join, resolve, basename
 │   ├── color/         # hexToRgb, lighten, darken, contrastRatio
-│   ├── validation/    # isNIK, isNPWP, isPhone, isEmail, isURL
+│   ├── validation/    # isNIK, parseNIK, isNPWP, isPlatNomor, isPhone, isKodepos, isNoRekening, isEmail, isURL
 │   ├── error/         # createError, TypedError, MultiError
 │   ├── logger/        # Logger, transports
 │   └── dep-exray/     # Dependency scanner
-├── tests/             # 810 tests
+├── tests/             # 828 tests
 ├── dist/              # Hasil build
 └── package.json
 ```

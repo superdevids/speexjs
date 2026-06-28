@@ -14,7 +14,7 @@ cd packages/core
 # 1. Build
 npx tsup
 
-# 2. Test (810 tests)
+# 2. Test (828 tests)
 npx vitest run
 
 # 3. Bump version
@@ -38,7 +38,7 @@ git push origin master
 ## Checklist Sebelum Publish
 
 - [ ] `npx tsup` — build sukses
-- [ ] `npx vitest run` — 810 tests pass
+- [ ] `npx vitest run` — 828 tests pass
 - [ ] `npm login` — udah login
 - [ ] Changelog udah diupdate
 - [ ] README udah sesuai

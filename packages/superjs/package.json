@@ -51,14 +51,6 @@
       "import": "./dist/client/vdom/index.js",
       "types": "./dist/client/vdom/index.d.ts"
     },
-    "./client/jsx-runtime": {
-      "import": "./dist/client/vdom/jsx-runtime.js",
-      "types": "./dist/client/vdom/jsx-runtime.d.ts"
-    },
-    "./jsx-runtime": {
-      "import": "./dist/client/vdom/jsx-runtime.js",
-      "types": "./dist/client/vdom/jsx-runtime.d.ts"
-    },
     "./rpc": {
       "import": "./dist/rpc/index.js",
       "types": "./dist/rpc/index.d.ts"
@@ -85,7 +77,8 @@
     "ci": "npm run lint && npm run typecheck && npm run build && npm run test:coverage"
   },
   "dependencies": {
-    "superjs-core": "workspace:*"
+    "commander": "^12.0.0",
+    "superjs-core": "^0.4.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.1",

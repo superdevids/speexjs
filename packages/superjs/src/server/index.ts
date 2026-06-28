@@ -31,7 +31,6 @@ export class SuperApp {
   private engine: ServerEngine
   private serverInstance: ServerInstance | undefined
   private globalPipeline: MiddlewarePipeline
-  private viewEngine: ViewEngine | undefined
   private started = false
   private serverPromise: Promise<void> | undefined
 
@@ -149,8 +148,7 @@ export class SuperApp {
     return this
   }
 
-  view(engine: ViewEngine): this {
-    this.viewEngine = engine
+  view(_engine: ViewEngine): this {
     return this
   }
 

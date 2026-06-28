@@ -407,18 +407,17 @@ function compressWith(
   _encoding: string,
 ): Promise<void> {
   const originalEnd = ctx.response.rawResponse.end.bind(ctx.response.rawResponse)
-  const originalWrite = ctx.response.rawResponse.write.bind(ctx.response.rawResponse)
 
   const chunks: Buffer[] = []
 
-  ctx.response.rawResponse.write = function (chunk: unknown, ...args: unknown[]) {
+  ctx.response.rawResponse.write = function (chunk: unknown) {
     if (Buffer.isBuffer(chunk) || typeof chunk === 'string') {
       chunks.push(Buffer.from(chunk))
     }
     return true
   } as typeof ctx.response.rawResponse.write
 
-  ctx.response.rawResponse.end = function (chunk?: unknown, ...args: unknown[]) {
+  ctx.response.rawResponse.end = function (chunk?: unknown, ...args: any[]) {
     if (chunk !== undefined && chunk !== null) {
       if (Buffer.isBuffer(chunk) || typeof chunk === 'string') {
         chunks.push(Buffer.from(chunk))

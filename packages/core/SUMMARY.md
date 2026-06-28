@@ -1,6 +1,6 @@
 # superjs-core — Ringkasan Fitur Lengkap
 
-> **Versi:** 0.4.0 | **License:** MIT | **Zero runtime dependencies**
+> **Versi:** 0.4.4 | **License:** MIT | **Zero runtime dependencies**
 
 ```
 npm install superjs-core
@@ -226,8 +226,12 @@ npm install superjs-core
 | Fungsi | Deskripsi |
 |--------|-----------|
 | `isNIK(value)` | **Validasi NIK** 16 digit + tanggal lahir |
+| `parseNIK(value)` | **Extract data dari NIK** — gender, provinsi, tanggal lahir |
 | `isNPWP(value)` | **Validasi NPWP** + checksum |
+| `isPlatNomor(value)` | **Validasi plat kendaraan** RI (B 1234 CD) |
 | `isPhone(value, country?)` | **Validasi nomor HP Indonesia** |
+| `isKodepos(value)` | **Validasi kode pos** 5 digit |
+| `isNoRekening(value)` | **Validasi nomor rekening** bank (8-16 digit) |
 | `isEmail(value)` | Validasi email RFC-compliant |
 | `isURL(value)` | Validasi URL (http/https) |
 
@@ -293,7 +297,7 @@ npm install superjs-core
 
 | Module | Test Files | Tests |
 |--------|-----------|-------|
-| Semua module | 18 | **810** ✅ |
+| Semua module | 19 | **828** ✅ |
 
 ---
 
