@@ -285,6 +285,7 @@ function patchChildren(parent: Node, oldChildren: VNode[], newChildren: VNode[])
       } else {
         const newNode = createDOM(newChild)
         parent.replaceChild(newNode, existingNode!)
+      }
     }
   }
 }
