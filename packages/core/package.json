@@ -1,5 +1,5 @@
 ﻿{
-    "name":  "speedx-core",
+    "name":  "speexjs-core",
     "version":  "0.7.0",
     "description":  "JavaScript toolkit all-in-one buat developer Indonesia: validasi NIK/NPWP/Phone, terbilang, formatRupiah, timeAgo (WIB/WITA/WIT), deepClone, logger, dep scanner. 200+ fungsi, zero dependency.",
     "type":  "module",
