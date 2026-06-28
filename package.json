@@ -1,13 +1,13 @@
 {
-  "name": "speedx-monorepo",
+  "name": "speexjs-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "SpeedX Monorepo — speedx-core (utility library) + speedx (fullstack framework) 🇮🇩",
+  "description": "SpeexJS Monorepo — speexjs-core (utility library) + speexjs (fullstack framework) 🇮🇩",
   "scripts": {
     "build:core": "cd packages/core && npm run build",
-    "build:speedx": "cd packages/constx && npm run build",
-    "build:all": "npm run build:core && npm run build:speedx",
+    "build:speexjs": "cd packages/constx && npm run build",
+    "build:all": "npm run build:core && npm run build:speexjs",
     "publish:core": "cd packages/core && npm publish",
-    "publish:speedx": "cd packages/constx && npm publish"
+    "publish:speexjs": "cd packages/constx && npm publish"
   }
 }

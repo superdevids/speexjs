@@ -1,138 +1,136 @@
-﻿{
-    "name":  "speexjs",
-    "version":  "0.2.0",
-    "description":  "Fullstack JavaScript/TypeScript framework Ã¢â‚¬â€ Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies. Ã°Å¸â€¡Â®Ã°Å¸â€¡Â© Indonesia First.",
-    "type":  "module",
-    "main":  "./dist/index.js",
-    "module":  "./dist/index.js",
-    "types":  "./dist/index.d.ts",
-    "bin":  {
-                "speedx":  "dist/cli/index.js"
-            },
-    "exports":  {
-                    ".":  {
-                              "import":  "./dist/index.js",
-                              "types":  "./dist/index.d.ts"
-                          },
-                    "./server":  {
-                                     "import":  "./dist/server/index.js",
-                                     "types":  "./dist/server/index.d.ts"
-                                 },
-                    "./server/http":  {
-                                          "import":  "./dist/server/http/index.js",
-                                          "types":  "./dist/server/http/index.d.ts"
-                                      },
-                    "./server/router":  {
-                                            "import":  "./dist/server/router/index.js",
-                                            "types":  "./dist/server/router/index.d.ts"
-                                        },
-                    "./server/middleware":  {
-                                                "import":  "./dist/server/middleware/index.js",
-                                                "types":  "./dist/server/middleware/index.d.ts"
-                                            },
-                    "./server/controller":  {
-                                                "import":  "./dist/server/controller/index.js",
-                                                "types":  "./dist/server/controller/index.d.ts"
-                                            },
-                    "./server/container":  {
-                                               "import":  "./dist/server/container/index.js",
-                                               "types":  "./dist/server/container/index.d.ts"
-                                           },
-                    "./server/auth":  {
-                                          "import":  "./dist/server/auth/index.js",
-                                          "types":  "./dist/server/auth/index.d.ts"
-                                      },
-                    "./server/gate":  {
-                                          "import":  "./dist/server/gate/index.js",
-                                          "types":  "./dist/server/gate/index.d.ts"
-                                      },
-                    "./server/cache":  {
-                                           "import":  "./dist/server/cache/index.js",
-                                           "types":  "./dist/server/cache/index.d.ts"
-                                       },
-                    "./server/storage":  {
-                                             "import":  "./dist/server/storage/index.js",
-                                             "types":  "./dist/server/storage/index.d.ts"
-                                         },
-                    "./server/events":  {
-                                            "import":  "./dist/server/events/index.js",
-                                            "types":  "./dist/server/events/index.d.ts"
-                                        },
-                    "./server/database":  {
-                                              "import":  "./dist/server/database/index.js",
-                                              "types":  "./dist/server/database/index.d.ts"
-                                          },
-                    "./client":  {
-                                     "import":  "./dist/client/index.js",
-                                     "types":  "./dist/client/index.d.ts"
-                                 },
-                    "./client/signals":  {
-                                             "import":  "./dist/client/signals/index.js",
-                                             "types":  "./dist/client/signals/index.d.ts"
-                                         },
-                    "./client/vdom":  {
-                                          "import":  "./dist/client/vdom/index.js",
-                                          "types":  "./dist/client/vdom/index.d.ts"
-                                      },
-                    "./client/vdom/jsx-runtime":  {
-                                                      "import":  "./dist/client/vdom/jsx-runtime.js",
-                                                      "types":  "./dist/client/vdom/jsx-runtime.d.ts"
-                                                  },
-                    "./rpc":  {
-                                  "import":  "./dist/rpc/index.js",
-                                  "types":  "./dist/rpc/index.d.ts"
-                              },
-                    "./schema":  {
-                                     "import":  "./dist/schema/index.js",
-                                     "types":  "./dist/schema/index.d.ts"
-                                 }
-                },
-    "sideEffects":  false,
-    "files":  [
-                  "dist"
-              ],
-    "scripts":  {
-                    "build":  "tsup",
-                    "dev":  "tsup --watch",
-                    "test":  "vitest run",
-                    "test:watch":  "vitest",
-                    "test:coverage":  "vitest run --coverage",
-                    "typecheck":  "tsc --noEmit",
-                    "build:all":  "npm run build"
-                },
-    "dependencies":  {
-
-                     },
-    "devDependencies":  {
-                            "@biomejs/biome":  "^2.5.1",
-                            "@types/node":  "^26.0.1",
-                            "@vitest/coverage-v8":  "^2.1.9",
-                            "tsup":  "^8.3.0",
-                            "typescript":  "^5.7.0",
-                            "vite":  "^8.1.0",
-                            "vitest":  "^2.1.0"
-                        },
-    "keywords":  [
-                     "fullstack",
-                     "framework",
-                     "typescript",
-                     "server",
-                     "client",
-                     "rpc",
-                     "validation",
-                     "database",
-                     "auth",
-                     "indonesia"
-                 ],
-    "publishConfig":  {
-                          "access":  "public"
-                      },
-    "repository":  {
-                       "type":  "git",
-                       "url":  "git+https://github.com/superdevids/speedx.git"
-                   },
-    "license":  "MIT",
-    "engines":  {
-                    "node":  "\u003e=18.0.0"
-                }
+{
+    "name": "speexjs",
+    "version": "0.2.1",
+    "description": "Fullstack JavaScript/TypeScript framework Ã¢â‚¬â€ Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies. Ã°Å¸â€¡Â®Ã°Å¸â€¡Â© Indonesia First.",
+    "type": "module",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "bin": {
+        "speedx": "dist/cli/index.js"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./server": {
+            "import": "./dist/server/index.js",
+            "types": "./dist/server/index.d.ts"
+        },
+        "./server/http": {
+            "import": "./dist/server/http/index.js",
+            "types": "./dist/server/http/index.d.ts"
+        },
+        "./server/router": {
+            "import": "./dist/server/router/index.js",
+            "types": "./dist/server/router/index.d.ts"
+        },
+        "./server/middleware": {
+            "import": "./dist/server/middleware/index.js",
+            "types": "./dist/server/middleware/index.d.ts"
+        },
+        "./server/controller": {
+            "import": "./dist/server/controller/index.js",
+            "types": "./dist/server/controller/index.d.ts"
+        },
+        "./server/container": {
+            "import": "./dist/server/container/index.js",
+            "types": "./dist/server/container/index.d.ts"
+        },
+        "./server/auth": {
+            "import": "./dist/server/auth/index.js",
+            "types": "./dist/server/auth/index.d.ts"
+        },
+        "./server/gate": {
+            "import": "./dist/server/gate/index.js",
+            "types": "./dist/server/gate/index.d.ts"
+        },
+        "./server/cache": {
+            "import": "./dist/server/cache/index.js",
+            "types": "./dist/server/cache/index.d.ts"
+        },
+        "./server/storage": {
+            "import": "./dist/server/storage/index.js",
+            "types": "./dist/server/storage/index.d.ts"
+        },
+        "./server/events": {
+            "import": "./dist/server/events/index.js",
+            "types": "./dist/server/events/index.d.ts"
+        },
+        "./server/database": {
+            "import": "./dist/server/database/index.js",
+            "types": "./dist/server/database/index.d.ts"
+        },
+        "./client": {
+            "import": "./dist/client/index.js",
+            "types": "./dist/client/index.d.ts"
+        },
+        "./client/signals": {
+            "import": "./dist/client/signals/index.js",
+            "types": "./dist/client/signals/index.d.ts"
+        },
+        "./client/vdom": {
+            "import": "./dist/client/vdom/index.js",
+            "types": "./dist/client/vdom/index.d.ts"
+        },
+        "./client/vdom/jsx-runtime": {
+            "import": "./dist/client/vdom/jsx-runtime.js",
+            "types": "./dist/client/vdom/jsx-runtime.d.ts"
+        },
+        "./rpc": {
+            "import": "./dist/rpc/index.js",
+            "types": "./dist/rpc/index.d.ts"
+        },
+        "./schema": {
+            "import": "./dist/schema/index.js",
+            "types": "./dist/schema/index.d.ts"
+        }
+    },
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "typecheck": "tsc --noEmit",
+        "build:all": "npm run build"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@biomejs/biome": "^2.5.1",
+        "@types/node": "^26.0.1",
+        "@vitest/coverage-v8": "^2.1.9",
+        "tsup": "^8.3.0",
+        "typescript": "^5.7.0",
+        "vite": "^8.1.0",
+        "vitest": "^2.1.0"
+    },
+    "keywords": [
+        "fullstack",
+        "framework",
+        "typescript",
+        "server",
+        "client",
+        "rpc",
+        "validation",
+        "database",
+        "auth",
+        "indonesia"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/superdevids/speedx.git"
+    },
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    }
 }

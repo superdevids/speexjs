@@ -257,7 +257,7 @@ export class SuperApp {
 	}
 }
 
-export function constx(options?: AppOptions): SuperApp {
+export function speexjs(options?: AppOptions): SuperApp {
 	return new SuperApp(options);
 }
 
