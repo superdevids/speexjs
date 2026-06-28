@@ -19,12 +19,12 @@ const TEMPLATES: Record<string, TemplateContent> = {
             type: 'module',
             private: true,
             scripts: {
-              dev: 'SpeexJS serve',
-              build: 'SpeexJS build',
+              dev: 'speexjs serve',
+              build: 'speexjs build',
               start: 'node dist/index.js',
             },
             dependencies: {
-              SpeexJS: 'latest',
+              speexjs: 'latest',
             },
             devDependencies: {
               '@types/node': '^26.0.1',
@@ -55,9 +55,9 @@ const TEMPLATES: Record<string, TemplateContent> = {
         null,
         2,
       ),
-      'src/index.ts': `import { SpeexJS } from 'speexjs/server'
+      'src/index.ts': `import { speexjs } from 'speexjs/server'
 
-const app = SpeexJS()
+const app = speexjs()
 
 const PORT = Number(process.env.PORT) || 3000
 
@@ -69,10 +69,10 @@ app.listen(PORT, () => {
   console.log(\`SpeexJS running on http://localhost:\${PORT}\`)
 })
 `,
-      'src/app.ts': `import { SpeexJS } from 'speexjs/server'
+      'src/app.ts': `import { speexjs } from 'speexjs/server'
 
 export function createApp() {
-  const app = SpeexJS()
+  const app = speexjs()
   return app
 }
 `,
@@ -107,12 +107,12 @@ dist/
             type: 'module',
             private: true,
             scripts: {
-              dev: 'SpeexJS serve',
+              dev: 'speexjs serve',
               build: 'tsc',
               start: 'node dist/server/index.js',
             },
             dependencies: {
-              SpeexJS: 'latest',
+              speexjs: 'latest',
             },
             devDependencies: {
               '@types/node': '^26.0.1',
@@ -135,7 +135,7 @@ dist/
             isolatedModules: true,
             resolveJsonModule: true,
             jsx: 'react-jsx',
-            jsxImportSource: '@SpeexJS/vdom',
+            jsxImportSource: '@speexjs/vdom',
             outDir: './dist',
             rootDir: './src',
           },
@@ -145,12 +145,12 @@ dist/
         null,
         2,
       ),
-      'src/server/index.ts': `import { SpeexJS } from 'speexjs/server'
+      'src/server/index.ts': `import { speexjs } from 'speexjs/server'
 import { UserController } from './controllers/user.controller.js'
 
 const PORT = Number(process.env.PORT) || 3000
 
-const app = SpeexJS()
+const app = speexjs()
 
 app.controller(UserController)
 
@@ -262,12 +262,12 @@ dist/
             type: 'module',
             private: true,
             scripts: {
-              dev: 'SpeexJS serve',
+              dev: 'speexjs serve',
               build: 'tsc',
               start: 'node dist/index.js',
             },
             dependencies: {
-              SpeexJS: 'latest',
+              speexjs: 'latest',
             },
             devDependencies: {
               '@types/node': '^26.0.1',
@@ -298,11 +298,11 @@ dist/
         null,
         2,
       ),
-      'src/index.ts': `import { SpeexJS } from 'speexjs/server'
+      'src/index.ts': `import { speexjs } from 'speexjs/server'
 
 const PORT = Number(process.env.PORT) || 3000
 
-const app = SpeexJS()
+const app = speexjs()
 
 app.get('/api/health', async ({ response }) => {
   return response.json({ status: 'ok', timestamp: new Date().toISOString() })
@@ -434,7 +434,7 @@ export async function initProject(
 
   console.log()
   console.log(`${colors.bold('╔════════════════════════════════════╗')}`)
-  console.log(`${colors.bold('║')}        ${colors.green('SpeexJS 🚀 Project Created')}${colors.bold('       ║')}`)
+  console.log(`${colors.bold('║')}        ${colors.green('speexjs 🚀 Project Created')}${colors.bold('       ║')}`)
   console.log(`${colors.bold('╚════════════════════════════════════╝')}`)
   console.log()
   console.log(`  ${colors.bold('Name:')}     ${toPascalCase(name)}`)
