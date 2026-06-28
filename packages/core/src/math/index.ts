@@ -86,7 +86,10 @@ export function div(a: number, b: number): number {
  */
 export function round(value: number, precision: number = 0): number {
   const factor = Math.pow(10, precision)
-  return Math.round(value * factor) / factor
+  // Use toPrecision to avoid floating-point multiplication errors
+  // e.g. 1.005 * 100 = 100.49999999999999 without this fix
+  const shifted = Number((value * factor).toPrecision(15))
+  return Math.round(shifted) / factor
 }
 
 /**

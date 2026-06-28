@@ -130,12 +130,12 @@ export function parseDate(input: string | number | Date): Date {
   // DD/MM/YYYY or DD-MM-YYYY
   const dmyMatch = trimmed.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/)
   if (dmyMatch) {
-    const d = new Date(
-      parseInt(dmyMatch[3]!, 10),
-      parseInt(dmyMatch[2]!, 10) - 1,
-      parseInt(dmyMatch[1]!, 10)
-    )
-    if (!isNaN(d.getTime())) return d
+    const year = parseInt(dmyMatch[3]!, 10)
+    const month = parseInt(dmyMatch[2]!, 10) - 1
+    const day = parseInt(dmyMatch[1]!, 10)
+    const d = new Date(year, month, day)
+    // Validate that the date didn't overflow (e.g. Feb 29 in non-leap year)
+    if (!isNaN(d.getTime()) && d.getMonth() === month && d.getDate() === day) return d
   }
 
   // DD MMM YYYY or DD MMMM YYYY
@@ -143,12 +143,10 @@ export function parseDate(input: string | number | Date): Date {
   if (textMatch) {
     const monthIndex = MONTH_MAP[textMatch[2]!.toLowerCase()]
     if (monthIndex !== undefined) {
-      const d = new Date(
-        parseInt(textMatch[3]!, 10),
-        monthIndex,
-        parseInt(textMatch[1]!, 10)
-      )
-      if (!isNaN(d.getTime())) return d
+      const year = parseInt(textMatch[3]!, 10)
+      const day = parseInt(textMatch[1]!, 10)
+      const d = new Date(year, monthIndex, day)
+      if (!isNaN(d.getTime()) && d.getMonth() === monthIndex && d.getDate() === day) return d
     }
   }
 

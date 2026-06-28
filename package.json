@@ -1,14 +1,14 @@
 {
-  "name": "superjs",
-  "version": "0.1.0",
-  "private": true,
-  "description": "superjs-core — Zero-dependency JS standard library + dependency scanner",
-  "scripts": {
-    "ext:install": "cd extensions\\vscode-dep-exray && npm install",
-    "ext:compile": "cd extensions\\vscode-dep-exray && npm run compile",
-    "ext:package": "cd extensions\\vscode-dep-exray && npx vsce package"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+	"name": "superjs",
+	"version": "1.0.0",
+	"private": true,
+	"description": "superjs-core — Zero-dependency JS standard library + dependency scanner",
+	"scripts": {
+		"ext:install": "cd extensions\\vscode-dep-exray && npm install",
+		"ext:compile": "cd extensions\\vscode-dep-exray && npm run compile",
+		"ext:package": "cd extensions\\vscode-dep-exray && npx vsce package"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	}
 }
