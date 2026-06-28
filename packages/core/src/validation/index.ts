@@ -1,0 +1,5 @@
+export { isNIK } from './isNIK.js'
+export { isNPWP } from './isNPWP.js'
+export { isPhone } from './isPhone.js'
+export { isEmail } from './isEmail.js'
+export { isURL } from './isURL.js'

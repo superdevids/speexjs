@@ -1,6 +1,6 @@
 {
   "name": "superjs-core",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Zero-dependency JavaScript standard library + dependency health scanner — core, math, date, collection, string, async, io, type, crypto, path & dep-exray",
   "type": "module",
   "main": "./dist/index.js",
@@ -81,6 +81,22 @@
     "./dep-exray/cli": {
       "import": "./dist/dep-exray/cli.js",
       "types": "./dist/dep-exray/cli.d.ts"
+    },
+    "./validation": {
+      "import": "./dist/validation/index.js",
+      "types": "./dist/validation/index.d.ts"
+    },
+    "./error": {
+      "import": "./dist/error/index.js",
+      "types": "./dist/error/index.d.ts"
+    },
+    "./logger": {
+      "import": "./dist/logger/index.js",
+      "types": "./dist/logger/index.d.ts"
+    },
+    "./logger/transports": {
+      "import": "./dist/logger/transports.js",
+      "types": "./dist/logger/transports.d.ts"
     }
   },
   "sideEffects": false,

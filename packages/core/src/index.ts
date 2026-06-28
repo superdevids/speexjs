@@ -194,3 +194,42 @@ export type {
   DependencyInfo,
   ScannerConfig,
 } from './dep-exray/index.js'
+
+// ─── validation (Indonesia-specific) ────────────────────
+export {
+  isNIK,
+  isNPWP,
+  isPhone,
+  isEmail,
+  isURL,
+} from './validation/index.js'
+
+// ─── error (typed errors) ───────────────────────────────
+export {
+  createError,
+  isTypedError,
+  TypedError,
+  MultiError,
+  collectErrors,
+} from './error/index.js'
+
+export type { ErrorCode } from './error/index.js'
+
+// ─── logger (structured logging) ────────────────────────
+export {
+  Logger,
+  logger,
+  consoleTransport,
+} from './logger/index.js'
+
+export type {
+  LogLevel,
+  Transport,
+} from './logger/index.js'
+
+export {
+  createConsoleTransport,
+  createJsonTransport,
+  createFileTransport,
+  createBufferedTransport,
+} from './logger/transports.js'
