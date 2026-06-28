@@ -28,9 +28,9 @@ runs:
       with:
         node-version: 20
 
-    - name: Install dep-exray
+    - name: Install superjs-core
       shell: bash
-      run: npm install -g superjs-dep-exray
+      run: npm install -g superjs-core
 
     - name: Run dep-exray scan
       id: scan
