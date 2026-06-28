@@ -256,3 +256,46 @@ export function tumblingWindows<T>(items: T[], size: number): T[][] {
   }
   return result
 }
+
+/**
+ * Gets a nested value from an object using a dot-separated path.
+ *
+ * @example deepGet({ a: { b: 2 } }, 'a.b') // 2
+ * @example deepGet({ a: { b: 2 } }, 'a.c') // undefined
+ */
+export function deepGet<T = unknown>(obj: unknown, path: string, default_?: T): T | undefined {
+  const keys = path.split('.')
+  let current: unknown = obj
+  for (const key of keys) {
+    if (current === null || current === undefined) return default_
+    if (typeof current !== 'object') return default_
+    const curObj = current as Record<string, unknown>
+    if (!(key in curObj)) return default_
+    current = curObj[key]
+  }
+  return (current as T) ?? default_
+}
+
+/**
+ * Sets a nested value in an object using a dot-separated path.
+ * Creates intermediate objects/arrays as needed.
+ *
+ * @example deepSet({ a: { b: 2 } }, 'a.b', 3) // { a: { b: 3 } }
+ * @example deepSet({}, 'a.b.c', 1) // { a: { b: { c: 1 } } }
+ */
+export function deepSet<T extends Record<string, unknown>>(obj: T, path: string, value: unknown): T {
+  const keys = path.split('.')
+  const result = { ...obj } as Record<string, unknown>
+  let current = result
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i]!
+    const next = current[key]
+    if (next === null || next === undefined || typeof next !== 'object') {
+      const isArray = /^\d+$/.test(keys[i + 1]!)
+      current[key] = isArray ? [] : {}
+    }
+    current = current[key] as Record<string, unknown>
+  }
+  current[keys[keys.length - 1]!] = value
+  return result as T
+}

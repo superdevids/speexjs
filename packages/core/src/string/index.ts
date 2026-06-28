@@ -367,3 +367,67 @@ export function formatRupiah(
 ): string {
   return formatCurrency(value, { locale: 'id-ID', currency: 'IDR', notation: options?.notation })
 }
+
+/**
+ * Formats a byte count into a human-readable string.
+ *
+ * @example formatBytes(1024) // "1 KB"
+ * @example formatBytes(1536) // "1.5 KB"
+ * @example formatBytes(1048576) // "1 MB"
+ * @example formatBytes(0) // "0 B"
+ */
+export function formatBytes(bytes: number, options?: { decimals?: number }): string {
+  if (bytes === 0) return '0 B'
+  if (!Number.isFinite(bytes) || bytes < 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const dm = options?.decimals ?? (i === 0 ? 0 : 1)
+  const index = Math.min(i, sizes.length - 1)
+  return parseFloat((bytes / Math.pow(k, index)).toFixed(dm)) + ' ' + sizes[index]
+}
+
+/**
+ * Generates a random alphanumeric string of the specified length.
+ *
+ * @example randomString() // "a3F8k2..."
+ * @example randomString(8) // "X7j2K9mQ"
+ */
+export function randomString(length: number = 16): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return result
+}
+
+/**
+ * Returns a random boolean value.
+ *
+ * @example randomBoolean() // true or false
+ */
+export function randomBoolean(): boolean {
+  return Math.random() >= 0.5
+}
+
+/**
+ * Basic English pluralization helper. Adds 's' or 'es' based on simple rules.
+ *
+ * @example pluralize(1, 'apple') // "apple"
+ * @example pluralize(3, 'apple') // "apples"
+ * @example pluralize(0, 'box')   // "boxes"
+ * @example pluralize(1, 'box')   // "box"
+ */
+export function pluralize(count: number, singular: string): string {
+  if (count === 1) return singular
+  const last = singular[singular.length - 1]
+  const lastTwo = singular.slice(-2)
+  if (last === 's' || last === 'x' || last === 'z' || lastTwo === 'ch' || lastTwo === 'sh') {
+    return singular + 'es'
+  }
+  if (last === 'y' && singular.length > 2 && !'aeiou'.includes(singular[singular.length - 2]!)) {
+    return singular.slice(0, -1) + 'ies'
+  }
+  return singular + 's'
+}

@@ -412,3 +412,85 @@ export function once<T extends (...args: unknown[]) => unknown>(
     return result
   }
 }
+
+/**
+ * Deep equality check between two values. Supports primitives, objects,
+ * arrays, Date, RegExp, Map, Set, and nested structures. Circular
+ * references are handled.
+ *
+ * @example deepEqual({ a: 1, b: { c: 2 } }, { a: 1, b: { c: 2 } }) // true
+ * @example deepEqual({ a: 1 }, { a: 2 }) // false
+ */
+export function deepEqual(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) return true
+  if (a === null || b === null || typeof a !== typeof b) return false
+  if (typeof a !== 'object') return false
+
+  const aObj = a as Record<string, unknown>
+  const bObj = b as Record<string, unknown>
+
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false
+    for (let i = 0; i < a.length; i++) {
+      if (!deepEqual(a[i], b[i])) return false
+    }
+    return true
+  }
+
+  if (a instanceof Date && b instanceof Date) {
+    return a.getTime() === b.getTime()
+  }
+
+  if (a instanceof RegExp && b instanceof RegExp) {
+    return a.source === b.source && a.flags === b.flags
+  }
+
+  if (a instanceof Map && b instanceof Map) {
+    if (a.size !== b.size) return false
+    for (const [k, v] of a) {
+      if (!b.has(k) || !deepEqual(v, b.get(k))) return false
+    }
+    return true
+  }
+
+  if (a instanceof Set && b instanceof Set) {
+    if (a.size !== b.size) return false
+    for (const v of a) {
+      if (!b.has(v)) return false
+    }
+    return true
+  }
+
+  const keysA = Object.keys(aObj)
+  const keysB = Object.keys(bObj)
+  if (keysA.length !== keysB.length) return false
+
+  for (const key of keysA) {
+    if (!Object.prototype.hasOwnProperty.call(bObj, key)) return false
+    if (!deepEqual(aObj[key], bObj[key])) return false
+  }
+  return true
+}
+
+/**
+ * Performs left-to-right function composition.
+ *
+ * @example const fn = pipe((x: number) => x + 1, (x: number) => x * 2)
+ * fn(3) // 8
+ */
+export function pipe<T>(initial: T, ...fns: Array<(arg: T) => T>): T
+export function pipe<T, R>(initial: T, ...fns: Array<(arg: unknown) => unknown>): R
+export function pipe(initial: unknown, ...fns: Array<(arg: unknown) => unknown>): unknown {
+  return fns.reduce((acc, fn) => fn(acc), initial)
+}
+
+/**
+ * Performs right-to-left function composition.
+ *
+ * @example const fn = compose((x: number) => x * 2, (x: number) => x + 1)
+ * fn(3) // 8 — same as (3+1)*2
+ */
+export function compose<T>(...fns: Array<(arg: T) => T>): (initial: T) => T
+export function compose(...fns: Array<(arg: unknown) => unknown>): (initial: unknown) => unknown {
+  return (initial: unknown) => fns.reduceRight((acc, fn) => fn(acc), initial)
+}

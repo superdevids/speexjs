@@ -233,3 +233,13 @@ export {
   createFileTransport,
   createBufferedTransport,
 } from './logger/transports.js'
+
+// ─── color (utilities) ──────────────────────────────────
+export {
+  hexToRgb,
+  rgbToHex,
+  lighten,
+  darken,
+  contrastRatio,
+  meetsWCAG,
+} from './color/index.js'

@@ -24,6 +24,7 @@ export default defineConfig({
     'src/error/index.ts',
     'src/logger/index.ts',
     'src/logger/transports.ts',
+    'src/color/index.ts',
   ],
   format: ['esm'],
   dts: true,

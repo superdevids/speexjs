@@ -1,7 +1,7 @@
 {
   "name": "superjs-core",
-  "version": "0.3.9",
-  "description": "All-in-one JavaScript toolkit: standard library + Indonesia validation (NIK, NPWP, Phone) + dependency scanner + structured logger + typed errors. 90+ functions, zero runtime dependencies.",
+  "version": "0.4.0",
+  "description": "All-in-one JS toolkit: standard library (deepClone, debounce, deepEqual, pipe, color utilities, typed errors, logger, crypto, path, dependency scanner, Indonesia validation). 100+ functions, zero runtime deps, tree-shakeable.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -97,6 +97,10 @@
     "./logger/transports": {
       "import": "./dist/logger/transports.js",
       "types": "./dist/logger/transports.d.ts"
+    },
+    "./color": {
+      "import": "./dist/color/index.js",
+      "types": "./dist/color/index.d.ts"
     }
   },
   "sideEffects": false,
