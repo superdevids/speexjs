@@ -20,11 +20,16 @@ export {
 import type { ControllerClass } from './router'
 import { type RouteContext, type RouteHandler, Router } from './router'
 import type { ViewEngine } from './view/index.js'
+import { generateDashboardHtml, trackQuery, getRecentQueries } from './debug/dashboard.js'
+import { DatabaseConnection } from './database/connection.js'
 
 export { Cache, type CacheConfig, cacheResponse } from './cache'
 export { PageView } from './view/index.js'
 export type { ViewEngine } from './view/index.js'
 export * from './database/index.js'
+export { loadConfig, defineConfig } from './config/manager'
+export type { SpeexConfig } from './config/manager'
+export { env, requireEnv, validateEnv, generateEnvExample } from './env'
 export { createEvent, Event, type EventConfig, event } from './events'
 export { registerMacro, responseMacros, URLBuilder, url } from './helpers'
 export {
@@ -53,6 +58,9 @@ export {
 export { Controller, controller, get, post, put, del } from './controller'
 // `patch` decorator not re-exported here to avoid conflict with client VDOM `patch`
 export { patch as patchDecorator } from './controller'
+export { SmartErrorHandler } from './errors/handler.js'
+export type { ErrorHint } from './errors/handler.js'
+export { generateDashboardHtml, trackQuery, getRecentQueries, clearQueries, wrapConnection } from './debug/dashboard.js'
 
 export interface AppOptions {
   engine?: ServerEngine
@@ -218,6 +226,8 @@ export class SuperApp {
       await this.handleRequest(req, res)
     })
 
+    this.setupDebugMode()
+
     const listenPort = port ?? 3000
     const listenHost = host ?? '0.0.0.0'
 
@@ -277,6 +287,58 @@ export class SuperApp {
   async ready(): Promise<void> {
     if (this.serverPromise !== undefined) {
       await this.serverPromise
+    }
+  }
+
+  private setupDebugMode(): void {
+    if (process.env.SPEEXJS_DEBUG !== 'true') return
+
+    this.router.get('/_speexjs/dashboard', async (ctx) => {
+      const routes = this.router.getRoutes().map((r) => ({
+        method: (r.methods[0] || 'GET') as string,
+        path: r.path,
+        middlewareCount: r.middleware.length,
+      }))
+
+      const queries = getRecentQueries()
+
+      let cacheStats: { hits: number; misses: number; keys: number; size: string } | null = null
+      try {
+        const cache = this.container.resolve<any>('cache')
+        if (cache && typeof cache.stats === 'function') {
+          cacheStats = cache.stats()
+        }
+      } catch {
+        /* no cache registered */
+      }
+
+      const configStore: Record<string, unknown> = {}
+      try {
+        const cfg = this.container.resolve<any>('config')
+        if (cfg) {
+          const store = (cfg as any).store
+          if (store instanceof Map) {
+            for (const [k, v] of store) {
+              configStore[k] = v
+            }
+          }
+        }
+      } catch {
+        /* no config registered */
+      }
+
+      const html = generateDashboardHtml(routes, queries, cacheStats, configStore)
+      ctx.response.type('text/html; charset=utf-8').send(html)
+    })
+
+    const originalRaw = DatabaseConnection.prototype.raw
+    DatabaseConnection.prototype.raw = async function (this: DatabaseConnection, sql: string, bindings?: any[]) {
+      const start = Date.now()
+      try {
+        return await originalRaw.call(this, sql, bindings)
+      } finally {
+        trackQuery(sql, Date.now() - start, bindings)
+      }
     }
   }
 

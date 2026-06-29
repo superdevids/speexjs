@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 import { parseArgs } from '../native/args.js'
 import { colors } from '../native/colors.js'
+import { build as buildCommand } from './commands/build.js'
+import { deploy } from './commands/deploy.js'
 import { initProject } from './commands/init.js'
+import { listRoutes } from './commands/list-routes.js'
+import { makeAuth } from './commands/make-auth.js'
 import { makeController } from './commands/make-controller.js'
 import { makeMiddleware } from './commands/make-middleware.js'
-import { makeSchema } from './commands/make-schema.js'
 import { makeMigration } from './commands/make-migration.js'
 import { makeModel } from './commands/make-model.js'
 import { makeResource } from './commands/make-resource.js'
-import { listRoutes } from './commands/list-routes.js'
+import { makeSchema } from './commands/make-schema.js'
 import { serve } from './commands/serve.js'
-import { build as buildCommand } from './commands/build.js'
 
 function showHelp(): void {
   console.log(`${colors.bold('SpeexJS')} ${colors.cyan('v0.2.0')}`)
@@ -22,12 +24,14 @@ function showHelp(): void {
   console.log('  SpeexJS make:middleware <name>        Generate middleware')
   console.log('  SpeexJS make:migration <name>         Generate migration')
   console.log('  SpeexJS make:model <name>             Generate model')
+  console.log('  SpeexJS make:auth [options]            Generate auth scaffold')
   console.log('  SpeexJS make:resource <name>          Generate resource (controller + model + migration)')
   console.log('  SpeexJS make:schema <name>            Generate schema')
   console.log('  SpeexJS migrate                       Run migrations')
   console.log('  SpeexJS db:seed                       Seed the database')
   console.log('  SpeexJS list-routes                   View all routes')
   console.log('  SpeexJS serve [options]               Run server')
+  console.log('  SpeexJS deploy [options]              Deploy application (docker/vercel)')
   console.log('  SpeexJS --help                        Show help')
   console.log()
   console.log(`${colors.bold('Aliases:')}`)
@@ -104,6 +108,22 @@ async function main(): Promise<void> {
       await makeResource(parsed.args[0])
       break
     }
+    case 'make:auth': {
+      await makeAuth({
+        guard: (parsed.options.guard as 'session' | 'token' | 'sanctum') || 'session',
+        views: parsed.options['no-views'] !== true,
+        api: parsed.options.api === true,
+      })
+      break
+    }
+    case 'deploy': {
+      await deploy({
+        docker: parsed.options.docker === true,
+        vercel: parsed.options.vercel === true,
+        init: parsed.options.init === true,
+      })
+      break
+    }
     case 'migrate':
     case 'db:seed': {
       const label = command === 'migrate' ? 'Migration' : 'Database seeding'
@@ -148,7 +168,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(colors.red(`Error: ${err.message}`))
   process.exit(1)
 })
