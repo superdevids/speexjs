@@ -203,16 +203,15 @@ dist/
       'package.json': (name: string) => pkg(name, { dev: 'speexjs serve', build: 'tsc', start: 'node dist/server/index.js' }),
       'tsconfig.json': tsconfig({ jsx: 'react-jsx', jsxImportSource: '@speexjs/vdom' }, { include: ['src/**/*.ts', 'src/**/*.tsx'] }),
       'src/server/index.ts': `import { speexjs } from 'speexjs/server'
-import { schema } from 'speexjs/schema'
+import type { RouteContext } from 'speexjs/server/router'
 import { UserController } from './controllers/user.controller.js'
 
 const PORT = Number(process.env.PORT) || 3000
-
 const app = speexjs()
 
 app.controller(UserController)
 
-app.get('/', async ({ response }) => {
+app.get('/', async ({ response }: RouteContext) => {
   return response.html(\`
     <!DOCTYPE html>
     <html lang="en">
@@ -220,10 +219,30 @@ app.get('/', async ({ response }) => {
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>SpeexJS Fullstack</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+               background: #0f172a; color: #e2e8f0; display: flex; align-items: center;
+               justify-content: center; min-height: 100vh; text-align: center; }
+        .container { padding: 2rem; }
+        h1 { font-size: 2.5rem; background: linear-gradient(135deg,#60a5fa,#a78bfa);
+             -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        p { color: #94a3b8; margin-bottom: 0.5rem; }
+        .links { margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; }
+        a { padding: .75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 500; }
+        .btn-primary { background: #3b82f6; color: #fff; }
+        .btn-secondary { background: #1e293b; color: #e2e8f0; }
+      </style>
     </head>
     <body>
-      <div id="root"></div>
-      <script type="module" src="/client/index.js"></script>
+      <div class="container">
+        <h1>SpeexJS</h1>
+        <p>Fullstack TypeScript Framework — Zero dependencies.</p>
+        <div class="links">
+          <a href="/api/health" class="btn-primary">API Health</a>
+          <a href="/users" class="btn-secondary">Users</a>
+        </div>
+      </div>
     </body>
     </html>
   \`)
@@ -232,15 +251,16 @@ app.get('/', async ({ response }) => {
 export { app }
 `,
       'src/server/controllers/user.controller.ts': `import { Controller, get, post } from 'speexjs/server'
+import type { RouteContext } from 'speexjs/server/router'
 
 export class UserController extends Controller {
   @get('/users')
-  async index({ response }) {
-    return response.json({ data: [] })
+  async index({ response }: RouteContext) {
+    return response.json({ data: [{ id: 1, name: 'John Doe', email: 'john@example.com' }] })
   }
 
   @post('/users')
-  async store({ request, response }) {
+  async store({ request, response }: RouteContext) {
     const body = await request.body()
     return response.json({ data: body }, 201)
   }
@@ -252,18 +272,36 @@ document.addEventListener('DOMContentLoaded', () => {
   createApp().mount('#root')
 })
 `,
-      'src/client/app.ts': `export function createApp() {
+      'src/client/app.tsx': `import { Welcome } from './pages/welcome.js'
+
+export function createApp() {
   function mount(selector: string) {
     const root = document.querySelector(selector)
     if (!root) { console.error('Root element not found:', selector); return }
-    root.innerHTML = \`
-      <div style="text-align:center;padding:2rem">
-        <h1>SpeexJS Fullstack</h1>
-        <p>Welcome to SpeexJS!</p>
+    root.innerHTML = \`<div style="text-align:center;padding:2rem;font-family:sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column">
+      <h1 style="font-size:2.5rem;margin-bottom:1rem;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SpeexJS</h1>
+      <p style="color:#94a3b8;margin-bottom:2rem">Fullstack TypeScript Framework</p>
+      <div style="display:flex;gap:1rem">
+        <a href="/api/health" style="padding:.75rem 1.5rem;background:#3b82f6;color:#fff;border-radius:6px;text-decoration:none">API Health</a>
+        <a href="/users" style="padding:.75rem 1.5rem;background:#1e293b;color:#e2e8f0;border-radius:6px;text-decoration:none">Users</a>
       </div>
-    \`
+    </div>\`
   }
   return { mount }
+}
+`,
+      'src/client/pages/welcome.tsx': `import type { VNode } from 'speexjs/client/vdom'
+
+export function Welcome(props: Record<string, unknown>): VNode {
+  return {
+    type: 'element',
+    tag: 'div',
+    props: { style: 'text-align:center;padding:2rem;font-family:sans-serif' },
+    children: [
+      { type: 'element', tag: 'h1', props: { style: 'font-size:2.5rem;color:#60a5fa' }, children: [{ type: 'text', text: 'SpeexJS' }] },
+      { type: 'element', tag: 'p', props: { style: 'color:#94a3b8' }, children: [{ type: 'text', text: 'Welcome to SpeexJS Fullstack!' }] },
+    ],
+  }
 }
 `,
       'public/style.css': `* {
@@ -303,21 +341,16 @@ body {
       'package.json': (name: string) => pkg(name, { dev: 'speexjs serve', build: 'tsc', start: 'node dist/index.js' }),
       'tsconfig.json': tsconfig(),
       'src/index.ts': `import { speexjs } from 'speexjs/server'
-import { schema } from 'speexjs/schema'
-import { Config } from './config/index.js'
+import type { RouteContext } from 'speexjs/server/router'
 import { HealthController } from './controllers/health.controller.js'
 
+const PORT = Number(process.env.PORT) || 3000
 const app = speexjs()
 
 app.controller(HealthController)
 
-app.get('/api/health', async ({ response }) => {
-  return response.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    env: Config.env,
-  })
+app.get('/api/health', async ({ response }: RouteContext) => {
+  return response.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
 export { app }

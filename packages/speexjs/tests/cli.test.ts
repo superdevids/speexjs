@@ -283,7 +283,7 @@ describe('initProject', () => {
       expect(filePaths.some(p => p.endsWith('src/server/index.ts'))).toBe(true)
       expect(filePaths.some(p => p.endsWith('src/server/controllers/user.controller.ts'))).toBe(true)
       expect(filePaths.some(p => p.endsWith('src/client/index.ts'))).toBe(true)
-      expect(filePaths.some(p => p.endsWith('src/client/app.ts'))).toBe(true)
+      expect(filePaths.some(p => p.endsWith('src/client/app.tsx'))).toBe(true)
       expect(filePaths.some(p => p.endsWith('public/style.css'))).toBe(true)
       expect(filePaths.some(p => p.endsWith('src/shared/types.ts'))).toBe(true)
     })
@@ -315,7 +315,7 @@ describe('initProject', () => {
       await initProject('my-app', { template: 'fullstack' })
 
       const writeCalls = vi.mocked(writeFileSync).mock.calls
-      const clientCall = writeCalls.find(([p]) => p.toString().endsWith('src/client/app.ts') || p.toString().endsWith('src\\client\\app.ts'))
+      const clientCall = writeCalls.find(([p]) => p.toString().replace(/\\/g, '/').endsWith('src/client/app.tsx'))
       expect(clientCall![1].toString()).toContain('export function createApp()')
       expect(clientCall![1].toString()).toContain('function mount(selector: string)')
     })

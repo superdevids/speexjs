@@ -1,8 +1,9 @@
 import { existsSync, readFileSync, watch } from 'node:fs'
-import { resolve } from 'node:path'
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:http'
 import { createServer as createNetServer } from 'node:net'
-import { fork } from 'node:child_process'
+import { spawn } from 'node:child_process'
 import { colors } from '../../native/colors.js'
 import { logger } from '../../native/logger.js'
 
@@ -35,7 +36,8 @@ export async function serve(options: Record<string, any>): Promise<void> {
   const port = await findPort(parseInt(String(opts.port), 10))
 
   if (opts.docs) {
-    const docsPath = resolve(import.meta.dirname, '../../docs/index.html')
+    const __dirname = dirname(fileURLToPath(import.meta.url))
+    const docsPath = resolve(__dirname, '../../docs/index.html')
     if (!existsSync(docsPath)) {
       console.error(colors.red('Documentation not found. Ensure docs/index.html exists in the speexjs package.'))
       process.exit(1)
@@ -71,19 +73,26 @@ export async function serve(options: Record<string, any>): Promise<void> {
     process.exit(1)
   }
 
-  // ── Fork child process with tsx ─────────────────────────
+  // ── Spawn child process with tsx ─────────────────────────
   let child: any
   let restarting = false
 
   const startChild = () => {
-    const childProcess = fork(entryPath, [], {
-      execArgv: ['--import', 'tsx'],
+    const childProcess = spawn('npx', ['tsx', entryPath], {
       stdio: 'inherit',
+      cwd: process.cwd(),
+      env: { ...process.env, PORT: String(port) },
     })
     childProcess.on('exit', (code) => {
       if (code !== null && code !== 0 && !restarting) {
         console.error(`Child process exited with code ${code}`)
         process.exit(code)
+      }
+    })
+    childProcess.on('error', (err) => {
+      if (!restarting) {
+        console.error(`Failed to start: ${err.message}`)
+        process.exit(1)
       }
     })
     return childProcess
