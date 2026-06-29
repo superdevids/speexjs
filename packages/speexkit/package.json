@@ -1,6 +1,6 @@
 {
 	"name": "SpeexKit",
-	"version": "0.8.5",
+	"version": "0.8.6",
 	"description": "SpeexKit —— JavaScript toolkit: NDArray (NumPy-like), 250+ functions (core, math, date, string, async, validation, collection, color, error, logger, crypto, path, IO, type, dep-exray, functional tools). Zero dependencies.",
 	"type": "module",
 	"main": "./dist/index.js",
