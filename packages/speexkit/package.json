@@ -1,6 +1,6 @@
 {
   "name": "speexkit",
-  "version": "1.4.6",
+  "version": "1.4.5",
   "description": "JavaScript toolkit: NDArray, ML, Stats, validation, functional, date, async, collection, color, error, logger, crypto, path, IO, type, dep-exray. Zero dependencies.",
   "type": "module",
   "main": "./dist/index.js",
