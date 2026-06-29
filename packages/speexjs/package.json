@@ -1,6 +1,6 @@
 {
   "name": "speexjs",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Fullstack JavaScript/TypeScript framework — Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies.",
   "type": "module",
   "main": "./dist/index.js",

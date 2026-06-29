@@ -12,6 +12,7 @@ export function isIPv4(value: string): boolean {
     return Number.isInteger(num) && num >= 0 && num <= 255
   })
 }
+/** Is I Pv6. */
 export function isIPv6(value: string): boolean {
   if (typeof value !== 'string' || value.length === 0) return false
   const ipv4MappedMatch = value.match(/^([0-9a-fA-F:.]+):(\d+\.\d+\.\d+\.\d+)$/)
@@ -35,6 +36,7 @@ export function isIPv6(value: string): boolean {
   const all = [...left, ...Array(middle).fill('0'), ...right]
   return all.every(g => /^[0-9a-fA-F]{1,4}$/.test(g))
 }
+/** Is I P. */
 export function isIP(value: string, version?: 4 | 6): boolean {
   if (version === 4) return isIPv4(value)
   if (version === 6) return isIPv6(value)

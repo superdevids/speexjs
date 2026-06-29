@@ -10,6 +10,7 @@ export interface PackageMapping {
   detectionPattern: string
 }
 
+/** K N O W N_ M A P P I N G S. */
 export const KNOWN_MAPPINGS: PackageMapping[] = [
   {
     name: 'lodash',
@@ -112,6 +113,7 @@ export const KNOWN_MAPPINGS: PackageMapping[] = [
   },
 ]
 
+/** K N O W N_ C V E S. */
 export const KNOWN_CVES: Record<string, { cve: string; severity: string; fix: string }[]> = {
   'ansi-regex': [
     { cve: 'CVE-2021-3807', severity: 'high', fix: 'Update to ansi-regex@6.0.1 or later' },
