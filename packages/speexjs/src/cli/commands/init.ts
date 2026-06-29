@@ -47,8 +47,9 @@ const TEMPLATES: Record<string, TemplateContent> = {
       'package.json': (name: string) => pkg(name, { dev: 'speexjs serve', build: 'speexjs build', start: 'node dist/index.js', lint: 'tsc --noEmit' }),
       'tsconfig.json': tsconfig({}, { include: ['src/**/*.ts'] }),
       'src/index.ts': `import { speexjs, cors, bodyParser } from 'speexjs/server'
-import { Config } from './config/index.js'
 import { HealthController } from './controllers/health.controller.js'
+import { UserController } from './controllers/user.controller.js'
+import { Config } from './config/index.js'
 
 const app = speexjs()
 
@@ -56,38 +57,9 @@ app.use(cors())
 app.use(bodyParser())
 
 app.controller(HealthController)
+app.controller(UserController)
 
-app.get('/', ({ response }) => {
-  return response.html(\`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>SpeexJS</title>
-      <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-               background: #0f172a; color: #e2e8f0; display: flex; align-items: center;
-               justify-content: center; min-height: 100vh; text-align: center; }
-        .container { padding: 2rem; }
-        h1 { font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #60a5fa, #a78bfa);
-             -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        p { color: #94a3b8; margin-bottom: 0.5rem; }
-        a { color: #60a5fa; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>SpeexJS</h1>
-        <p>Fullstack TypeScript Framework — Zero dependencies.</p>
-        <p style="margin-top: 1rem;"><a href="/api/health">API Health</a></p>
-      </div>
-    </body>
-    </html>
-  \`)
-})
+app.get('/', ({ response }) => response.html('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>SpeexJS</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,\\'Segoe UI\\',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center}.container{padding:2rem}h1{font-size:2.5rem;margin-bottom:1rem;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}p{color:#94a3b8;margin-bottom:.5rem}a{color:#60a5fa;text-decoration:none}a:hover{text-decoration:underline}}</style></head><body><div class="container"><h1>SpeexJS</h1><p>Fullstack TypeScript Framework</p><p style="margin-top:1rem"><a href="/api/health">API</a> | <a href="/users">Users</a></p></div></body></html>'))
 
 export { app }
 `,
@@ -115,42 +87,59 @@ export class HealthController extends Controller {
       'src/controllers/user.controller.ts': `import { Controller, get, post, put, del } from 'speexjs/server'
 import { schema } from 'speexjs/schema'
 
-const CreateUserSchema = schema.object({
+interface User { id: number; name: string; email: string; createdAt: string }
+
+let users: User[] = [
+  { id: 1, name: 'John Doe', email: 'john@example.com', createdAt: new Date().toISOString() },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', createdAt: new Date().toISOString() },
+]
+let nextId = 3
+
+const UserSchema = schema.object({
   name: schema.string().min(3).max(100),
   email: schema.string().email(),
-  age: schema.number().min(18).optional(),
 })
 
 export class UserController extends Controller {
   @get('/users')
   async index({ response }) {
-    return response.json({ data: [] })
+    return response.json({ data: users })
   }
 
   @get('/users/:id')
   async show({ response, params }) {
-    return response.json({ data: { id: params.id } })
+    const user = users.find(u => u.id === Number(params.id))
+    if (!user) return response.status(404).json({ error: 'NOT_FOUND', message: 'User not found' })
+    return response.json({ data: user })
   }
 
   @post('/users')
   async store({ request, response }) {
     const body = await request.body()
-    const result = CreateUserSchema.safeParse(body)
-    if (!result.success) {
-      return response.status(422).json({ error: 'VALIDATION_ERROR', message: result.error })
-    }
-    return response.status(201).json({ data: result.data })
+    const result = UserSchema.safeParse(body)
+    if (!result.success) return response.status(422).json({ error: 'VALIDATION_ERROR', message: result.error })
+    const user: User = { id: nextId++, name: result.data.name, email: result.data.email, createdAt: new Date().toISOString() }
+    users.push(user)
+    return response.status(201).json({ data: user })
   }
 
   @put('/users/:id')
   async update({ request, response, params }) {
+    const idx = users.findIndex(u => u.id === Number(params.id))
+    if (idx === -1) return response.status(404).json({ error: 'NOT_FOUND', message: 'User not found' })
     const body = await request.body()
-    return response.json({ data: { id: params.id, ...body } })
+    const result = UserSchema.safeParse(body)
+    if (!result.success) return response.status(422).json({ error: 'VALIDATION_ERROR', message: result.error })
+    users[idx] = { ...users[idx], name: result.data.name, email: result.data.email }
+    return response.json({ data: users[idx] })
   }
 
   @del('/users/:id')
   async destroy({ response, params }) {
-    return response.json({ message: \`User \${params.id} deleted\` })
+    const idx = users.findIndex(u => u.id === Number(params.id))
+    if (idx === -1) return response.status(404).json({ error: 'NOT_FOUND', message: 'User not found' })
+    users.splice(idx, 1)
+    return response.json({ message: 'User deleted' })
   }
 }
 `,
@@ -515,7 +504,7 @@ export async function initProject(name: string, options: Record<string, any>): P
 
   console.log()
   console.log(`${colors.bold('╔════════════════════════════════════╗')}`)
-  console.log(`${colors.bold('║')}${colors.green('SpeexJS 🚀 Project Created')}${colors.bold('       ║')}`)
+  console.log(`${colors.bold('║')}  ${colors.green('SpeexJS 🚀 Project Created')}${colors.bold('       ║')}`)
   console.log(`${colors.bold('╚════════════════════════════════════╝')}`)
   console.log()
   console.log(`  ${colors.bold('Name:')}     ${toPascalCase(name)}`)
