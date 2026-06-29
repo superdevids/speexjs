@@ -1,12 +1,23 @@
 # SpeexJS
 
-**Fullstack TypeScript Framework — zero dependencies.**
+**Fullstack TypeScript Framework — Build web apps fast. Zero dependencies in production.**
 
 ```bash
 npm install speexjs
 ```
 
+> v0.6.0 • 67 KB • 1,849 tests • 49 features • Zero deps
+
 ## Quick Start
+
+```bash
+npx speexjs init my-app
+cd my-app
+npm install
+npm run dev
+```
+
+Or manually:
 
 ```typescript
 import { speexjs } from 'speexjs/server'
@@ -16,87 +27,144 @@ app.get('/', ({ response }) => response.html('<h1>SpeexJS 🚀</h1>'))
 app.listen(3000)
 ```
 
-```bash
-npx speexjs serve
-```
+## Why SpeexJS?
 
-## Features
+| | SpeexJS | AdonisJS | NestJS | Hono |
+|---|---|---|---|---|
+| **Package size** | **67 KB** | ~5 MB | ~10 MB | ~50 KB |
+| **Dependencies** | **Zero** (tsx for dev) | Many | Many | Zero |
+| **Test coverage** | **96.9%** | ~70% | ~80% | ~60% |
+| **Features** | **49** all-in-one | 55+ | 40+ | 10+ |
+| **Fullstack** | Server + Client | Server only | Server only | Server only |
 
-| Category | Description |
-|----------|-------------|
-| **Server** | Router, Middleware (10 built-in), Controller, DI Container |
-| **Database** | Query Builder, Migrations, Pagination — MySQL/SQLite/PG |
-| **Auth** | Session Guard, Token Guard, Gate Authorization |
-| **Validation** | 25+ schema types — string, number, objects, arrays, and more |
-| **Client** | Signals, VDOM, JSX, SSR — no React required |
-| **RPC** | Type-safe server-client communication |
-| **CLI** | `speexjs init`, `serve`, `make:*`, `list-routes` |
-| **Zero Dep** | 100% native Node.js |
+## Features (49 total)
+
+### 🖥️ Server
+- HTTP Router with groups, resources, named routes, middleware
+- **12 HTTP Exception classes** + global error handler
+- Middleware pipeline: CORS, CSRF, Session, Auth, Throttle, Logger, Helmet, Compress, Static, Validate
+- **Plugin system** with lifecycle hooks
+- **Graceful shutdown** (SIGINT/SIGTERM)
+- **Clustering** — multi-core support
+
+### 🗄️ Database
+- **Query Builder** — chainable, 30+ methods
+- **Migrations** + **Seeders** + **Schema Builder**
+- **3 dialects**: MySQL (pool), PostgreSQL (pool), SQLite
+- **ORM Model** with Active Record pattern
+- **6 relation types**: hasOne, hasMany, belongsTo, belongsToMany, morphMany, morphTo
+- **Eager loading** — `.with()` relations
+- **Pagination** — offset + cursor-based
+- **Soft deletes**, **Model factories**
+
+### 🔐 Auth
+- **Session Guard** — cookie-based + database store
+- **Token Guard** — API tokens with salted hashing
+- **OAuth2** — pluggable provider pattern
+- **Gate / Authorization** — policies, abilities
+- **Rate limiting** — memory + database store
+
+### ✅ Validation
+- **25+ schema types** — Zod-compatible API
+- Type inference with `Infer<typeof schema>`
+- Transform, coerce, refine pipelines
+- i18n error messages (English)
+
+### 🔄 Real-time
+- **WebSocket broadcasting** — channel-based pub/sub
+- **RPC** — type-safe server-client communication
+
+### 📧 Enterprise
+- **Queue / Jobs** — in-memory with handler system
+- **Mail** — pluggable transports + templates
+- **Task Scheduling** — cron-style
+- **Notifications** — database-backed
+- **HTTP Client** — fetch wrapper with timeout
+
+### 🛠️ CLI
+| Command | Description |
+|---|---|
+| `speexjs init` | Create new project (4 templates) |
+| `speexjs serve` | Development server |
+| `speexjs make:controller` | Generate controller |
+| `speexjs make:model` | Generate model |
+| `speexjs make:migration` | Generate migration |
+| `speexjs make:middleware` | Generate middleware |
+| `speexjs make:schema` | Generate schema |
+| `speexjs list-routes` | Display all routes |
+
+### 📦 Bundle Optimized
+- **67 KB** compressed (was 433 KB — **84% smaller**)
+- Code splitting + tree shaking + minification
+- Zero runtime dependencies
 
 ## Examples
 
-### Routing
-
-```typescript
-import { speexjs } from 'speexjs/server'
-
-const app = speexjs()
-
-app.group('/api', (router) => {
-  router.get('/users', [UserController, 'index'])
-  router.post('/users', [UserController, 'store'])
-}).middleware(['auth', 'throttle'])
-
-app.router.resource('/posts', PostController)
-```
-
 ### Validation
-
 ```typescript
 import { schema } from 'speexjs/schema'
 
 const UserSchema = schema.object({
-  name: schema.string().min(3).max(100),
+  name: schema.string().min(3),
   email: schema.string().email(),
-  age: schema.number().min(17).optional(),
+  age: schema.number().min(18).optional(),
 })
+
+const user = UserSchema.parse({ name: 'John', email: 'john@test.com', age: 25 })
 ```
 
-### Database
-
+### Controller with Decorators
 ```typescript
-import { db } from 'speexjs/server/database'
+import { Controller, get, post } from 'speexjs/server'
 
-await db.connect({ driver: 'mysql', database: 'myapp' })
+export class UserController extends Controller {
+  @get('/users')
+  async index({ response }) {
+    return response.json({ data: await User.all() })
+  }
 
-const users = await db.table('users')
-  .select('id', 'name', 'email')
-  .where('age', '>', 18)
-  .paginate(10, 1)
+  @post('/users')
+  async store({ request, response }) {
+    const data = await request.json()
+    const user = await User.create(data)
+    return response.json({ data: user }, 201)
+  }
+}
 ```
 
-### Auth
-
+### WebSocket Broadcasting
 ```typescript
-import { auth } from 'speexjs/server/auth'
+import { WsBroadcaster } from 'speexjs/server/websocket'
 
-app.post('/login', async ({ request, response }) => {
-  const { email, password } = await request.json()
-  const ok = await auth.attempt({ email, password })
-  if (!ok) return response.json({ error: 'Login failed' }, 401)
-  return response.json({ message: 'Login successful' })
+const ws = new WsBroadcaster()
+ws.attach(server)
+
+// Broadcast to channel
+ws.broadcast('chat:room1', 'message', { text: 'Hello!' })
+```
+
+### Queue
+```typescript
+import { Queue } from 'speexjs/server/queue'
+
+const queue = new Queue()
+queue.register('send-email', async (payload) => {
+  console.log('Sending email to:', payload)
 })
+queue.push('send-email', { to: 'user@test.com' })
 ```
 
-## CLI
+## Documentation
 
-| Command | Description |
-|---------|-------------|
-| `speexjs init` | Create a new project |
-| `speexjs serve` | Start development server |
-| `speexjs make:controller User` | Generate a controller |
-| `speexjs make:middleware Auth` | Generate a middleware |
-| `speexjs make:schema User` | Generate a schema |
-| `speexjs list-routes` | Display all registered routes |
+Full documentation: [docs.speexjs.dev](https://docs.speexjs.dev) (coming soon)
+
+## Benchmarks
+
+```bash
+# Run benchmarks locally
+npx mitata benchmarks/index.bench.ts
+```
+
+## License
 
 MIT

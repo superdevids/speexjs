@@ -54,5 +54,5 @@ npm publish --tag alpha      # speexjs@alpha
 Use deprecate instead of unpublish (unless within 72 hours):
 
 ```bash
-npm deprecate speexjs@0.2.0 "Critical bug. Upgrade to 0.2.1"
+npm deprecate speexjs@0.6.0 "Critical bug. Upgrade to 0.6.1"
 ```

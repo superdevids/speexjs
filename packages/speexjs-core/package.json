@@ -1,6 +1,6 @@
 {
     "name":  "speexjs-core",
-    "version":  "0.7.0",
+    "version":  "0.8.0",
     "description":  "JavaScript toolkit: NDArray (NumPy-like), 250+ functions (core, math, date, string, async, validation, collection, color, error, logger, crypto, path, IO, type, dep-exray, functional tools). Zero dependencies.",
     "type":  "module",
     "main":  "./dist/index.js",

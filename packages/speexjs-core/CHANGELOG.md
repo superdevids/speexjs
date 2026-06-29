@@ -6,6 +6,9 @@
 - **nlarray** — NumPy-like NDArray with 60+ methods: zeros, ones, arange, linspace, reshape, add/sub/mul/div (broadcasting), sum/mean/var/std (axis-aware), matmul, transpose, slice, concatenate, etc.
 - **nlfunction** — Functional programming toolkit: curry, partial, partialRight, tap, trace, memoizeSync, negate, before, wrapArray, constant, over, comparing, memoizeLast
 - **collection** — 18 new object/dictionary operations: pickBy, omitBy, mapKeys, mapValues, invert, invertBy, toPairs, fromPairs, hasPath, unset, mergeWith, defaults, defaultsDeep, deepFreeze, at, renameKeys, diff, fromKeys
+- **string** — `escapeRegExp()` utility
+- **type** — `isPlainObject()` now publicly exported
+- 1,477 total tests across 24 test files (96.5% line coverage)
 
 ### Changed
 - **validation** — Removed Indonesia-specific validators (NIK, NPWP, PlatNomor, Kodepos, NoRekening, NoSIM, Passport, NoBPJS, NoKK). Kept global: isEmail, isURL, isPhone

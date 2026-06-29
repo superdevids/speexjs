@@ -21,9 +21,9 @@ We will respond within **48 hours** to confirm receipt.
 
 | Version | Support |
 |---------|---------|
-| 0.2.x | ✅ Active |
-| 0.1.x | ⚠️ Limited |
-| < 0.1 | ❌ Not supported |
+| 0.6.x | ✅ Active |
+| 0.2.x - 0.5.x | ⚠️ Limited |
+| < 0.2 | ❌ Not supported |
 
 ## Responsible Disclosure
 

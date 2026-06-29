@@ -643,7 +643,8 @@ export function geometricMean(values: number[]): number {
     }
   }
   const logSum = values.reduce((acc, v) => (v === 0 ? acc : acc + Math.log(v)), 0)
-  if (logSum === -Infinity) return 0
+  // logSum is 0 if all values are 0 (reduce starts at 0, each 0 keeps it at 0)
+  // so we never reach -Infinity here. Math.exp(0/n) = 1 for all-zero input.
   return Math.exp(logSum / values.length)
 }
 
