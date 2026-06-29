@@ -1718,7 +1718,8 @@ describe('ClientRouter', () => {
       const router = new ClientRouter([
         { path: '/users', component: Home },
       ])
-      expect(router.current.value).toBeNull()
+      expect(router.current.value).not.toBeNull()
+      expect(router.current.value?.pattern).toBe('/users')
     })
 
     it('handles route with layout', () => {

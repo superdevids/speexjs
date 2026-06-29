@@ -257,9 +257,10 @@ export class SuperApp {
 					try { await handler(); } catch { /* ignore shutdown errors */ }
 				}
 
+				const forceExit = setTimeout(() => process.exit(1), 10000)
 				await this.close();
+				clearTimeout(forceExit)
 				console.log('✓ Server shut down gracefully');
-				process.exit(0);
 			};
 
 			process.on('SIGINT', () => shutdown('SIGINT'));

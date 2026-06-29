@@ -46,6 +46,9 @@ export class SuperRequest {
   private bodyCache: BodyCache | null = null
   private _bodyReadPromise: Promise<BodyCache> | null = null
   private maxBodySize: number
+  private static trustedProxies: string[] = []
+
+  static setTrustedProxy(ip: string): void { SuperRequest.trustedProxies.push(ip) }
 
   constructor(raw: IncomingMessage, options?: { maxBodySize?: number }) {
     this.maxBodySize = options?.maxBodySize ?? 10 * 1024 * 1024
@@ -55,10 +58,12 @@ export class SuperRequest {
       raw.headers as Record<string, string | string[]>,
     )
 
-    const parsedUrl = new URL(raw.url ?? '/', 'http://localhost')
+    let parsedUrl: URL
+    try { parsedUrl = new URL(raw.url ?? '/', 'http://localhost') }
+    catch { parsedUrl = new URL('/', 'http://localhost') }
     this._query = parseQueryParams(parsedUrl.searchParams)
 
-    this._ip = parseIp(raw)
+    this._ip = parseIp(raw, SuperRequest.trustedProxies)
 
     this.path = parsedUrl.pathname
     this.url = raw.url ?? '/'
@@ -305,25 +310,22 @@ function parseQueryParams(
   return result
 }
 
-function parseIp(req: IncomingMessage): string {
+function parseIp(req: IncomingMessage, trustedProxies: string[] = []): string {
+  const remote = req.socket.remoteAddress
+  const remoteIp = remote !== undefined ? (remote.startsWith('::ffff:') ? remote.slice(7) : remote) : '127.0.0.1'
+
   const forwarded = req.headers['x-forwarded-for']
-  if (forwarded !== undefined) {
+  if (forwarded !== undefined && trustedProxies.includes(remoteIp)) {
     const first = Array.isArray(forwarded) ? forwarded[0] : forwarded.split(',')[0]
     if (first !== undefined) return first.trim()
   }
 
   const realIp = req.headers['x-real-ip']
-  if (realIp !== undefined) {
+  if (realIp !== undefined && trustedProxies.includes(remoteIp)) {
     return Array.isArray(realIp) ? realIp[0] as string : realIp
   }
 
-  const remote = req.socket.remoteAddress
-  if (remote !== undefined) {
-    if (remote.startsWith('::ffff:')) return remote.slice(7)
-    return remote
-  }
-
-  return '127.0.0.1'
+  return remoteIp
 }
 
 function parseUrlEncoded(text: string): Record<string, string> {

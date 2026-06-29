@@ -57,7 +57,7 @@ async function createMysqlDriver(config: ConnectionConfig): Promise<Driver> {
 				charset: config.charset ?? "utf8mb4",
 				waitForConnections: true,
 				connectionLimit: 10,
-				queueLimit: 0,
+				queueLimit: 100,
 			});
 			// Verify connection
 			const conn = await pool.getConnection();
@@ -226,6 +226,8 @@ async function createSqliteDriver(config: ConnectionConfig): Promise<Driver> {
 	let connected = false;
 	const dialect = new SqliteDialect();
 
+	// NOTE: SQLite operations using better-sqlite3 are synchronous under the hood.
+	// This is a documented limitation - the async interface wraps sync calls.
 	const driver: Driver = {
 		async connect(): Promise<void> {
 			db = new sqlitePackage(config.database);

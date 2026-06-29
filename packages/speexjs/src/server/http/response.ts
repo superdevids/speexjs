@@ -69,7 +69,8 @@ export class SuperResponse {
 	}
 
 	header(name: string, value: string): this {
-		this._headers.set(name, value);
+		const safeValue = value.replace(/[\r\n]/g, '').trim()
+		this._headers.set(name, safeValue);
 		return this;
 	}
 
@@ -256,7 +257,7 @@ export class SuperResponse {
 	}
 
 	async download(filePath: string, filename?: string): Promise<this> {
-		const downloadName = filename ?? basename(filePath);
+		const downloadName = (filename ?? basename(filePath)).replace(/["\\\r\n]/g, '_')
 
 		this._headers.set(
 			"content-disposition",

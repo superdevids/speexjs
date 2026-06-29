@@ -66,7 +66,8 @@ export class ObjectSchema<T extends Shape> extends Schema<{ [K in keyof T]: Infe
     return new ObjectSchema({ ...this.shape, ...other.shape } as T & U)
   }
 
-  _parse(value: unknown): { [K in keyof T]: Infer<T[K]> } {
+  _parse(value: unknown, depth = 0): { [K in keyof T]: Infer<T[K]> } {
+    if (depth > 100) throw new SchemaError('Maximum object depth exceeded')
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
       throw new SchemaError(msg('type_object'))
     }
@@ -77,7 +78,7 @@ export class ObjectSchema<T extends Shape> extends Schema<{ [K in keyof T]: Infe
       if (Object.prototype.hasOwnProperty.call(this.shape, key)) {
         const schema = this.shape[key]!
         try {
-          result[key] = schema._parse(obj[key])
+          result[key] = (schema as any)._parse(obj[key], depth + 1)
         } catch (e) {
           if (e instanceof SchemaError) {
             throw new SchemaError(e.message, {

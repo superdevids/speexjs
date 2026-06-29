@@ -183,7 +183,7 @@ export class NumberSchema extends Schema<number> {
   }
 
   _parse(value: unknown): number {
-    if (typeof value !== 'number' || Number.isNaN(value)) {
+    if (typeof value !== 'number' || Number.isNaN(value) || !Number.isFinite(value)) {
       throw new SchemaError(msg('type_number'))
     }
     for (const check of this.checks) check(value)

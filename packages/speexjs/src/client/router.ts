@@ -34,15 +34,19 @@ function parseQuery(search: string): Record<string, string> {
   const qs = search.startsWith('?') ? search.slice(1) : search
   if (!qs) return params
   for (const part of qs.split('&')) {
-    const [key, val] = part.split('=')
-    if (key) params[decodeURIComponent(key)] = val ? decodeURIComponent(val) : ''
+    if (!part) continue
+    const [k, ...v] = part.split('=')
+    const key = k ? decodeURIComponent(k.replace(/\+/g, ' ')) : ''
+    const val = v.length > 0 ? decodeURIComponent(v.join('=').replace(/\+/g, ' ')) : ''
+    if (key) params[key] = val
   }
   return params
 }
 
 function matchPath(routePath: string, urlPath: string): Record<string, string> | null {
+  const normalizedUrl = urlPath.replace(/\/$/, '') || '/'
   const routeParts = routePath.split('/')
-  const urlParts = urlPath.split('/')
+  const urlParts = normalizedUrl.split('/')
   if (routeParts.length !== urlParts.length) return null
   const params: Record<string, string> = {}
   for (let i = 0; i < routeParts.length; i++) {
@@ -65,6 +69,7 @@ export class ClientRouter {
   private _historyIndex = -1
   private _routes: RouteDefinition[]
   private _options: Required<RouterOptions>
+  private _guards: RouteGuard[] = []
   private notFoundHandler?: () => VNode
 
   constructor(routes: RouteDefinition[], options?: RouterOptions) {
@@ -117,6 +122,11 @@ export class ClientRouter {
     return path
   }
 
+  guard(g: RouteGuard): this {
+    this._guards.push(g)
+    return this
+  }
+
   fallback(handler: () => VNode): this {
     this.notFoundHandler = handler
     return this
@@ -153,6 +163,11 @@ export class ClientRouter {
   async navigate(path: string): Promise<void> {
     const from = this._getCurrentPath()
     const to = path
+
+    for (const guard of this._guards) {
+      const result = await guard(to, from)
+      if (result === false) throw new Error(`Navigation guard blocked: ${from} -> ${to}`)
+    }
 
     const route = this._routes.find((r) => matchPath(r.path, to) !== null)
     if (route?.guards) {

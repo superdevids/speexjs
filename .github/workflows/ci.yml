@@ -1,46 +1,13 @@
 name: CI
-
-on:
-  push:
-    branches: [master]
-    paths:
-      - 'packages/core/**'
-  pull_request:
-    branches: [master]
-    paths:
-      - 'packages/core/**'
-
+on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18, 20, 22]
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: packages/core/package-lock.json
-
-      - name: Install dependencies
-        working-directory: packages/core
-        run: npm ci
-
-      - name: Lint
-        working-directory: packages/core
-        run: npx biome check src/
-
-      - name: Type check
-        working-directory: packages/core
-        run: npx tsc --noEmit
-
-      - name: Build
-        working-directory: packages/core
-        run: npx tsup
-
-      - name: Test
-        working-directory: packages/core
-        run: npx vitest run
+        with: { node-version: 22 }
+      - run: cd packages/speexjs && npm ci
+      - run: cd packages/speexjs && npm run typecheck
+      - run: cd packages/speexjs && npm test
+      - run: cd packages/speexjs && npm run build

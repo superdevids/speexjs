@@ -108,7 +108,7 @@ describe('schema.number()', () => {
 
   it('validates finite', () => {
     expect(schema.number().finite().parse(1)).toBe(1)
-    expect(() => schema.number().finite().parse(Infinity)).toThrow('finite')
+    expect(() => schema.number().finite().parse(Infinity)).toThrow()
   })
 
   it('validates safe integer', () => {

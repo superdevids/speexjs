@@ -36,7 +36,11 @@ export function cors(options?: CorsOptions): Middleware {
 
 		if (origin !== undefined) {
 			if (opts.origin === "*") {
-				response.header("access-control-allow-origin", "*");
+				if (opts.credentials) {
+					if (origin) response.header("access-control-allow-origin", origin)
+				} else {
+					response.header("access-control-allow-origin", "*");
+				}
 			} else if (typeof opts.origin === "string") {
 				response.header("access-control-allow-origin", opts.origin);
 			} else if (opts.origin.includes(origin)) {
@@ -145,10 +149,8 @@ export function session(options?: SessionOptions): Middleware {
 		}
 		const sessionData = sessions.get(id)!.data;
 
-		// Renew TTL on activity
-		if (sessions.has(id)) {
-			sessions.get(id)!.createdAt = Date.now();
-		}
+		// NOTE: TTL is intentionally NOT renewed on activity.
+		// Renewing would subvert maxAge - the original TTL from session creation stands.
 
 		(ctx as unknown as Record<string, unknown>).session = sessionData;
 
@@ -416,6 +418,16 @@ export function csrf(): Middleware {
 			response.status(HttpStatus.FORBIDDEN).json({
 				error: "CSRF token mismatch",
 				message: "Invalid or missing CSRF token",
+			});
+			return;
+		}
+
+		const expiresAt = tokens.get(token)
+		if (expiresAt !== undefined && expiresAt < Date.now()) {
+			tokens.delete(token)
+			response.status(HttpStatus.FORBIDDEN).json({
+				error: "CSRF token expired",
+				message: "CSRF token has expired",
 			});
 			return;
 		}

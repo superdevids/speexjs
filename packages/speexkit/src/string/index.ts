@@ -1,6 +1,7 @@
 const WORD_SPLIT_RE = /[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\b)|\d+/g
 
 function splitWords(str: string): string[] {
+  if (typeof str !== 'string' || str.length === 0) return []
   return str.match(WORD_SPLIT_RE) ?? []
 }
 

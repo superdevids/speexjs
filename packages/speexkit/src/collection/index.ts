@@ -187,10 +187,11 @@ export function last<T>(items: T[]): T | undefined {
  * Works for arrays, objects, strings, Map, and Set.
  */
 export function isEmpty(value: unknown): boolean {
+  if (value === null || value === undefined) return true
   if (Array.isArray(value)) return value.length === 0
   if (typeof value === 'string') return value.length === 0
   if (value instanceof Map || value instanceof Set) return value.size === 0
-  if (value !== null && typeof value === 'object') return Object.keys(value as Record<string, unknown>).length === 0
+  if (typeof value === 'object') return Object.keys(value as Record<string, unknown>).length === 0
   return false
 }
 

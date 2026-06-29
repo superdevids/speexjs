@@ -313,6 +313,6 @@ describe('isEmpty', () => {
   it('returns false for non-object non-collection values', () => {
     expect(isEmpty(42)).toBe(false)
     expect(isEmpty(true)).toBe(false)
-    expect(isEmpty(null)).toBe(false)
+    expect(isEmpty(null)).toBe(true)
   })
 })

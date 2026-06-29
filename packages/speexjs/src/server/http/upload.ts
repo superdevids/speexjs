@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { writeFile, readFile, unlink, mkdir } from 'node:fs/promises'
 import { unlinkSync } from 'node:fs'
-import { join, extname, basename, dirname } from 'node:path'
+import { extname, dirname, join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 
 const tempFiles: string[] = []
@@ -78,15 +78,21 @@ export class SuperUploadedFile implements UploadedFile {
   }
 
   async move(destination: string, filename?: string): Promise<string> {
-    const destName = filename ?? basename(this.path)
-    const destPath = join(destination, destName)
+    const resolvedDest = resolve(destination)
+    const safeName = (filename ?? this.originalName).replace(/[\\/:*?"<>|]/g, '_')
+    const destPath = join(resolvedDest, safeName)
 
-    await mkdir(dirname(destPath), { recursive: true })
+    const resolved = resolve(destPath)
+    if (!resolved.startsWith(resolvedDest)) {
+      throw new Error('Path traversal detected')
+    }
+
+    await mkdir(dirname(resolved), { recursive: true })
 
     const buf = await this.toBuffer()
-    await writeFile(destPath, buf)
+    await writeFile(resolved, buf)
 
-    return destPath
+    return resolved
   }
 
   async toBuffer(): Promise<Buffer> {

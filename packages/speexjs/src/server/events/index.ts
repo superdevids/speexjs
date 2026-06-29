@@ -42,10 +42,18 @@ export class Event {
 	}
 
 	emitLater(event: string, ...args: unknown[]): void {
-		setImmediate(() => { this.emit(event, ...args).catch(() => {}) })
+		setImmediate(() => { this._emitSequential(event, args as any[]).catch(() => {}) })
 	}
 
 	async emit(event: string, ...args: any[]): Promise<void> {
+		return this._emitSequential(event, args)
+	}
+
+	async emitParallel(event: string, ...args: any[]): Promise<void> {
+		return this._emitParallel(event, args)
+	}
+
+	private async _emitSequential(event: string, args: any[]): Promise<void> {
 		const listeners = this.emitter.listeners(event);
 
 		for (const listener of listeners) {
@@ -65,6 +73,30 @@ export class Event {
 				}
 			}
 		}
+	}
+
+	private async _emitParallel(event: string, args: any[]): Promise<void> {
+		const promises: Promise<void>[] = [];
+
+		for (const listener of this.emitter.listeners(event)) {
+			const result = listener(...args) as unknown;
+			if (result instanceof Promise) {
+				promises.push(result);
+			}
+		}
+
+		if (this.wildcardMode) {
+			for (const entry of this.patterns) {
+				if (entry.regex.test(event)) {
+					const result = entry.handler(event, ...args) as unknown;
+					if (result instanceof Promise) {
+						promises.push(result);
+					}
+				}
+			}
+		}
+
+		await Promise.all(promises);
 	}
 
 	off(event: string, handler: EventHandler): this {

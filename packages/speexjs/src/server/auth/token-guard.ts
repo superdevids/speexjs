@@ -81,7 +81,12 @@ export class TokenGuard {
   }
 
   private hashToken(plaintext: string): string {
-    const hmac = createHmac('sha256', this.config.secret ?? 'speexjs-token-secret')
+    const secret = this.config.secret ?? process.env.APP_KEY
+    if (!secret && process.env.NODE_ENV === 'production') {
+      throw new Error('TokenGuard requires a secret in production')
+    }
+    const key = secret ?? 'speexjs-dev-token'
+    const hmac = createHmac('sha256', key)
     hmac.update(plaintext)
     return hmac.digest('hex')
   }

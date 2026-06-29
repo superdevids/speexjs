@@ -101,10 +101,9 @@
 		"typecheck": "tsc --noEmit",
 		"build:all": "npm run build"
 	},
-	"dependencies": {
-		"tsx": "^4.19.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
+		"tsx": "^4.19.0",
 		"@biomejs/biome": "^2.5.1",
 		"@types/node": "^26.0.1",
 		"@vitest/coverage-v8": "^2.1.9",

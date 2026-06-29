@@ -264,6 +264,7 @@ export class QueryBuilder {
 	async avg(column: string): Promise<number> { return (await this.aggregate("AVG", column)) ?? 0; }
 
 	async paginate(perPage = 15, page = 1): Promise<PaginatedResult<any>> {
+		perPage = Math.max(1, Math.min(perPage, 1000))
 		const total = await this.count();
 		const lastPage = Math.max(1, Math.ceil(total / perPage));
 		const currentPage = Math.max(1, Math.min(page, lastPage));
@@ -278,6 +279,7 @@ export class QueryBuilder {
 	}
 
 	async insert(data: Record<string, any>): Promise<number | string> {
+		if (Object.keys(data).length === 0) throw new Error('Cannot insert empty object')
 		const { sql, bindings } = this.compileInsert(data);
 		const driverType = this.connection.getDriver();
 		const dialect = this.connection.getDialect();
@@ -329,6 +331,7 @@ export class QueryBuilder {
 	}
 
 	async update(data: Record<string, any>): Promise<number> {
+		if (Object.keys(data).length === 0) throw new Error('Cannot update with empty data')
 		const { sql, bindings } = this.compileUpdate(data);
 		const result = await this.connection.raw(sql, bindings);
 		if (result.rows && typeof result.rows === 'object' && 'affectedRows' in result.rows) {
@@ -360,6 +363,8 @@ export class QueryBuilder {
 		await this.connection.raw(this.connection.getDialect().compileTruncate(this.tableName));
 	}
 
+	// NOTE: Offset-based pagination degrades on large datasets.
+	// For high-volume tables, consider keyset pagination (WHERE id > ? ORDER BY id LIMIT ?) instead.
 	async chunk(size: number, callback: (rows: any[]) => Promise<void>): Promise<void> {
 		let page = 1;
 		let hasMore = true;
@@ -393,16 +398,27 @@ export class QueryBuilder {
 		return qb;
 	}
 
+	/**
+	 * ⚠️ UNSAFE: Raw SQL where clause. Do NOT pass user input directly.
+	 * Use parameterized bindings for user-provided values.
+	 */
 	whereRaw(sql: string, _bindings?: any[]): this {
 		this.wheres.push({ type: "raw", value: sql, boolean: "and" } as any);
 		return this;
 	}
 
+	/**
+	 * ⚠️ UNSAFE: Raw SQL or where clause. Do NOT pass user input directly.
+	 * Use parameterized bindings for user-provided values.
+	 */
 	orWhereRaw(sql: string, _bindings?: any[]): this {
 		this.wheres.push({ type: "raw", value: sql, boolean: "or" } as any);
 		return this;
 	}
 
+	/**
+	 * ⚠️ UNSAFE: Raw SQL order by clause. Do NOT pass user input directly.
+	 */
 	orderByRaw(sql: string): this {
 		this.orderBys.push({ column: sql, direction: "asc" } as any);
 		return this;

@@ -45,6 +45,8 @@ export interface ComponentContext {
   children?: VNode[]
 }
 
+const nodeCleanups = new WeakMap<Node, () => void>()
+
 const VOID_ELEMENTS = new Set([
   'area','base','br','col','embed','hr','img','input','link','meta',
   'param','source','track','wbr',
@@ -220,7 +222,7 @@ function createDOM(vnode: VNode): Node {
         result.then((resolved) => {
           const node = createDOM(resolved)
           placeholder.parentNode?.replaceChild(node, placeholder)
-        })
+        }).catch(() => { /* async component failed - keep placeholder */ })
         return placeholder
       }
       return createDOM(result)
@@ -229,13 +231,14 @@ function createDOM(vnode: VNode): Node {
       const val = vnode.signal.value
       const v = normalizeChild(val)
       const node = createDOM(v ?? text(''))
-      vnode.signal.subscribe((newVal: any) => {
+      const unsub = vnode.signal.subscribe((newVal: any) => {
         const newV = normalizeChild(newVal)
         if (newV && node.parentNode) {
           const newNode = createDOM(newV)
           node.parentNode.replaceChild(newNode, node)
         }
       })
+      nodeCleanups.set(node, unsub)
       return node
     }
   }
@@ -302,6 +305,7 @@ function patchChildren(parent: Node, oldChildren: VNode[], newChildren: VNode[])
 
   for (const [, leftover] of oldMap) {
     if (leftover.node.parentNode === parent) {
+      nodeCleanups.get(leftover.node)?.()
       parent.removeChild(leftover.node)
     }
   }

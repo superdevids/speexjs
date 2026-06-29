@@ -147,6 +147,10 @@ export class Cache {
 		}
 	}
 
+	// NOTE: increment/decrement are NOT atomic operations.
+	// The read-modify-write sequence (get → compute → set) has a TOCTOU race
+	// under concurrent access. For atomic counters, use a dedicated store
+	// with compare-and-swap or a database transaction.
 	async increment(key: string, value: number = 1): Promise<number> {
 		const current = await this.get<number>(key);
 		const newValue = (current ?? 0) + value;

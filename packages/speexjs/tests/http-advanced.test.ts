@@ -385,6 +385,17 @@ describe('SuperRequest - advanced', () => {
   })
 
   describe('IP parsing edge cases', () => {
+    beforeEach(() => {
+      SuperRequest.setTrustedProxy('127.0.0.1')
+    })
+
+    afterEach(() => {
+      // Reset static trustedProxies to avoid affecting other tests
+      while ((SuperRequest as any).trustedProxies?.length > 0) {
+        (SuperRequest as any).trustedProxies.pop()
+      }
+    })
+
     it('uses x-forwarded-for from array', () => {
       const req = new SuperRequest(
         createMockReq({
@@ -563,7 +574,7 @@ describe('SuperUploadedFile - advanced', () => {
         'doc', 'original.txt', 'text/plain', buf, tmpDir,
       )
       const result = await file.move(tmpDir)
-      expect(result).toBe(join(tmpDir, file.path.split(sep).pop()!))
+      expect(result).toBe(join(tmpDir, 'original.txt'))
       expect(existsSync(result)).toBe(true)
       expect(readFileSync(result).toString()).toBe('move test')
       await file.cleanup()

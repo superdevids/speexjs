@@ -88,6 +88,7 @@ function isValidDomain(domain: string): boolean {
  * @example isEmail('not-an-email')                  // => false
  */
 export function isEmail(value: string): boolean {
+  if (typeof value !== 'string' || value.length === 0) return false
   if (value.length > 254) return false
 
   const atIndex = value.lastIndexOf('@')

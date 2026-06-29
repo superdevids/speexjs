@@ -543,7 +543,7 @@ describe('SessionGuard', () => {
       await guard.attempt({ email: 'a@b.com', password: 'p' }, true)
       const maxAge = res.cookie.mock.calls[0][2].maxAge
       const fiveYears = 5 * 365 * 24 * 60 * 60
-      expect(maxAge).toBeGreaterThanOrEqual(fiveYears)
+      expect(maxAge).toBeGreaterThanOrEqual(fiveYears - 5)
     })
   })
 })

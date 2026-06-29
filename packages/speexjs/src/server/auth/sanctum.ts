@@ -6,7 +6,11 @@ export class Sanctum {
   private hmacKey: string
 
   constructor(hmacKey?: string) {
-    this.hmacKey = hmacKey ?? process.env.APP_KEY ?? 'sanctum'
+    const key = hmacKey ?? process.env.APP_KEY
+    if (!key && process.env.NODE_ENV === 'production') {
+      throw new Error('Sanctum requires APP_KEY environment variable in production')
+    }
+    this.hmacKey = key ?? 'sanctum-dev'
   }
 
   private hash(token: string): string {
