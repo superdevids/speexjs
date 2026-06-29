@@ -11,7 +11,10 @@ interface WhereClause {
 		| "between"
 		| "notBetween"
 		| "like"
-		| "nested";
+		| "nested"
+		| "raw"
+		| "exists"
+		| "column";
 	column?: string;
 	operator?: string;
 	value?: any;
@@ -39,7 +42,7 @@ interface HavingClause {
 	value: any;
 }
 
-export interface PaginatedResult<T = any> {
+export interface PaginatedResult<T> {
 	data: T[]; currentPage: number; perPage: number; total: number; lastPage: number;
 	from: number; to: number; hasMore: boolean; hasPrev: boolean; isEmpty: boolean;
 }
@@ -249,7 +252,7 @@ export class QueryBuilder {
 
 	async avg(column: string): Promise<number> { return (await this.aggregate("AVG", column)) ?? 0; }
 
-	async paginate(perPage = 15, page = 1): Promise<PaginatedResult> {
+	async paginate(perPage = 15, page = 1): Promise<PaginatedResult<any>> {
 		const total = await this.count();
 		const lastPage = Math.max(1, Math.ceil(total / perPage));
 		const currentPage = Math.max(1, Math.min(page, lastPage));
@@ -341,6 +344,38 @@ export class QueryBuilder {
 		return qb;
 	}
 
+	whereRaw(sql: string, _bindings?: any[]): this {
+		this.wheres.push({ type: "raw", value: sql, boolean: "and" } as any);
+		return this;
+	}
+
+	orWhereRaw(sql: string, _bindings?: any[]): this {
+		this.wheres.push({ type: "raw", value: sql, boolean: "or" } as any);
+		return this;
+	}
+
+	orderByRaw(sql: string): this {
+		this.orderBys.push({ column: sql, direction: "asc" } as any);
+		return this;
+	}
+
+	whereExists(callback: (query: QueryBuilder) => void): this {
+		const sub = new QueryBuilder(this.connection, this.tableName);
+		callback(sub);
+		this.wheres.push({ type: "exists", nested: (sub as any).wheres, boolean: "and" });
+		return this;
+	}
+
+	whereColumn(first: string, operator: string, second: string): this {
+		this.wheres.push({ type: "column", column: first, operator, value: second, boolean: "and" });
+		return this;
+	}
+
+	when(condition: boolean, callback: (query: this) => void): this {
+		if (condition) callback(this);
+		return this;
+	}
+
 	toSQL(): { sql: string; bindings: any[] } {
 		const bindings: any[] = [];
 		const dialect = this.connection.getDialect();
@@ -414,6 +449,9 @@ export class QueryBuilder {
 				const nestedSQL = this.compileNestedWhere(w.nested!, dialect, bindings);
 				return nestedSQL ? `(${nestedSQL})` : null;
 			}
+			case "raw": return String(w.value);
+			case "exists": return `EXISTS (SELECT 1 FROM ${dialect.wrapIdentifier(this.tableName)} WHERE ${this.compileWhereArray(w.nested!, dialect, bindings)})`;
+			case "column": return `${dialect.wrapIdentifier(w.column!)} ${w.operator} ${dialect.wrapIdentifier(w.value as string)}`;
 			default: return null;
 		}
 	}

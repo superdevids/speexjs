@@ -57,6 +57,7 @@ export class SuperResponse {
 	private _sent = false;
 	private _contentTypeSet = false;
 	private _viewEngine: ViewEngine | null = null;
+	private _startTime = Date.now();
 
 	constructor(raw: ServerResponse) {
 		this.raw = raw;
@@ -100,6 +101,19 @@ export class SuperResponse {
 		const body = JSON.stringify(data);
 		return this.send(body, undefined, "application/json");
 	}
+
+	jsonp<T>(data: T, callback = 'callback'): this {
+		const body = `${callback}(${JSON.stringify(data)})`
+		return this.send(body, undefined, 'text/javascript')
+	}
+
+	vary(...headers: string[]): this {
+		const existing = (this._headers.get('vary') ?? '').split(',').map(h => h.trim()).filter(Boolean)
+		this._headers.set('vary', [...existing, ...headers].join(', '))
+		return this
+	}
+
+	elapsed(): number { return Date.now() - this._startTime }
 
 	send(body: string | Buffer, status?: number, contentType?: string): this {
 		if (status !== undefined) this._statusCode = status;

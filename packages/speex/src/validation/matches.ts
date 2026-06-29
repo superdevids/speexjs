@@ -1,0 +1,1 @@
+﻿export function matches(value:string,pattern:RegExp|string,modifiers?:string):boolean{if(typeof value!=='string')return false;const regex=typeof pattern==='string'?new RegExp(pattern,modifiers??''):pattern;return regex.test(value)}

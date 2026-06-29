@@ -1,0 +1,1 @@
+﻿export function isSlug(value:string):boolean{if(typeof value!=='string'||value.length===0)return false;return/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)}

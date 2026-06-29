@@ -261,6 +261,16 @@ export class SuperRequest {
     return this.isAjax()
   }
 
+  accepts(...types: string[]): string | false {
+    const accept = this._headers.get('accept') ?? '*/*'
+    for (const type of types) { if (accept.includes(type)) return type }
+    return false
+  }
+
+  acceptsJson(): boolean { return this.accepts('application/json') !== false }
+
+  acceptsHtml(): boolean { return this.accepts('text/html') !== false }
+
   bearerToken(): string | undefined {
     const auth = this._headers.get('authorization')
     if (auth === undefined) return undefined

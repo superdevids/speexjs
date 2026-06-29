@@ -1,15 +1,22 @@
-# SpeexJS Monorepo
+﻿# speexkit
 
-Dua package dalam satu repo:
+**400+ functions · 0 dependencies · 19 modules · 1,477 tests**
 
-| Package | npm | Fungsi |
-|---------|-----|--------|
-| **speexjs** | `npm install speexjs` | Fullstack framework: server, client, database, auth, CLI |
-| **speexjs-core** | `npm install speexjs-core` | Utility library: 200+ fungsi, zero dep |
+The JavaScript/TypeScript utility toolkit — NDArray, ML, stats, validation, functional, date, async, and more.
 
-📖 [Lihat dokumentasi speexjs →](./packages/constx/README.md)  
-📖 [Lihat dokumentasi speexjs-core →](./packages/core/README.md)
+`ash
+npm install speexkit
+`
 
----
+`	ypescript
+import { NDArray } from 'speexkit/nlarray'
+import { StandardScaler } from 'speexkit/ml'
+import { normalPDF, ttestInd } from 'speexkit/stats'
+import { curry, pipe } from 'speexkit/nlfunction'
+import { formatDate, timeAgo } from 'speexkit/date'
+import { isEmail, isStrongPassword } from 'speexkit/validation'
+`
 
-MIT
+📖 [Full docs →](./packages/speex/SUMMARY.md)
+
+**License:** MIT

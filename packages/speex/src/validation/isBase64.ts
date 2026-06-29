@@ -1,0 +1,1 @@
+﻿const B64=/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;const B64U=/^(?:[A-Za-z0-9\\-_]{4})*(?:[A-Za-z0-9\\-_]{2}==|[A-Za-z0-9\\-_]{3}=?)?$/;export function isBase64(value:string,urlSafe?:boolean):boolean{if(typeof value!=='string'||value.length===0)return false;return(urlSafe?B64U:B64).test(value)}

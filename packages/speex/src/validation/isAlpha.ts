@@ -1,0 +1,1 @@
+﻿export function isAlpha(value:string):boolean{if(typeof value!=='string'||value.length===0)return false;for(let i=0;i<value.length;i++){const ch=value[i]!;if(!((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z')))return false}return true}

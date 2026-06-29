@@ -1,7 +1,7 @@
 import type { SuperRequest } from '../http/request.js'
 import type { SuperResponse } from '../http/response.js'
 import { verifyPassword } from '../../native/hashing.js'
-import { encrypt, decrypt, generateEncryptionKey } from '../../native/crypto.js'
+import { encrypt, decrypt } from '../../native/crypto.js'
 
 export interface AuthUser {
   id: string | number
@@ -46,7 +46,7 @@ export class SessionGuard {
       identifier: 'email',
       password: 'password',
       provider: undefined,
-      encryptionKey: config?.encryptionKey ?? process.env.APP_KEY ?? generateEncryptionKey(),
+      encryptionKey: config?.encryptionKey ?? process.env.APP_KEY ?? (() => { throw new Error('APP_KEY must be set in production. Add APP_KEY to your .env file.') })(),
       ...config,
     }
   }

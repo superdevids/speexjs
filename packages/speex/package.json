@@ -1,0 +1,193 @@
+{
+    "name": "speexkit",
+    "version": "0.8.2",
+    "description": "SPEEX ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â JavaScript toolkit: NDArray (NumPy-like), 250+ functions (core, math, date, string, async, validation, collection, color, error, logger, crypto, path, IO, type, dep-exray, functional tools). Zero dependencies.",
+    "type": "module",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "bin": {
+        "dep-exray": "dist/dep-exray/cli.js"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./core": {
+            "import": "./dist/core/index.js",
+            "types": "./dist/core/index.d.ts"
+        },
+        "./math": {
+            "import": "./dist/math/index.js",
+            "types": "./dist/math/index.d.ts"
+        },
+        "./date": {
+            "import": "./dist/date/index.js",
+            "types": "./dist/date/index.d.ts"
+        },
+        "./collection": {
+            "import": "./dist/collection/index.js",
+            "types": "./dist/collection/index.d.ts"
+        },
+        "./string": {
+            "import": "./dist/string/index.js",
+            "types": "./dist/string/index.d.ts"
+        },
+        "./async": {
+            "import": "./dist/async/index.js",
+            "types": "./dist/async/index.d.ts"
+        },
+        "./io": {
+            "import": "./dist/io/index.js",
+            "types": "./dist/io/index.d.ts"
+        },
+        "./type": {
+            "import": "./dist/type/index.js",
+            "types": "./dist/type/index.d.ts"
+        },
+        "./crypto": {
+            "import": "./dist/crypto/index.js",
+            "types": "./dist/crypto/index.d.ts"
+        },
+        "./path": {
+            "import": "./dist/path/index.js",
+            "types": "./dist/path/index.d.ts"
+        },
+        "./dep-exray": {
+            "import": "./dist/dep-exray/index.js",
+            "types": "./dist/dep-exray/index.d.ts"
+        },
+        "./dep-exray/scanner": {
+            "import": "./dist/dep-exray/scanner/index.js",
+            "types": "./dist/dep-exray/scanner/index.d.ts"
+        },
+        "./dep-exray/analyzer": {
+            "import": "./dist/dep-exray/analyzer/index.js",
+            "types": "./dist/dep-exray/analyzer/index.d.ts"
+        },
+        "./dep-exray/reporter": {
+            "import": "./dist/dep-exray/reporter/index.js",
+            "types": "./dist/dep-exray/reporter/index.d.ts"
+        },
+        "./dep-exray/types": {
+            "import": "./dist/dep-exray/types.js",
+            "types": "./dist/dep-exray/types.d.ts"
+        },
+        "./dep-exray/known-mappings": {
+            "import": "./dist/dep-exray/known-mappings.js",
+            "types": "./dist/dep-exray/known-mappings.d.ts"
+        },
+        "./dep-exray/cli": {
+            "import": "./dist/dep-exray/cli.js",
+            "types": "./dist/dep-exray/cli.d.ts"
+        },
+        "./validation": {
+            "import": "./dist/validation/index.js",
+            "types": "./dist/validation/index.d.ts"
+        },
+        "./error": {
+            "import": "./dist/error/index.js",
+            "types": "./dist/error/index.d.ts"
+        },
+        "./logger": {
+            "import": "./dist/logger/index.js",
+            "types": "./dist/logger/index.d.ts"
+        },
+        "./logger/transports": {
+            "import": "./dist/logger/transports.js",
+            "types": "./dist/logger/transports.d.ts"
+        },
+        "./color": {
+            "import": "./dist/color/index.js",
+            "types": "./dist/color/index.d.ts"
+        },
+        "./nlfunction": {
+            "import": "./dist/nlfunction/index.js",
+            "types": "./dist/nlfunction/index.d.ts"
+        },
+        "./ml": {
+            "import": "./dist/ml/index.js",
+            "types": "./dist/ml/index.d.ts"
+        },
+        "./stats": {
+            "import": "./dist/stats/index.js",
+            "types": "./dist/stats/index.d.ts"
+        },
+        "./viz-data": {
+            "import": "./dist/viz-data/index.js",
+            "types": "./dist/viz-data/index.d.ts"
+        },
+        "./nlarray": {
+            "import": "./dist/nlarray/index.js",
+            "types": "./dist/nlarray/index.d.ts"
+        }
+    },
+    "sideEffects": false,
+    "files": [
+        "dist",
+        "*.md"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "lint": "biome check src/",
+        "lint:fix": "biome check --write src/",
+        "typecheck": "tsc --noEmit",
+        "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+        "size": "size-limit",
+        "bench": "vitest bench",
+        "ci": "npm run lint && npm run typecheck && npm run build && npm run test:coverage"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^2.5.1",
+        "@size-limit/file": "^11.0.0",
+        "@types/node": "^26.0.1",
+        "@vitest/coverage-v8": "^2.1.9",
+        "size-limit": "^11.0.0",
+        "tsup": "^8.3.0",
+        "typescript": "^5.7.0",
+        "vite": "^8.1.0",
+        "vitest": "^2.1.0"
+    },
+    "size-limit": [
+        {
+            "path": "dist/index.js",
+            "limit": "60 KB"
+        }
+    ],
+    "keywords": [
+        "utilities",
+        "standard-library",
+        "typescript",
+        "dependency-scanner",
+        "npm-audit",
+        "bloat-detection",
+        "security",
+        "validation",
+        "ndarray",
+        "numpy",
+        "functional",
+        "data-science",
+        "utilities",
+        "lodash-alternative"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/superdevids/speexjs.git"
+    },
+    "bugs": {
+        "url": "https://github.com/superdevids/speexjs/issues"
+    },
+    "homepage": "https://github.com/superdevids/speexjs#readme",
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

@@ -870,7 +870,6 @@ describe('Middleware: helmet', () => {
     await helmet()(ctx, vi.fn())
     expect(res.getHeader('x-content-type-options')).toBe('nosniff')
     expect(res.getHeader('x-frame-options')).toBe('SAMEORIGIN')
-    expect(res.getHeader('x-xss-protection')).toBe('1; mode=block')
     expect(res.getHeader('strict-transport-security')).toBeDefined()
     expect(res.getHeader('content-security-policy')).toBeDefined()
   })
@@ -1540,20 +1539,20 @@ describe('LocalDisk', () => {
     expect((await disk.get('log.txt')).toString()).toBe('~~start end')
   })
 
-  it('readStream and writeStream', () => {
-    const ws = disk.writeStream('streamed.txt')
+  it('readStream and writeStream', async () => {
+    const ws = await disk.writeStream('streamed.txt')
     ws.end('stream data')
-    return new Promise<void>((resolve) => {
-      ws.on('finish', () => {
-        const rs = disk.readStream('streamed.txt')
+    await new Promise<void>((resolve) => {
+      ws.on('finish', async () => {
+        const rs = await disk.readStream('streamed.txt')
         expect(rs).toBeDefined()
         resolve()
       })
     })
   })
 
-  it('readStream throws for missing file', () => {
-    expect(() => disk.readStream('ghost.txt')).toThrow('File not found')
+  it('readStream throws for missing file', async () => {
+    await expect(disk.readStream('ghost.txt')).rejects.toThrow('File not found')
   })
 
   it('getRoot returns root path', () => {

@@ -791,6 +791,7 @@ describe('auth middleware - additional coverage', () => {
 
   beforeEach(async () => {
     vi.clearAllMocks()
+    process.env.APP_KEY = 'dGVzdC1rZXktMzItYnl0ZXMtMTIzNDU2Nzg5MDEyMzQ1Ng=='
     const authMod = await import('../src/server/auth/index.js')
     AuthManager = authMod.AuthManager
     authMiddleware = (await import('../src/server/auth/middleware.js')).authMiddleware
@@ -1611,6 +1612,10 @@ describe('serve command - success paths', () => {
 // ====================================================================
 
 describe('SessionGuard - edge cases', () => {
+  beforeEach(() => {
+    process.env.APP_KEY = 'dGVzdC1rZXktMzItYnl0ZXMtMTIzNDU2Nzg5MDEyMzQ1Ng=='
+  })
+
   it('readSession returns null when req is null', async () => {
     const { SessionGuard } = await import('../src/server/auth/session-guard.js')
     const guard = new SessionGuard()

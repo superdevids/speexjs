@@ -3,6 +3,11 @@ export class AccountLockout {
   private maxAttempts = 5
   private lockoutDuration = 900000
 
+  constructor(config?: { maxAttempts?: number; lockoutDurationMs?: number }) {
+    if (config?.maxAttempts) this.maxAttempts = config.maxAttempts
+    if (config?.lockoutDurationMs) this.lockoutDuration = config.lockoutDurationMs
+  }
+
   recordAttempt(identifier: string): void {
     const entry = this.attempts.get(identifier) ?? { count: 0, lockedUntil: 0 }
     entry.count++

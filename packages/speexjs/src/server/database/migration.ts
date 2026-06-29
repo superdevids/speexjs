@@ -244,6 +244,32 @@ export class TableBlueprint {
 		return col;
 	}
 
+	point(name: string): ColumnDefinition { return this.addColumn("point", name); }
+
+	polygon(name: string): ColumnDefinition { return this.addColumn("polygon", name); }
+
+	geometry(name: string): ColumnDefinition { return this.addColumn("geometry", name); }
+
+	ip(name: string): ColumnDefinition { return this.addColumn("inet", name); }
+
+	mac(name: string): ColumnDefinition { return this.addColumn("macaddr", name); }
+
+	mediumText(name: string): ColumnDefinition { return this.addColumn("mediumtext", name); }
+
+	longText(name: string): ColumnDefinition { return this.addColumn("longtext", name); }
+
+	ulid(name: string): ColumnDefinition { return this.addColumn("ulid", name); }
+
+	virtualAs(expression: string): ColumnDefinition {
+		this.columns[this.columns.length - 1]!.virtualAs = expression;
+		return this.columns[this.columns.length - 1]!;
+	}
+
+	storedAs(expression: string): ColumnDefinition {
+		this.columns[this.columns.length - 1]!.storedAs = expression;
+		return this.columns[this.columns.length - 1]!;
+	}
+
 	foreignId(name: string): ColumnDefinition {
 		const col = this.addColumn("foreignId", name);
 		col.unsigned();
@@ -385,6 +411,8 @@ export class ColumnDefinition {
 	private scaleValue: number | null = null;
 	private lengthValue: number | null = null;
 	private enumValues: string[] | null = null;
+	virtualAs: string | null = null;
+	storedAs: string | null = null;
 	private isForeignId = false;
 	isNew = true;
 
@@ -482,6 +510,8 @@ export class ColumnDefinition {
 			length: this.lengthValue,
 			values: this.enumValues,
 			isForeignId: this.isForeignId,
+			virtualAs: this.virtualAs,
+			storedAs: this.storedAs,
 		};
 	}
 }

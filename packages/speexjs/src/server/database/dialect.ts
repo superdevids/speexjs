@@ -38,6 +38,8 @@ export interface ColumnCompileOptions {
   length: number | null;
   values: string[] | null;
   isForeignId: boolean;
+  virtualAs: string | null;
+  storedAs: string | null;
 }
 
 abstract class BaseDialect {

@@ -1,6 +1,6 @@
+import { createHmac } from 'node:crypto'
 import type { AuthUser } from './session-guard.js'
 import { randomHex } from '../../native/crypto.js'
-import { scryptSync, randomBytes } from 'node:crypto'
 
 export interface TokenProvider {
   create(
@@ -30,6 +30,7 @@ export interface TokenGuardConfig {
   tokenName?: string
   provider?: TokenProvider
   userLookup?: UserLookup
+  secret?: string
 }
 
 interface TokenRecord {
@@ -39,8 +40,8 @@ interface TokenRecord {
 
 export class TokenGuard {
   private config: Required<
-    Omit<TokenGuardConfig, 'provider' | 'userLookup'>
-  > & { provider: TokenProvider | undefined; userLookup: UserLookup | undefined }
+    Omit<TokenGuardConfig, 'provider' | 'userLookup' | 'secret'>
+  > & { provider: TokenProvider | undefined; userLookup: UserLookup | undefined; secret?: string }
 
   constructor(config?: TokenGuardConfig) {
     this.config = {
@@ -50,6 +51,7 @@ export class TokenGuard {
       tokenName: 'api-token',
       provider: undefined,
       userLookup: undefined,
+      secret: undefined,
       ...config,
     }
   }
@@ -67,7 +69,7 @@ export class TokenGuard {
 
     const plaintext = randomHex(this.config.tokenLength)
     const tokenHash = this.config.hashTokens
-      ? this.saltedHash(plaintext)
+      ? this.hashToken(plaintext)
       : plaintext
     await this.config.provider.create(
       userId,
@@ -78,10 +80,10 @@ export class TokenGuard {
     return plaintext
   }
 
-  private saltedHash(plaintext: string): string {
-    const salt = randomBytes(16).toString('hex')
-    const hash = scryptSync(plaintext, salt, 64).toString('hex')
-    return `$scrypt$${salt}$${hash}`
+  private hashToken(plaintext: string): string {
+    const hmac = createHmac('sha256', this.config.secret ?? 'speexjs-token-secret')
+    hmac.update(plaintext)
+    return hmac.digest('hex')
   }
 
   async user(token: string): Promise<AuthUser | null> {
@@ -115,7 +117,7 @@ export class TokenGuard {
 
   async revokeToken(token: string): Promise<void> {
     if (this.config.provider === undefined) return
-    const tokenHash = this.config.hashTokens ? this.saltedHash(token) : token
+    const tokenHash = this.config.hashTokens ? this.hashToken(token) : token
     await this.config.provider.delete(tokenHash)
   }
 
@@ -128,7 +130,7 @@ export class TokenGuard {
     token: string,
   ): Promise<TokenRecord | null> {
     if (this.config.provider === undefined) return null
-    const tokenHash = this.config.hashTokens ? this.saltedHash(token) : token
+    const tokenHash = this.config.hashTokens ? this.hashToken(token) : token
     return this.config.provider.find(tokenHash)
   }
 }

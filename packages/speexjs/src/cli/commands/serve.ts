@@ -2,6 +2,7 @@ import { existsSync, readFileSync, watch } from 'node:fs'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createServer } from 'node:http'
+import { createServer as createNetServer } from 'node:net'
 import { colors } from '../../native/colors.js'
 import { logger } from '../../native/logger.js'
 
@@ -49,8 +50,17 @@ export async function serve(options: Record<string, any>): Promise<void> {
     docs: !!options.docs,
   }
 
-  const port = parseInt(String(opts.port), 10)
   const host = String(opts.host)
+
+  async function findPort(start: number): Promise<number> {
+    return new Promise((resolve) => {
+      const server = createNetServer()
+      server.on('error', () => { server.close(); resolve(findPort(start + 1)) })
+      server.listen(start, () => { server.close(); resolve(start) })
+    })
+  }
+
+  const port = await findPort(parseInt(String(opts.port), 10))
 
   if (opts.docs) {
     const docsPath = resolve(import.meta.dirname, '../../docs/index.html')

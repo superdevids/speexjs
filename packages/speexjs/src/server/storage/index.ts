@@ -1,4 +1,5 @@
 import * as fs from "node:fs";
+import * as fsp from "node:fs/promises";
 import * as path from "node:path";
 
 export interface StorageConfig {
@@ -31,60 +32,46 @@ export class LocalDisk {
 	async put(filePath: string, content: string | Buffer): Promise<string> {
 		const fullPath = this.resolvePath(filePath);
 		const dir = path.dirname(fullPath);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
-		fs.writeFileSync(fullPath, content);
+		try { await fsp.access(dir); } catch { await fsp.mkdir(dir, { recursive: true }); }
+		await fsp.writeFile(fullPath, content);
 		return filePath;
 	}
 
 	async get(filePath: string): Promise<Buffer> {
 		const fullPath = this.resolvePath(filePath);
-		if (!fs.existsSync(fullPath)) {
-			throw new Error(`File not found: ${filePath}`);
-		}
-		return fs.readFileSync(fullPath);
+		try { await fsp.access(fullPath); } catch { throw new Error(`File not found: ${filePath}`); }
+		return fsp.readFile(fullPath);
 	}
 
 	async exists(filePath: string): Promise<boolean> {
 		const fullPath = this.resolvePath(filePath);
-		return fs.existsSync(fullPath);
+		try { await fsp.access(fullPath); return true; } catch { return false; }
 	}
 
 	async delete(filePath: string): Promise<boolean> {
 		const fullPath = this.resolvePath(filePath);
-		if (!fs.existsSync(fullPath)) {
-			return false;
-		}
-		fs.unlinkSync(fullPath);
+		try { await fsp.access(fullPath); } catch { return false; }
+		await fsp.unlink(fullPath);
 		return true;
 	}
 
 	async copy(from: string, to: string): Promise<boolean> {
 		const fromPath = this.resolvePath(from);
 		const toPath = this.resolvePath(to);
-		if (!fs.existsSync(fromPath)) {
-			return false;
-		}
+		try { await fsp.access(fromPath); } catch { return false; }
 		const dir = path.dirname(toPath);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
-		fs.copyFileSync(fromPath, toPath);
+		try { await fsp.access(dir); } catch { await fsp.mkdir(dir, { recursive: true }); }
+		await fsp.copyFile(fromPath, toPath);
 		return true;
 	}
 
 	async move(from: string, to: string): Promise<boolean> {
 		const fromPath = this.resolvePath(from);
 		const toPath = this.resolvePath(to);
-		if (!fs.existsSync(fromPath)) {
-			return false;
-		}
+		try { await fsp.access(fromPath); } catch { return false; }
 		const dir = path.dirname(toPath);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
-		fs.renameSync(fromPath, toPath);
+		try { await fsp.access(dir); } catch { await fsp.mkdir(dir, { recursive: true }); }
+		await fsp.rename(fromPath, toPath);
 		return true;
 	}
 
@@ -98,95 +85,73 @@ export class LocalDisk {
 
 	async size(filePath: string): Promise<number> {
 		const fullPath = this.resolvePath(filePath);
-		if (!fs.existsSync(fullPath)) {
-			throw new Error(`File not found: ${filePath}`);
-		}
-		return fs.statSync(fullPath).size;
+		try { await fsp.access(fullPath); } catch { throw new Error(`File not found: ${filePath}`); }
+		const stat = await fsp.stat(fullPath);
+		return stat.size;
 	}
 
 	async lastModified(filePath: string): Promise<Date> {
 		const fullPath = this.resolvePath(filePath);
-		if (!fs.existsSync(fullPath)) {
-			throw new Error(`File not found: ${filePath}`);
-		}
-		return fs.statSync(fullPath).mtime;
+		try { await fsp.access(fullPath); } catch { throw new Error(`File not found: ${filePath}`); }
+		const stat = await fsp.stat(fullPath);
+		return stat.mtime;
 	}
 
 	async files(directory: string = ""): Promise<string[]> {
 		const fullPath = this.resolvePath(directory);
-		if (!fs.existsSync(fullPath)) {
-			return [];
-		}
-		return fs
-			.readdirSync(fullPath)
-			.filter((name) => {
-				const stat = fs.statSync(path.join(fullPath, name));
-				return stat.isFile();
-			})
-			.map((name) => path.join(directory, name).replace(/\\/g, "/"));
+		try { await fsp.access(fullPath); } catch { return []; }
+		const entries = await fsp.readdir(fullPath, { withFileTypes: true });
+		return entries
+			.filter((entry) => entry.isFile())
+			.map((entry) => path.join(directory, entry.name).replace(/\\/g, "/"));
 	}
 
 	async directories(directory: string = ""): Promise<string[]> {
 		const fullPath = this.resolvePath(directory);
-		if (!fs.existsSync(fullPath)) {
-			return [];
-		}
-		return fs
-			.readdirSync(fullPath)
-			.filter((name) => {
-				const stat = fs.statSync(path.join(fullPath, name));
-				return stat.isDirectory();
-			})
-			.map((name) => path.join(directory, name).replace(/\\/g, "/"));
+		try { await fsp.access(fullPath); } catch { return []; }
+		const entries = await fsp.readdir(fullPath, { withFileTypes: true });
+		return entries
+			.filter((entry) => entry.isDirectory())
+			.map((entry) => path.join(directory, entry.name).replace(/\\/g, "/"));
 	}
 
 	async makeDirectory(dirPath: string): Promise<void> {
 		const fullPath = this.resolvePath(dirPath);
-		fs.mkdirSync(fullPath, { recursive: true });
+		await fsp.mkdir(fullPath, { recursive: true });
 	}
 
 	async deleteDirectory(dirPath: string): Promise<void> {
 		const fullPath = this.resolvePath(dirPath);
-		if (fs.existsSync(fullPath)) {
-			fs.rmSync(fullPath, { recursive: true, force: true });
-		}
+		try { await fsp.access(fullPath); } catch { return; }
+		await fsp.rm(fullPath, { recursive: true, force: true });
 	}
 
 	async append(filePath: string, content: string): Promise<void> {
 		const fullPath = this.resolvePath(filePath);
 		const dir = path.dirname(fullPath);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
-		fs.appendFileSync(fullPath, content, "utf-8");
+		try { await fsp.access(dir); } catch { await fsp.mkdir(dir, { recursive: true }); }
+		await fsp.appendFile(fullPath, content, "utf-8");
 	}
 
 	async prepend(filePath: string, content: string): Promise<void> {
 		const fullPath = this.resolvePath(filePath);
 		const dir = path.dirname(fullPath);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
-		const existing = fs.existsSync(fullPath)
-			? fs.readFileSync(fullPath, "utf-8")
-			: "";
-		fs.writeFileSync(fullPath, content + existing, "utf-8");
+		try { await fsp.access(dir); } catch { await fsp.mkdir(dir, { recursive: true }); }
+		let existing = "";
+		try { existing = await fsp.readFile(fullPath, "utf-8"); } catch { /* file doesn't exist */ }
+		await fsp.writeFile(fullPath, content + existing, "utf-8");
 	}
 
-	readStream(filePath: string): fs.ReadStream {
+	async readStream(filePath: string): Promise<fs.ReadStream> {
 		const fullPath = this.resolvePath(filePath);
-		if (!fs.existsSync(fullPath)) {
-			throw new Error(`File not found: ${filePath}`);
-		}
+		try { await fsp.access(fullPath); } catch { throw new Error(`File not found: ${filePath}`); }
 		return fs.createReadStream(fullPath);
 	}
 
-	writeStream(filePath: string): fs.WriteStream {
+	async writeStream(filePath: string): Promise<fs.WriteStream> {
 		const fullPath = this.resolvePath(filePath);
 		const dir = path.dirname(fullPath);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
+		try { await fsp.access(dir); } catch { await fsp.mkdir(dir, { recursive: true }); }
 		return fs.createWriteStream(fullPath);
 	}
 

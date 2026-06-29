@@ -111,6 +111,7 @@ export function session(options?: SessionOptions): Middleware {
 	}
 	const sessions = new Map<string, SessionEntry>();
 	const SESSION_TTL = (opts.maxAge || 7200) * 1000;
+	let cleanupCounter = 0;
 
 	function generateSessionId(): string {
 		return randomUUID();
@@ -121,8 +122,10 @@ export function session(options?: SessionOptions): Middleware {
 		const sessionId = request.cookie(opts.name) ?? generateSessionId();
 		const id = sessionId;
 
-		// Clean expired sessions periodically (every 100 requests)
-		if (Math.random() < 0.01) {
+		// Clean expired sessions every 100 requests (deterministic)
+		cleanupCounter++;
+		if (cleanupCounter >= 100) {
+			cleanupCounter = 0;
 			const now = Date.now();
 			for (const [key, entry] of sessions) {
 				if (now - entry.createdAt > SESSION_TTL) {
@@ -477,7 +480,6 @@ export function helmet(): Middleware {
 		response
 			.header("x-content-type-options", "nosniff")
 			.header("x-frame-options", "SAMEORIGIN")
-			.header("x-xss-protection", "1; mode=block")
 			.header(
 				"strict-transport-security",
 				"max-age=15552000; includeSubDomains",

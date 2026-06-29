@@ -62,11 +62,7 @@ export class Cache {
 		return entry.value as T;
 	}
 
-	async remember<T>(
-		key: string,
-		ttl: number | undefined,
-		callback: () => Promise<T>,
-	): Promise<T> {
+	async remember<T>(key: string, ttl: number, callback: () => Promise<T>): Promise<T> {
 		const cached = await this.get<T>(key);
 		if (cached !== null) {
 			return cached;

@@ -269,23 +269,38 @@ function patchProps(el: Element, oldProps: Record<string, any>, newProps: Record
   }
 }
 
+function getVNodeKey(vn: VNode | undefined): string | number {
+  return (vn != null && 'key' in vn && (vn as any).key != null) ? (vn as any).key : -1
+}
+
 function patchChildren(parent: Node, oldChildren: VNode[], newChildren: VNode[]): void {
+  const oldMap = new Map<string | number, { node: Node; vnode: VNode }>()
+  for (let i = 0; i < oldChildren.length; i++) {
+    const key = getVNodeKey(oldChildren[i])
+    oldMap.set(key, { node: parent.childNodes[i]!, vnode: oldChildren[i]! })
+  }
+
   const maxLen = Math.max(oldChildren.length, newChildren.length)
   for (let i = 0; i < maxLen; i++) {
-    const oldChild = oldChildren[i]
     const newChild = newChildren[i]
-    const existingNode = parent.childNodes[i]
-    if (!oldChild && newChild) {
+    const newKey = getVNodeKey(newChild)
+    const matched = oldMap.get(newKey)
+
+    if (matched && newChild && isSameVNodeType(matched.vnode, newChild)) {
+      patchVNode(matched.node, matched.vnode, newChild)
+      oldMap.delete(newKey)
+    } else if (matched && newChild) {
+      const newNode = createDOM(newChild)
+      parent.replaceChild(newNode, matched.node)
+      oldMap.delete(newKey)
+    } else if (newChild) {
       parent.appendChild(createDOM(newChild))
-    } else if (oldChild && !newChild) {
-      if (existingNode) parent.removeChild(existingNode)
-    } else if (oldChild && newChild) {
-      if (isSameVNodeType(oldChild, newChild)) {
-        patchVNode(existingNode ?? null, oldChild, newChild)
-      } else {
-        const newNode = createDOM(newChild)
-        parent.replaceChild(newNode, existingNode!)
-      }
+    }
+  }
+
+  for (const [, leftover] of oldMap) {
+    if (leftover.node.parentNode === parent) {
+      parent.removeChild(leftover.node)
     }
   }
 }

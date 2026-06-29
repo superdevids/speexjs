@@ -1,0 +1,1 @@
+﻿export interface IsLengthOptions{min?:number;max?:number}export function isLength(value:string,options?:IsLengthOptions):boolean{if(typeof value!=='string')return false;const{min=0,max=Infinity}=options??{};return value.length>=min&&value.length<=max}

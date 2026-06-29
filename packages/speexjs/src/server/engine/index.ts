@@ -86,12 +86,11 @@ export class HttpsEngine extends NodeEngine {
 
   async createServer(handler: RequestHandler): Promise<ServerInstance> {
     const server = createHttpsServer(this.options, async (nodeReq, nodeRes) => {
-      const req = new (require('../http/request.js').SuperRequest)(nodeReq)
-      const res = new (require('../http/response.js').SuperResponse)(nodeRes)
+      const req = new SuperRequest(nodeReq as any)
+      const res = new SuperResponse(nodeRes as any)
       try { await handler(req, res) }
       catch (_err: unknown) {
         if (!res.headersSent) {
-          const { normalizeError } = require('../errors.js')
           const error = _err instanceof Error ? _err : new Error(String(_err))
           const httpError = normalizeError(error)
           res.status(httpError.status).json(httpError.toJSON())

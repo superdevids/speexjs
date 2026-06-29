@@ -1,0 +1,1 @@
+﻿export function isJSON(value:string):boolean{if(typeof value!=='string'||value.length===0)return false;try{JSON.parse(value);return true}catch{return false}}

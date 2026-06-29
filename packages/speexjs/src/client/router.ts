@@ -65,6 +65,7 @@ export class ClientRouter {
   private _historyIndex = -1
   private _routes: RouteDefinition[]
   private _options: Required<RouterOptions>
+  private notFoundHandler?: () => VNode
 
   constructor(routes: RouteDefinition[], options?: RouterOptions) {
     this._routes = routes
@@ -116,6 +117,11 @@ export class ClientRouter {
     return path
   }
 
+  fallback(handler: () => VNode): this {
+    this.notFoundHandler = handler
+    return this
+  }
+
   private _resolveRoute(path: string): RouteMatch | null {
     for (const route of this._routes) {
       const params = matchPath(route.path, path)
@@ -130,6 +136,15 @@ export class ClientRouter {
           params,
           query: parseQuery(window.location.search),
         }
+      }
+    }
+    if (this.notFoundHandler) {
+      return {
+        path,
+        pattern: '*',
+        component: (this.notFoundHandler as any) as Component,
+        params: {},
+        query: parseQuery(window.location.search),
       }
     }
     return null

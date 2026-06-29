@@ -1,9 +1,19 @@
+export interface MailAttachment {
+  filename: string
+  content: string | Buffer
+  contentType?: string
+}
+
 export interface MailMessage {
   to: string | string[]
   subject: string
   text?: string
   html?: string
   from?: string
+  cc?: string | string[]
+  bcc?: string | string[]
+  replyTo?: string
+  attachments?: MailAttachment[]
 }
 
 export interface MailTransport {
@@ -28,6 +38,10 @@ export class ConsoleMailTransport implements MailTransport {
   }
 }
 
+function sanitizeHeader(value: string): string {
+  return value.replace(/[\r\n]/g, '').trim()
+}
+
 export class SmtpMailTransport implements MailTransport {
   constructor(private config: {
     host: string
@@ -35,15 +49,19 @@ export class SmtpMailTransport implements MailTransport {
     secure?: boolean
     auth?: { user: string; pass: string }
     from?: string
+    tls?: { rejectUnauthorized?: boolean }
   }) {}
 
   async send(message: MailMessage): Promise<void> {
     const { host, port, secure, auth, from } = this.config
-    const sender = from ?? message.from ?? 'noreply@speexjs.dev'
+    const sender = sanitizeHeader(from ?? message.from ?? 'noreply@speexjs.dev')
+    const to = Array.isArray(message.to) ? message.to.map(sanitizeHeader).join(', ') : sanitizeHeader(message.to)
+    const firstRecipient = Array.isArray(message.to) ? sanitizeHeader(message.to[0] ?? '') : sanitizeHeader(message.to)
+    const subject = sanitizeHeader(message.subject)
     
     let raw = `From: ${sender}\r\n`
-    raw += `To: ${Array.isArray(message.to) ? message.to.join(', ') : message.to}\r\n`
-    raw += `Subject: ${message.subject}\r\n`
+    raw += `To: ${to}\r\n`
+    raw += `Subject: ${subject}\r\n`
     raw += `MIME-Version: 1.0\r\n`
     raw += `Content-Type: text/html; charset="utf-8"\r\n`
     raw += `\r\n${message.html ?? message.text ?? ''}`
@@ -53,7 +71,7 @@ export class SmtpMailTransport implements MailTransport {
     
     return new Promise((resolve, reject) => {
       const socket = secure 
-        ? (connect as any)(port, host, { rejectUnauthorized: false })
+        ? (connect as any)(port, host, { rejectUnauthorized: this.config.tls?.rejectUnauthorized !== false })
         : createConnection(port, host)
       
       let step = 0
@@ -81,7 +99,7 @@ export class SmtpMailTransport implements MailTransport {
         if (step === 3) { send(Buffer.from(auth!.user).toString('base64')); return }
         if (step === 4) { send(Buffer.from(auth!.pass).toString('base64')); return }
         if (step === 5) { send(`MAIL FROM:<${sender}>`); return }
-        if (step === 6) { send(`RCPT TO:<${Array.isArray(message.to) ? message.to[0] : message.to}>`); return }
+        if (step === 6) { send(`RCPT TO:<${firstRecipient}>`); return }
         if (step === 7) { send('DATA'); return }
         if (step === 8) { send(raw + '\r\n.'); return }
         if (step === 9) { send('QUIT'); socket.end(); resolve(); return }

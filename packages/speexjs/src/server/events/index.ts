@@ -41,6 +41,10 @@ export class Event {
 		return this;
 	}
 
+	emitLater(event: string, ...args: unknown[]): void {
+		setImmediate(() => { this.emit(event, ...args).catch(() => {}) })
+	}
+
 	async emit(event: string, ...args: any[]): Promise<void> {
 		const listeners = this.emitter.listeners(event);
 

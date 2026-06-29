@@ -10,6 +10,9 @@ export class Queue {
   private jobs: Job[] = []
   private processing = false
   private handlers: Map<string, JobHandler> = new Map()
+  private maxSize = 1000
+
+  constructor(maxSize = 1000) { this.maxSize = maxSize }
 
   register(name: string, handler: JobHandler): void {
     this.handlers.set(name, handler)
@@ -18,6 +21,7 @@ export class Queue {
   push(name: string, payload: unknown): void {
     const handler = this.handlers.get(name)
     if (!handler) throw new Error(`No handler registered for job: ${name}`)
+    if (this.jobs.length >= this.maxSize) throw new Error(`Queue full (max ${this.maxSize})`)
     this.jobs.push({ name, payload, handler })
     this.process()
   }

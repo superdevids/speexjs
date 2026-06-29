@@ -21,13 +21,10 @@ vi.mock('../src/native/hashing.js', () => ({
   verifyPassword: mockVerifyPassword,
 }))
 
-vi.mock('node:crypto', () => ({
+vi.mock('node:crypto', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('node:crypto')>()),
   scryptSync: mockScryptSync,
   randomBytes: mockRandomBytes,
-  default: {
-    scryptSync: mockScryptSync,
-    randomBytes: mockRandomBytes,
-  },
 }))
 
 // ─── Helpers ──────────────────────────────────────────────────────
@@ -101,6 +98,7 @@ const { AuthManager } = await import('../src/server/auth/index.js')
 describe('SessionGuard', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    process.env.APP_KEY = 'dGVzdC1rZXktMzItYnl0ZXMtMTIzNDU2Nzg5MDEyMzQ1Ng=='
     mockGenerateEncryptionKey.mockReturnValue('dGVzdC1rZXktMzItYnl0ZXMtMTIzNDU2Nzg5MDEyMzQ1Ng==')
     mockEncrypt.mockImplementation(fakeEncrypt)
     mockDecrypt.mockImplementation(fakeDecrypt)
@@ -120,12 +118,9 @@ describe('SessionGuard', () => {
       expect(guard['config'].encryptionKey).toBe('cHJvZC1rZXktMzItYnl0ZXMtMTIzNDU2Nzg5MA==')
     })
 
-    it('generates encryption key when neither key nor env var exist', () => {
+    it('throws when neither encryptionKey nor APP_KEY is set', () => {
       delete process.env.APP_KEY
-      mockGenerateEncryptionKey.mockReturnValue('Z2VuZXJhdGVkLWtleS0zMi1ieXRlcw==')
-      const guard = new SessionGuard()
-      expect(mockGenerateEncryptionKey).toHaveBeenCalled()
-      expect(guard['config'].encryptionKey).toBe('Z2VuZXJhdGVkLWtleS0zMi1ieXRlcw==')
+      expect(() => new SessionGuard()).toThrow('APP_KEY must be set')
     })
 
     it('accepts custom config values', () => {
@@ -615,7 +610,7 @@ describe('TokenGuard', () => {
       expect(mockRandomHex).toHaveBeenCalledWith(64)
       expect(provider.create).toHaveBeenCalledWith(
         42,
-        expect.stringContaining('$scrypt$'),
+        expect.stringMatching(/^[a-f0-9]{64}$/),
         'api-token',
         ['read', 'write'],
       )
@@ -760,7 +755,7 @@ describe('TokenGuard', () => {
       const provider = makeTokenProvider()
       const guard = new TokenGuard({ provider })
       await guard.revokeToken('token-to-revoke')
-      expect(provider.delete).toHaveBeenCalledWith(expect.stringContaining('$scrypt$'))
+      expect(provider.delete).toHaveBeenCalledWith(expect.stringMatching(/^[a-f0-9]{64}$/))
     })
 
     it('passes plaintext when hashTokens is false', async () => {
@@ -795,25 +790,24 @@ describe('TokenGuard', () => {
   // ── Token Hashing ────────────────────────────────────────────
 
   describe('token hashing', () => {
-    it('produces a salted scrypt hash', async () => {
+    it('produces a hex HMAC hash', async () => {
       const provider = makeTokenProvider()
       const guard = new TokenGuard({ provider })
       await guard.createToken(1)
 
       const storedHash = provider.create.mock.calls[0][1]
-      expect(storedHash).toMatch(/^\$scrypt\$[a-f0-9]+\$[a-f0-9]+$/)
+      expect(storedHash).toMatch(/^[a-f0-9]{64}$/)
     })
 
-    it('same plaintext produces different hashes each time', async () => {
+    it('different plaintexts produce different hashes', async () => {
       const provider = makeTokenProvider()
       const guard = new TokenGuard({ provider })
 
-      mockRandomBytes.mockImplementationOnce(() => Buffer.from('s1'.repeat(8)))
-      mockRandomBytes.mockImplementationOnce(() => Buffer.from('s2'.repeat(8)))
-
+      mockRandomHex.mockReturnValueOnce('plaintext-one-value')
       await guard.createToken(1)
       const hash1 = provider.create.mock.calls[0][1]
 
+      mockRandomHex.mockReturnValueOnce('plaintext-two-value')
       await guard.createToken(1)
       const hash2 = provider.create.mock.calls[1][1]
 

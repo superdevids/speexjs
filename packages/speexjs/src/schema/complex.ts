@@ -384,3 +384,13 @@ export class UnknownSchema extends Schema<unknown> {
     return value
   }
 }
+
+// ─── PromiseSchema ──────────────────────────────────────────
+
+export class PromiseSchema<T> extends Schema<Promise<T>> {
+  constructor(private inner: Schema<T>) { super() }
+  _parse(value: unknown): Promise<T> {
+    if (value instanceof Promise) return value.then(v => this.inner._parse(v))
+    return Promise.resolve(this.inner._parse(value))
+  }
+}
