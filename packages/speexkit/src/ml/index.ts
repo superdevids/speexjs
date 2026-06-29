@@ -1,20 +1,134 @@
-export class StandardScaler{private mean:number[]=[];private std:number[]=[];private f=false;fit(X:number[][]):this{const n=X.length;if(!n)throw Error('empty');const m=X[0]!.length;this.mean=new Array(m).fill(0);this.std=new Array(m).fill(0);for(let j=0;j<m;j++){let s=0;for(let i=0;i<n;i++)s+=X[i]![j]!;this.mean[j]=s/n}for(let j=0;j<m;j++){let sq=0;for(let i=0;i<n;i++){const d=X[i]![j]!-this.mean[j]!;sq+=d*d}this.std[j]=Math.sqrt(sq/n);if(this.std[j]===0)this.std[j]=1}this.f=true;return this}transform(X:number[][]):number[][]{if(!this.f)throw Error('fit');return X.map(r=>r.map((v,j)=>(v-this.mean[j]!)/this.std[j]!))}fitTransform(X:number[][]):number[][]{return this.fit(X).transform(X)}inverseTransform(X:number[][]):number[][]{return X.map(r=>r.map((v,j)=>v*this.std[j]!+this.mean[j]!))}}
-export class MinMaxScaler{private mn:number[]=[];private mx:number[]=[];private f=false;private rng:[number,number];constructor(o?:{featureRange?:[number,number]}){this.rng=o?.featureRange??[0,1]}fit(X:number[][]):this{const n=X.length;if(!n)throw Error('empty');const m=X[0]!.length;this.mn=new Array(m).fill(1/0);this.mx=new Array(m).fill(-1/0);for(let j=0;j<m;j++){for(let i=0;i<n;i++){const v=X[i]![j]!;if(v<this.mn[j]!)this.mn[j]=v;if(v>this.mx[j]!)this.mx[j]=v}if(this.mn[j]===this.mx[j]!)this.mx[j]=this.mn[j]!+1}this.f=true;return this}transform(X:number[][]):number[][]{if(!this.f)throw Error('fit');const[r0,r1]=this.rng;return X.map(r=>r.map((v,j)=>((v-this.mn[j]!)/(this.mx[j]!-this.mn[j]!))*(r1-r0)+r0))}fitTransform(X:number[][]):number[][]{return this.fit(X).transform(X)}}
-export function trainTestSplit(X:number[][],y:number[],o?:{testSize?:number;randomState?:number;shuffle?:boolean}):[number[][],number[][],number[],number[]]{const n=X.length;if(!n)throw Error('empty');const ts=o?.testSize??0.25;let idx=Array.from({length:n},(_,i)=>i);if(o?.shuffle??true){let s=o?.randomState??Date.now();const r=()=>{s|=0;s=(s+0x6d2b79f5)|0;let t=Math.imul(s^(s>>>15),1|s);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296};for(let i=n-1;i>0;i--){const j=Math.floor(r()*(i+1));[idx[i],idx[j]]=[idx[j]!,idx[i]!]}}const nt=Math.round(n*ts);const Xt:number[][]=[],Xte:number[][]=[],yt:number[]=[],yte:number[]=[];for(let i=0;i<n-nt;i++){const k=idx[i]!;Xt.push([...X[k]!]);yt.push(y[k]!)}for(let i=n-nt;i<n;i++){const k=idx[i]!;Xte.push([...X[k]!]);yte.push(y[k]!)}return[Xt,Xte,yt,yte]}
-export class LinearRegression{private w:number[]=[];private b=0;private f=false;fit(X:number[][],y:number[]):this{const n=X.length;if(!n)throw Error('empty');const p=X[0]!.length;const Xa=X.map(r=>[1,...r]);const Xt=Array.from({length:p+1},(_,j)=>Xa.map(r=>r[j]!));const XtX=Array.from({length:p+1},(_,i)=>Array.from({length:p+1},(_,j)=>{let s=0;for(let k=0;k<n;k++)s+=Xt[i]![k]!*Xa[k]![j]!;return s}));const Xty=Array.from({length:p+1},(_,i)=>{let s=0;for(let k=0;k<n;k++)s+=Xt[i]![k]!*y[k]!;return s});const beta=solve(XtX,Xty);this.b=beta[0]!;this.w=beta.slice(1);this.f=true;return this}
-  predict(X:number[][]):number[]{if(!this.f)throw Error('fit');return X.map(r=>{let p=this.b;for(let j=0;j<this.w.length;j++)p+=r[j]!*this.w[j]!;return p})}
-  score(X:number[][],y:number[]):number{const p=this.predict(X);return r2Score(y,p)}get coef(){return this.w}get intercept(){return this.b}}
-function solve(A:number[][],b:number[]):number[]{const n=A.length;const aug=A.map((r,i)=>[...r,b[i]!]);for(let c=0;c<n;c++){let mv=Math.abs(aug[c]![c]!),mr=c;for(let r=c+1;r<n;r++){const v=Math.abs(aug[r]![c]!);if(v>mv){mv=v;mr=r}}if(mv<1e-14)throw Error('singular');if(mr!==c){const t=aug[c];aug[c]=aug[mr]!;aug[mr]=t!}const pv=aug[c]![c]!;for(let r=c+1;r<n;r++){const f=aug[r]![c]!/pv;for(let j=c;j<=n;j++)aug[r]![j]=aug[r]![j]!-f*aug[c]![j]!}}const x=new Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=aug[i]![n]!;for(let j=i+1;j<n;j++)s-=aug[i]![j]!*x[j]!;x[i]=s/aug[i]![i]!}return x}
-export class KMeans{private k:number;private c:number[][]=[];private inert=0;private l:number[]=[];private f=false;constructor(o?:{nClusters?:number;maxIter?:number;randomState?:number}){this.k=o?.nClusters??8}
-  fit(X:number[][]):this{const n=X.length;if(!n)throw Error('empty');const k=Math.min(this.k,n);const p=X[0]!.length;const sr=()=>Math.random();this.c=[X[Math.floor(sr()*n)]!];const ds=new Array(n).fill(1/0);for(let c=1;c<k;c++){let td=0;for(let i=0;i<n;i++){const d=sqDist(X[i]!,this.c[c-1]!);if(d<ds[i]!)ds[i]=d;td+=ds[i]!}let cum=0;const t=sr()*td;let ci=0;for(let i=0;i<n;i++){cum+=ds[i]!;if(cum>=t){ci=i;break}}this.c.push([...X[ci]!])}const labels=new Array(n).fill(0);for(let it=0;it<300;it++){let ch=false;for(let i=0;i<n;i++){let md=1/0;let bc=0;for(let j=0;j<k;j++){const d=sqDist(X[i]!,this.c[j]!);if(d<md){md=d;bc=j}}if(labels[i]!==bc){labels[i]=bc;ch=true}}const sums=Array.from({length:k},()=>new Array(p).fill(0));const cnt=new Array(k).fill(0);for(let i=0;i<n;i++){const cl=labels[i]!;cnt[cl]++;for(let j=0;j<p;j++)sums[cl]![j]=sums[cl]![j]!+X[i]![j]!}for(let j=0;j<k;j++)if(cnt[j]!>0)for(let f=0;f<p;f++)this.c[j]![f]=sums[j]![f]!/cnt[j]!;if(!ch)break}this.inert=0;this.l=new Array(n);for(let i=0;i<n;i++){let md=1/0;let bc=0;for(let j=0;j<k;j++){const d=sqDist(X[i]!,this.c[j]!);if(d<md){md=d;bc=j}}this.l[i]=bc;this.inert+=md}this.f=true;return this}
-  predict(X:number[][]):number[]{if(!this.f)throw Error('fit');const k=this.c.length;return X.map(r=>{let md=1/0,lb=0;for(let j=0;j<k;j++){const d=sqDist(r,this.c[j]!);if(d<md){md=d;lb=j}}return lb})}
-  fitPredict(X:number[][]):number[]{this.fit(X);return this.l}get clusterCenters_(){return this.c}get inertia_(){return this.inert}}
-function sqDist(a:number[],b:number[]):number{let s=0;for(let i=0;i<a.length;i++){const d=a[i]!-b[i]!;s+=d*d}return s}
-export function confusionMatrix(yt:number[],yp:number[]):number[][]{const cls=[...new Set([...yt,...yp])].sort((a,b)=>a-b);const n=cls.length;const ci=new Map(cls.map((c,i)=>[c,i]));const cm=Array.from({length:n},()=>new Array(n).fill(0));for(let i=0;i<yt.length;i++)cm[ci.get(yt[i]!)!]![ci.get(yp[i]!)!]!++;return cm}
-export function accuracyScore(yt:number[],yp:number[]):number{let c=0;for(let i=0;i<yt.length;i++)if(yt[i]===yp[i])c++;return c/yt.length}
-export function r2Score(yt:number[],yp:number[]):number{const my=yt.reduce((a,b)=>a+b,0)/yt.length;let sr=0,st=0;for(let i=0;i<yt.length;i++){sr+=(yt[i]!-yp[i]!)**2;st+=(yt[i]!-my)**2}return st===0?(sr===0?1:0):1-sr/st}
-export function meanSquaredError(yt:number[],yp:number[]):number{let s=0;for(let i=0;i<yt.length;i++)s+=(yt[i]!-yp[i]!)**2;return s/yt.length}
-export function meanAbsoluteError(yt:number[],yp:number[]):number{let s=0;for(let i=0;i<yt.length;i++)s+=Math.abs(yt[i]!-yp[i]!);return s/yt.length}
-export function euclideanDistance(a:number[],b:number[]):number{let s=0;for(let i=0;i<a.length;i++){const d=a[i]!-b[i]!;s+=d*d}return Math.sqrt(s)}
-export function manhattanDistance(a:number[],b:number[]):number{let s=0;for(let i=0;i<a.length;i++)s+=Math.abs(a[i]!-b[i]!);return s}
-export function cosineSimilarity(a:number[],b:number[]):number{let d=0,na=0,nb=0;for(let i=0;i<a.length;i++){d+=a[i]!*b[i]!;na+=a[i]!*a[i]!;nb+=b[i]!*b[i]!}const nn=Math.sqrt(na)*Math.sqrt(nb);return nn===0?0:d/nn}
+export class StandardScaler {
+  private mean: number[] = []
+  private std: number[] = []
+  private f = false
+  fit(X: number[][]): this {
+    const n = X.length; if (!n) throw Error('empty')
+    const m = X[0]!.length
+    this.mean = new Array(m).fill(0); this.std = new Array(m).fill(0)
+    for (let j = 0; j < m; j++) { let s = 0; for (let i = 0; i < n; i++) s += X[i]![j]!; this.mean[j] = s / n }
+    for (let j = 0; j < m; j++) {
+      let sq = 0; for (let i = 0; i < n; i++) { const d = X[i]![j]! - this.mean[j]!; sq += d * d }
+      this.std[j] = Math.sqrt(sq / n); if (this.std[j] === 0) this.std[j] = 1
+    }
+    this.f = true; return this
+  }
+  transform(X: number[][]): number[][] {
+    if (!this.f) throw Error('fit'); return X.map(r => r.map((v, j) => (v - this.mean[j]!) / this.std[j]!))
+  }
+  fitTransform(X: number[][]): number[][] { return this.fit(X).transform(X) }
+  inverseTransform(X: number[][]): number[][] { return X.map(r => r.map((v, j) => v * this.std[j]! + this.mean[j]!)) }
+}
+
+export class MinMaxScaler {
+  private mn: number[] = []; private mx: number[] = []; private f = false; private rng: [number, number]
+  constructor(o?: { featureRange?: [number, number] }) { this.rng = o?.featureRange ?? [0, 1] }
+  fit(X: number[][]): this {
+    const n = X.length; if (!n) throw Error('empty'); const m = X[0]!.length
+    this.mn = new Array(m).fill(1 / 0); this.mx = new Array(m).fill(-1 / 0)
+    for (let j = 0; j < m; j++) {
+      for (let i = 0; i < n; i++) { const v = X[i]![j]!; if (v < this.mn[j]!) this.mn[j] = v; if (v > this.mx[j]!) this.mx[j] = v }
+      if (this.mn[j] === this.mx[j]!) this.mx[j] = this.mn[j]! + 1
+    }
+    this.f = true; return this
+  }
+  transform(X: number[][]): number[][] {
+    if (!this.f) throw Error('fit'); const [r0, r1] = this.rng
+    return X.map(r => r.map((v, j) => ((v - this.mn[j]!) / (this.mx[j]! - this.mn[j]!)) * (r1 - r0) + r0))
+  }
+  fitTransform(X: number[][]): number[][] { return this.fit(X).transform(X) }
+}
+
+export function trainTestSplit(X: number[][], y: number[], o?: { testSize?: number; randomState?: number; shuffle?: boolean }): [number[][], number[][], number[], number[]] {
+  const n = X.length; if (!n) throw Error('empty'); const ts = o?.testSize ?? 0.25
+  let idx = Array.from({ length: n }, (_, i) => i)
+  if (o?.shuffle ?? true) {
+    let s = o?.randomState ?? Date.now(); const r = () => { s |= 0; s = (s + 0x6d2b79f5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
+    for (let i = n - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j]!, idx[i]!] }
+  }
+  const nt = Math.round(n * ts); const Xt: number[][] = [], Xte: number[][] = [], yt: number[] = [], yte: number[] = []
+  for (let i = 0; i < n - nt; i++) { const k = idx[i]!; Xt.push([...X[k]!]); yt.push(y[k]!) }
+  for (let i = n - nt; i < n; i++) { const k = idx[i]!; Xte.push([...X[k]!]); yte.push(y[k]!) }
+  return [Xt, Xte, yt, yte]
+}
+
+export class LinearRegression {
+  private w: number[] = []; private b = 0; private f = false
+  fit(X: number[][], y: number[]): this {
+    const n = X.length; if (!n) throw Error('empty'); const p = X[0]!.length
+    const Xa = X.map(r => [1, ...r]); const Xt = Array.from({ length: p + 1 }, (_, j) => Xa.map(r => r[j]!))
+    const XtX = Array.from({ length: p + 1 }, (_, i) => Array.from({ length: p + 1 }, (_, j) => { let s = 0; for (let k = 0; k < n; k++) s += Xt[i]![k]! * Xa[k]![j]!; return s }))
+    const Xty = Array.from({ length: p + 1 }, (_, i) => { let s = 0; for (let k = 0; k < n; k++) s += Xt[i]![k]! * y[k]!; return s })
+    const beta = solve(XtX, Xty); this.b = beta[0]!; this.w = beta.slice(1); this.f = true; return this
+  }
+  predict(X: number[][]): number[] { if (!this.f) throw Error('fit'); return X.map(r => { let p = this.b; for (let j = 0; j < this.w.length; j++) p += r[j]! * this.w[j]!; return p }) }
+  score(X: number[][], y: number[]): number { return r2Score(y, this.predict(X)) }
+  get coef() { return this.w }; get intercept() { return this.b }
+}
+
+function solve(A: number[][], b: number[]): number[] {
+  const n = A.length; const aug = A.map((r, i) => [...r, b[i]!])
+  for (let c = 0; c < n; c++) {
+    let mv = Math.abs(aug[c]![c]!), mr = c
+    for (let r = c + 1; r < n; r++) { const v = Math.abs(aug[r]![c]!); if (v > mv) { mv = v; mr = r } }
+    if (mv < 1e-14) throw Error('singular')
+    if (mr !== c) { const t = aug[c]; aug[c] = aug[mr]!; aug[mr] = t! }
+    const pv = aug[c]![c]!
+    for (let r = c + 1; r < n; r++) { const f = aug[r]![c]! / pv; for (let j = c; j <= n; j++) aug[r]![j] = aug[r]![j]! - f * aug[c]![j]! }
+  }
+  const x = new Array(n).fill(0)
+  for (let i = n - 1; i >= 0; i--) { let s = aug[i]![n]!; for (let j = i + 1; j < n; j++) s -= aug[i]![j]! * x[j]!; x[i] = s / aug[i]![i]! }
+  return x
+}
+
+export class KMeans {
+  private k: number; private c: number[][] = []; private inert = 0; private l: number[] = []; private f = false
+  constructor(o?: { nClusters?: number; maxIter?: number; randomState?: number }) { this.k = o?.nClusters ?? 8 }
+  fit(X: number[][]): this {
+    const n = X.length; if (!n) throw Error('empty'); const k = Math.min(this.k, n); const p = X[0]!.length
+    const sr = () => Math.random(); this.c = [X[Math.floor(sr() * n)]!]; const ds = new Array(n).fill(1 / 0)
+    for (let c = 1; c < k; c++) {
+      let td = 0; for (let i = 0; i < n; i++) { const d = sqDist(X[i]!, this.c[c - 1]!); if (d < ds[i]!) ds[i] = d; td += ds[i]! }
+      let cum = 0; const t = sr() * td; let ci = 0; for (let i = 0; i < n; i++) { cum += ds[i]!; if (cum >= t) { ci = i; break } }
+      this.c.push([...X[ci]!])
+    }
+    const labels = new Array(n).fill(0)
+    for (let it = 0; it < 300; it++) {
+      let ch = false
+      for (let i = 0; i < n; i++) { let md = 1 / 0, bc = 0; for (let j = 0; j < k; j++) { const d = sqDist(X[i]!, this.c[j]!); if (d < md) { md = d; bc = j } } if (labels[i] !== bc) { labels[i] = bc; ch = true } }
+      const sums = Array.from({ length: k }, () => new Array(p).fill(0)); const cnt = new Array(k).fill(0)
+      for (let i = 0; i < n; i++) { const cl = labels[i]!; cnt[cl]++; for (let j = 0; j < p; j++) sums[cl]![j] = sums[cl]![j]! + X[i]![j]! }
+      for (let j = 0; j < k; j++) if (cnt[j]! > 0) for (let f = 0; f < p; f++) this.c[j]![f] = sums[j]![f]! / cnt[j]!
+      if (!ch) break
+    }
+    this.inert = 0; this.l = new Array(n)
+    for (let i = 0; i < n; i++) { let md = 1 / 0, bc = 0; for (let j = 0; j < k; j++) { const d = sqDist(X[i]!, this.c[j]!); if (d < md) { md = d; bc = j } } this.l[i] = bc; this.inert += md }
+    this.f = true; return this
+  }
+  predict(X: number[][]): number[] { if (!this.f) throw Error('fit'); const k = this.c.length; return X.map(r => { let md = 1 / 0, lb = 0; for (let j = 0; j < k; j++) { const d = sqDist(r, this.c[j]!); if (d < md) { md = d; lb = j } } return lb }) }
+  fitPredict(X: number[][]): number[] { this.fit(X); return this.l }
+  get clusterCenters_() { return this.c }; get inertia_() { return this.inert }
+}
+
+function sqDist(a: number[], b: number[]): number { let s = 0; for (let i = 0; i < a.length; i++) { const d = a[i]! - b[i]!; s += d * d } return s }
+
+export function confusionMatrix(yt: number[], yp: number[]): number[][] {
+  const cls = [...new Set([...yt, ...yp])].sort((a, b) => a - b); const n = cls.length; const ci = new Map(cls.map((c, i) => [c, i]))
+  const cm = Array.from({ length: n }, () => new Array(n).fill(0))
+  for (let i = 0; i < yt.length; i++) cm[ci.get(yt[i]!)!]![ci.get(yp[i]!)!]!++
+  return cm
+}
+
+export function accuracyScore(yt: number[], yp: number[]): number { let c = 0; for (let i = 0; i < yt.length; i++) if (yt[i] === yp[i]) c++; return c / yt.length }
+
+export function r2Score(yt: number[], yp: number[]): number {
+  const my = yt.reduce((a, b) => a + b, 0) / yt.length; let sr = 0, st = 0
+  for (let i = 0; i < yt.length; i++) { sr += (yt[i]! - yp[i]!) ** 2; st += (yt[i]! - my) ** 2 }
+  return st === 0 ? (sr === 0 ? 1 : 0) : 1 - sr / st
+}
+
+export function meanSquaredError(yt: number[], yp: number[]): number { let s = 0; for (let i = 0; i < yt.length; i++) s += (yt[i]! - yp[i]!) ** 2; return s / yt.length }
+export function meanAbsoluteError(yt: number[], yp: number[]): number { let s = 0; for (let i = 0; i < yt.length; i++) s += Math.abs(yt[i]! - yp[i]!); return s / yt.length }
+export function euclideanDistance(a: number[], b: number[]): number { let s = 0; for (let i = 0; i < a.length; i++) { const d = a[i]! - b[i]!; s += d * d } return Math.sqrt(s) }
+export function manhattanDistance(a: number[], b: number[]): number { let s = 0; for (let i = 0; i < a.length; i++) s += Math.abs(a[i]! - b[i]!); return s }
+export function cosineSimilarity(a: number[], b: number[]): number { let d = 0, na = 0, nb = 0; for (let i = 0; i < a.length; i++) { d += a[i]! * b[i]!; na += a[i]! * a[i]!; nb += b[i]! * b[i]! } const nn = Math.sqrt(na) * Math.sqrt(nb); return nn === 0 ? 0 : d / nn }
