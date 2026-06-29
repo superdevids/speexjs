@@ -59,7 +59,7 @@ export class RpcServer<T extends RpcDefinitions> {
   toHandler(): (req: any, res: any) => Promise<void> {
     return async (req, res) => {
       try {
-        const bodyText = req.body === undefined || req.body === null ? '{}' : (typeof req.body === 'string' ? req.body : JSON.stringify(req.body))
+        const bodyText = !req.body ? '{}' : (typeof req.body === 'string' ? req.body : JSON.stringify(req.body))
         const body = JSON.parse(bodyText)
         const { procedure, input } = body
         const output = await this.call(procedure, input)
