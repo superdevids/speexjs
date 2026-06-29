@@ -5,6 +5,7 @@ import { gzipSync } from 'node:zlib'
 import { HttpStatus } from '../http/status'
 import type { RouteContext } from '../router'
 import type { Schema } from '../../schema/types.js'
+import { RouteRateLimiter } from './route-limiter.js'
 
 const MIME_TYPES: Record<string, string> = {
   '.html': 'text/html',
@@ -110,6 +111,7 @@ export interface SessionOptions {
   httpOnly?: boolean
   secure?: boolean
   sameSite?: 'strict' | 'lax' | 'none'
+  absoluteMaxAge?: number
 }
 
 export function session(options?: SessionOptions): Middleware {
@@ -132,9 +134,11 @@ export function session(options?: SessionOptions): Middleware {
   interface SessionEntry {
     data: Record<string, unknown>
     createdAt: number
+    lastTouchedAt: number
   }
   const sessions = new Map<string, SessionEntry>()
   const SESSION_TTL = (opts.maxAge || 7200) * 1000
+  const ABSOLUTE_MAX_AGE = (opts.absoluteMaxAge ?? 86400) * 1000
   let cleanupCounter = 0
 
   function generateSessionId(): string {
@@ -152,25 +156,28 @@ export function session(options?: SessionOptions): Middleware {
       cleanupCounter = 0
       const now = Date.now()
       for (const [key, entry] of sessions) {
-        if (now - entry.createdAt > SESSION_TTL) {
+        if (now - entry.createdAt > ABSOLUTE_MAX_AGE || now - entry.lastTouchedAt > SESSION_TTL) {
           sessions.delete(key)
         }
       }
     }
 
+    const now = Date.now()
+
     // Check if existing session is expired
     const existing = sessions.get(id)
-    if (existing && Date.now() - existing.createdAt > SESSION_TTL) {
+    if (existing && (now - existing.createdAt > ABSOLUTE_MAX_AGE || now - existing.lastTouchedAt > SESSION_TTL)) {
       sessions.delete(id)
     }
 
     if (!sessions.has(id)) {
-      sessions.set(id, { data: {}, createdAt: Date.now() })
+      sessions.set(id, { data: {}, createdAt: now, lastTouchedAt: now })
+    } else {
+      const entry = sessions.get(id)!
+      entry.lastTouchedAt = now
     }
     const sessionData = sessions.get(id)!.data
 
-    // NOTE: TTL is intentionally NOT renewed on activity.
-    // Renewing would subvert maxAge - the original TTL from session creation stands.
     ;(ctx as unknown as Record<string, unknown>).session = sessionData
 
     if (request.cookie(opts.name) === undefined) {
@@ -212,9 +219,10 @@ export function auth(guard?: string): Middleware {
   }
 }
 
-export function throttle(limit?: number, window?: number): Middleware {
-  const maxRequests = limit ?? 60
-  const timeWindow = (window ?? 60) * 1000
+export function throttle(limitOrLimiter?: number | RouteRateLimiter, windowSeconds?: number): Middleware {
+  const limiter = limitOrLimiter instanceof RouteRateLimiter ? limitOrLimiter : undefined
+  const defaultMax: number = limiter ? 60 : ((limitOrLimiter as number | undefined) ?? 60)
+  const defaultWindow = (windowSeconds ?? 60) * 1000
   const hits = new Map<string, { count: number; resetAt: number }>()
   const normalizeIp = (ip: string): string => (ip.startsWith('::ffff:') ? ip.slice(7) : ip)
 
@@ -232,7 +240,20 @@ export function throttle(limit?: number, window?: number): Middleware {
   }
 
   return (ctx: RouteContext, next: () => Promise<void>) => {
-    const key = normalizeIp(ctx.request.ip)
+    const forwarded = ctx.request.headers.get('x-forwarded-for')
+    const ip = (forwarded !== undefined ? forwarded.split(',')[0]?.trim() : undefined) || ctx.request.ip
+    const key = normalizeIp(ip)
+
+    // Resolve effective limits — check route-level config if limiter is available
+    let maxRequests = defaultMax
+    let timeWindow = defaultWindow
+    if (limiter) {
+      const routeConfig = limiter.getLimit(ctx.request.path)
+      if (routeConfig) {
+        maxRequests = routeConfig.max
+        timeWindow = routeConfig.window
+      }
+    }
 
     const now = Date.now()
     const hit = hits.get(key)
@@ -477,7 +498,8 @@ export function validate(schema: Schema<unknown>): Middleware {
     if (!result.success) {
       ctx.response.status(422).json({
         error: 'VALIDATION_ERROR',
-        message: result.error,
+        message: 'Validation failed',
+        errors: result.error,
       })
       return
     }
@@ -492,7 +514,8 @@ export function validateQuery(schema: Schema<unknown>): Middleware {
     if (!result.success) {
       ctx.response.status(422).json({
         error: 'VALIDATION_ERROR',
-        message: result.error,
+        message: 'Validation failed',
+        errors: result.error,
       })
       return
     }

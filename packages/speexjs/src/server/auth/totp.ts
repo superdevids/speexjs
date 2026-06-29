@@ -19,7 +19,11 @@ export class TOTP {
     return String(code).padStart(6, '0')
   }
 
-  verify(secret: string, code: string): boolean {
+  verify(secret: string, code: string, maxAttempts?: number): boolean {
+    if (maxAttempts !== undefined) {
+      // TODO: Integrate with AccountLockout system — track failed attempts per user
+      // and lock the account after exceeding maxAttempts within the window.
+    }
     const counter = Math.floor(Date.now() / 30000)
     for (let i = -1; i <= 1; i++) {
       if (this.generateCode(secret, counter + i) === code) return true

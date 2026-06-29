@@ -6,6 +6,7 @@ import { createServer as createNetServer } from 'node:net'
 import { spawn, type ChildProcess } from 'node:child_process'
 import { colors } from '../../native/colors.js'
 import { logger } from '../../native/logger.js'
+// HMR uses dynamic import of 'ws' - graceful fallback if unavailable
 
 interface ServeOptions {
   port?: string | number
@@ -171,11 +172,28 @@ export async function serve(options: Record<string, any>): Promise<void> {
     return childProcess
   }
 
+  // ── HMR WebSocket server (signals browser to reload) ────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let hmrServer: any = null
+
+  function sendHmrReload(): void {
+    if (hmrServer) {
+      const msg = JSON.stringify({ type: 'reload' })
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      for (const client of hmrServer.clients as Set<{ readyState: number; send: (msg: string) => void }>) {
+        if (client.readyState === 1) {
+          client.send(msg)
+        }
+      }
+    }
+  }
+
   // ── Debounced restart scheduler (300ms) ─────────────────
   function scheduleRestart(filename: string): void {
     if (debounceTimer !== null) clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => {
       debounceTimer = null
+      sendHmrReload()
       console.log(`\n${colors.cyan('🔄')}  File changed: ${filename} — Restarting...`)
 
       currentChildId++
@@ -190,9 +208,21 @@ export async function serve(options: Record<string, any>): Promise<void> {
     }, 300)
   }
 
-  // ── File watching for dev ──────────────────────────────
+  // ── HMR + File watching for dev ─────────────────────────
   if (opts.dev) {
     logger.info(`Development server starting at ${colors.cyan(`http://${host}:${port}`)}`)
+
+    // Start HMR WebSocket server (requires optional 'ws' package)
+    try {
+      // @ts-expect-error - ws is optional; falls back gracefully if not installed
+      const { WebSocketServer } = await import('ws')
+      const hmrPort = port + 1
+      hmrServer = new WebSocketServer({ port: hmrPort }) as any
+      console.log(`  ${colors.dim('📡 HMR WebSocket at')} ${colors.cyan(`ws://${host}:${hmrPort}`)}`)
+    } catch {
+      /* ws not available — HMR client reload disabled */
+    }
+
     const srcDir = resolve(process.cwd(), 'src')
     try {
       watch(srcDir, { recursive: true }, (_eventType, filename) => {

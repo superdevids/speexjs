@@ -44,6 +44,7 @@ function makeResStub(overrides: Record<string, unknown> = {}) {
     clearCookie: vi.fn().mockReturnThis(),
     status: vi.fn().mockReturnThis(),
     json: vi.fn().mockReturnThis(),
+    flush: vi.fn().mockResolvedValue(undefined),
     redirect: vi.fn().mockReturnThis(),
     ...overrides,
   } as any
@@ -218,11 +219,7 @@ describe('SessionGuard', () => {
       guard.setContext(makeReqStub(), res)
       const result = await guard.attempt({ email: 'a@b.com', password: 'correct' })
       expect(result).toBe(true)
-      expect(res.cookie).toHaveBeenCalledWith(
-        'speexjs_session',
-        expect.any(String),
-        expect.objectContaining({ httpOnly: true, path: '/' }),
-      )
+      expect(res.cookie).toHaveBeenCalledWith('speexjs_session', expect.any(String), expect.objectContaining({ httpOnly: true, path: '/' }))
     })
 
     it('passes remember flag to calculateExpiry', async () => {
@@ -259,11 +256,7 @@ describe('SessionGuard', () => {
       const res = makeResStub()
       guard.setContext(makeReqStub(), res)
       await guard.login(99)
-      expect(res.cookie).toHaveBeenCalledWith(
-        'speexjs_session',
-        expect.any(String),
-        expect.objectContaining({ httpOnly: true, path: '/' }),
-      )
+      expect(res.cookie).toHaveBeenCalledWith('speexjs_session', expect.any(String), expect.objectContaining({ httpOnly: true, path: '/' }))
     })
 
     it('looks up user from provider when available', async () => {
@@ -297,11 +290,7 @@ describe('SessionGuard', () => {
       guard.setContext(makeReqStub(), res)
       const user = { id: 'uuid-1', name: 'Bob', role: 'admin' }
       await guard.loginUser(user)
-      expect(res.cookie).toHaveBeenCalledWith(
-        'speexjs_session',
-        expect.any(String),
-        expect.any(Object),
-      )
+      expect(res.cookie).toHaveBeenCalledWith('speexjs_session', expect.any(String), expect.any(Object))
     })
 
     it('populates cached payload with user for subsequent user() call', async () => {
@@ -361,10 +350,7 @@ describe('SessionGuard', () => {
         findById: vi.fn().mockResolvedValue({ id: 3, name: 'FromProvider' }),
       })
       const guard = new SessionGuard({ provider })
-      const encrypted = JSON.stringify(fakeEncrypt(
-        JSON.stringify({ userId: 3, data: {}, expiresAt: Date.now() + 99999 }),
-        '',
-      ))
+      const encrypted = JSON.stringify(fakeEncrypt(JSON.stringify({ userId: 3, data: {}, expiresAt: Date.now() + 99999 }), ''))
       const req = makeReqStub({ cookie: vi.fn(() => encrypted) })
       guard.setContext(req, makeResStub())
       const result = await guard.user()
@@ -374,10 +360,7 @@ describe('SessionGuard', () => {
 
     it('falls back to minimal user object when no provider', async () => {
       const guard = new SessionGuard()
-      const encrypted = JSON.stringify(fakeEncrypt(
-        JSON.stringify({ userId: 9, data: {}, expiresAt: Date.now() + 99999 }),
-        '',
-      ))
+      const encrypted = JSON.stringify(fakeEncrypt(JSON.stringify({ userId: 9, data: {}, expiresAt: Date.now() + 99999 }), ''))
       guard.setContext(makeReqStub({ cookie: vi.fn(() => encrypted) }), makeResStub())
       const result = await guard.user()
       expect(result).toEqual({ id: 9 })
@@ -386,7 +369,9 @@ describe('SessionGuard', () => {
     it('returns null when cookie is malformed', async () => {
       const guard = new SessionGuard()
       guard.setContext(makeReqStub({ cookie: vi.fn(() => 'garbage-not-json') }), makeResStub())
-      mockDecrypt.mockImplementation(() => { throw new Error('bad') })
+      mockDecrypt.mockImplementation(() => {
+        throw new Error('bad')
+      })
       const result = await guard.user()
       expect(result).toBeNull()
     })
@@ -608,12 +593,7 @@ describe('TokenGuard', () => {
       const token = await guard.createToken(42, 'api-token', ['read', 'write'])
       expect(token).toBe('a'.repeat(128))
       expect(mockRandomHex).toHaveBeenCalledWith(64)
-      expect(provider.create).toHaveBeenCalledWith(
-        42,
-        expect.stringMatching(/^[a-f0-9]{64}$/),
-        'api-token',
-        ['read', 'write'],
-      )
+      expect(provider.create).toHaveBeenCalledWith(42, expect.stringMatching(/^[a-f0-9]{64}$/), 'api-token', ['read', 'write'])
     })
 
     it('passes plaintext when hashTokens is false', async () => {
@@ -912,8 +892,14 @@ describe('Gate', () => {
     it('supports multiple before callbacks in order', async () => {
       const gate = new Gate()
       const order: number[] = []
-      gate.before(async () => { order.push(1); return null })
-      gate.before(async () => { order.push(2); return null })
+      gate.before(async () => {
+        order.push(1)
+        return null
+      })
+      gate.before(async () => {
+        order.push(2)
+        return null
+      })
       gate.define('test', () => true)
       await gate.allows('test', { id: 1 })
       expect(order).toEqual([1, 2])

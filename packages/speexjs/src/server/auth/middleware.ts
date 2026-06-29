@@ -30,11 +30,13 @@ export function authMiddleware(guardName?: string): Middleware {
           error: 'Unauthenticated',
           message: 'Authentication is required to access this resource',
         })
+        await ctx.response.flush()
         return
       }
 
       if (authManager.getLoginPath() !== undefined) {
         ctx.response.redirect(authManager.getLoginPath()!, HttpStatus.FOUND)
+        await ctx.response.flush()
         return
       }
 
@@ -42,6 +44,7 @@ export function authMiddleware(guardName?: string): Middleware {
         error: 'Unauthenticated',
         message: 'Authentication is required to access this resource',
       })
+      await ctx.response.flush()
       return
     }
 

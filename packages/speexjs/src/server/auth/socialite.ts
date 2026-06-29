@@ -33,7 +33,7 @@ export class Socialite {
     }
   }
 
-  registerGitHub(clientId: string, clientSecret: string, redirectUri = 'http://localhost:3000/auth/github/callback'): void {
+  registerGitHub(clientId: string, clientSecret: string, redirectUri: string): void {
     this.oauth.register('github', {
       authorizeUrl: (state: string) =>
         `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`,
@@ -57,7 +57,7 @@ export class Socialite {
     })
   }
 
-  registerGoogle(clientId: string, clientSecret: string, redirectUri = 'http://localhost:3000/auth/google/callback'): void {
+  registerGoogle(clientId: string, clientSecret: string, redirectUri: string): void {
     this.oauth.register('google', {
       authorizeUrl: (state: string) =>
         `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=email%20profile&state=${state}`,

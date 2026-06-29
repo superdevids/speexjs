@@ -250,7 +250,8 @@ export class UnionSchema<T> extends Schema<T> {
         errors.push(e instanceof SchemaError ? e.message : String(e))
       }
     }
-    throw new SchemaError(msg('union_fail'))
+    const detail = errors.map((e, i) => `${i + 1}) ${e}`).join('; ')
+    throw new SchemaError(`${msg('union_fail')}: ${detail}`)
   }
 }
 
@@ -268,6 +269,12 @@ export class IntersectionSchema<A, B> extends Schema<A & B> {
     const a = this.left._parse(value)
     const b = this.right._parse(value)
     if (typeof a === 'object' && a !== null && typeof b === 'object' && b !== null) {
+      const keysA = new Set(Object.keys(a))
+      for (const key of Object.keys(b)) {
+        if (keysA.has(key)) {
+          throw new SchemaError(msg('intersection_fail') + `: overlapping key "${key}"`)
+        }
+      }
       return { ...a, ...b } as A & B
     }
     if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {

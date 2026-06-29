@@ -772,6 +772,7 @@ describe('auth middleware - additional coverage', () => {
       clearCookie: vi.fn().mockReturnThis(),
       status: vi.fn().mockReturnThis(),
       json: vi.fn().mockReturnThis(),
+      flush: vi.fn().mockResolvedValue(undefined),
       redirect: vi.fn().mockReturnThis(),
       ...overrides,
     } as any
@@ -4383,7 +4384,7 @@ describe('middleware - validate', () => {
     const next = vi.fn()
     await mw(ctx, next)
     expect(status).toHaveBeenCalledWith(422)
-    expect(json).toHaveBeenCalledWith({ error: 'VALIDATION_ERROR', message: 'Name required' })
+    expect(json).toHaveBeenCalledWith({ error: 'VALIDATION_ERROR', message: 'Validation failed', errors: 'Name required' })
     expect(next).not.toHaveBeenCalled()
   })
 })
@@ -4427,7 +4428,7 @@ describe('middleware - validateQuery', () => {
     const next = vi.fn()
     await mw(ctx, next)
     expect(status).toHaveBeenCalledWith(422)
-    expect(json).toHaveBeenCalledWith({ error: 'VALIDATION_ERROR', message: 'Invalid query' })
+    expect(json).toHaveBeenCalledWith({ error: 'VALIDATION_ERROR', message: 'Validation failed', errors: 'Invalid query' })
     expect(next).not.toHaveBeenCalled()
   })
 
@@ -5805,18 +5806,16 @@ describe('Socialite — exchangeCode & getUser', () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
-        json: vi
-          .fn()
-          .mockResolvedValue({
-            access_token: 'at1',
-            refresh_token: 'rt1',
-            id: '42',
-            name: 'Test',
-            email: 't@t.com',
-            avatar_url: 'https://av.at/1',
-            login: 'testuser',
-            picture: 'https://pic.at/1',
-          }),
+        json: vi.fn().mockResolvedValue({
+          access_token: 'at1',
+          refresh_token: 'rt1',
+          id: '42',
+          name: 'Test',
+          email: 't@t.com',
+          avatar_url: 'https://av.at/1',
+          login: 'testuser',
+          picture: 'https://pic.at/1',
+        }),
       }),
     )
   })
