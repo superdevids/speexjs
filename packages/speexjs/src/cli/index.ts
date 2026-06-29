@@ -10,8 +10,10 @@ import { makeController } from './commands/make-controller.js'
 import { makeMiddleware } from './commands/make-middleware.js'
 import { makeMigration } from './commands/make-migration.js'
 import { makeModel } from './commands/make-model.js'
+import { makeCrud } from './commands/make-crud.js'
 import { makeResource } from './commands/make-resource.js'
 import { makeSchema } from './commands/make-schema.js'
+import { generateSdk } from './commands/generate-sdk.js'
 import { serve } from './commands/serve.js'
 
 function showHelp(): void {
@@ -27,10 +29,12 @@ function showHelp(): void {
   console.log('  SpeexJS make:auth [options]            Generate auth scaffold')
   console.log('  SpeexJS make:resource <name>          Generate resource (controller + model + migration)')
   console.log('  SpeexJS make:schema <name>            Generate schema')
+  console.log('  SpeexJS make:crud                     Generate complete CRUD (interactive)')
   console.log('  SpeexJS migrate                       Run migrations')
   console.log('  SpeexJS db:seed                       Seed the database')
   console.log('  SpeexJS list-routes                   View all routes')
   console.log('  SpeexJS serve [options]               Run server')
+  console.log('  SpeexJS generate:sdk [options]         Generate TypeScript SDK from OpenAPI spec')
   console.log('  SpeexJS deploy [options]              Deploy application (docker/vercel)')
   console.log('  SpeexJS --help                        Show help')
   console.log()
@@ -116,6 +120,14 @@ async function main(): Promise<void> {
       })
       break
     }
+    case 'generate:sdk': {
+      await generateSdk({
+        output: parsed.options.output as string | undefined,
+        name: parsed.options.name as string | undefined,
+        format: parsed.options.format as string | undefined,
+      })
+      break
+    }
     case 'deploy': {
       await deploy({
         docker: parsed.options.docker === true,
@@ -138,6 +150,11 @@ async function main(): Promise<void> {
     }
     case 'build': {
       await buildCommand()
+      break
+    }
+    case 'make:crud':
+    case 'crud': {
+      await makeCrud()
       break
     }
     case 'serve':
