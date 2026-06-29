@@ -1,4 +1,4 @@
-# Contributing - speexjs Monorepo
+# Contributing - SpeexJS
 
 See packages/speex/CONTRIBUTING.md for contribution guidelines.
 

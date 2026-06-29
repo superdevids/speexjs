@@ -1,4 +1,4 @@
-# Roadmap - speexkit
+# Roadmap - SpeexKit
 
 ## v0.8.x (Current)
 

@@ -1,74 +1,23 @@
 # Roadmap
 
-> **Current:** v0.9.0 — All 30 gaps closed. Ready for v1.0.0-rc.1
+## ✅ v0.2.3 → v1.4.0 — Complete
+- All 30 initial gaps closed (G01-G30)
+- TSX Layout System with nested layouts (V01-V08)
+- Database ORM with Model Observers, Serialization (D01-D08)
+- Auth: Email Verification, 2FA, Lockout, Password Reset (S01-S05)
+- API: Swagger UI, API Resources, OpenAPI (P01-P03)
+- Testing: HTTP Assertions, actingAs, Time Travel (T01-T03)
+- Core: DI Resolver, Request ID (A01-A02)
+- ESM fixes, HMR, Build pipeline (B01-B08, H01-H16)
+- Database: CTE, UPSERT, UNION, LOCKING, subquery joins
+- HTTP: SSE, Signed cookies, Configurable body limit
+- CLI: make:resource, migrate:status, env validation
+- Cache/Storage: Redis, S3, SQLite queue
+- Schema: Branded types, PromiseSchema
 
-## ✅ v0.1.0 — Foundation
-- Schema validation (25+ types)
-- Server HTTP, Router, Middleware, Controller
-- Container DI, Engine abstraction
-- Client Signals, VDOM, JSX, Router
-- Type-safe RPC, CLI
-
-## ✅ v0.2.0 — Zero Dep + Enterprise
-- Zero external dependencies
-- Native: CLI parser, ANSI, Logger, Crypto, Hashing
-- String/Array/Number helpers
-- Auth: SessionGuard, TokenGuard
-- Gate authorization
-- Database: QueryBuilder, Migrations, Seeder
-- MySQL, SQLite, PostgreSQL drivers
-- Cache, Storage, Events
-
-## ✅ v0.3.0 — v0.5.0 — Developer Experience & Enterprise
-- File-based routing
-- Server Components
-- ORM (Active Record), Model Relationships
-- OAuth2 / Social Login
-- Unit tests for all modules
-- CLI: `make:model`, `make:migration`, `migrate`, `db:seed`
-
-## ✅ v0.6.0 — Bundle & Performance
-- 84% smaller bundle (433 KB → 67 KB)
-- Build time -69%, QueryBuilder -37%, Dialect -55%, Schema -65%
-- 2,500 → 1,300 lines across 5 core modules
-- 1,849 tests — all passing
-- WebSocket broadcasting with channels
-- Background job queue
-- Mail system with transports
-- Task scheduler (cron)
-- Database notification system
-- Plugin system with lifecycle
-- HTTP testing helpers
-- Multi-core clustering
-- Internationalization
-- OpenAPI spec generator
-- Configuration manager
-- HTTP exception classes (12)
-
-## ✅ v0.9.0 — Feature Complete
-- **64+ features** — All 30 gaps from initial analysis closed
-- **1,990 tests** — 96.3% coverage
-- **Zero TS errors** — `tsc --noEmit` clean
-- Socialite OAuth (GitHub, Google)
-- Sanctum SPA token auth
-- Pusher/Ably broadcast drivers
-- GraphQL support
-- Feature flags
-- Cashier billing
-- Task runner
-- Debug toolbar
-- Tinker REPL
-- Signed URLs
-- Admin generator
-- SMTP mail transport
-- Redis queue driver
-- Queue job monitor
-- File-based routing
-- TSX View Engine
-
-## ✅ v1.0.0 — Global Launch
-- Complete documentation
-- Website speexjs.dev
-- Benchmark vs Express, Fastify, Next.js
-- Starter kits (blog, API, SaaS)
-- Ecosystem: plugins, community templates
+## 🔜 v2.0 — Future
+- WebAuthn / Passkeys
+- Docker/CI-CD templates
+- Admin panel generator
+- Email open tracking
+- RPC WebSocket transport

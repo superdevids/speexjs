@@ -1,4 +1,4 @@
-# Security - speexjs Monorepo
+# Security - SpeexJS
 
 Report vulnerabilities: adityasuperdev@gmail.com (response within 48h)
 

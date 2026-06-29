@@ -1,4 +1,4 @@
-# Publishing - speexkit
+# Publishing - SpeexKit
 
 ```bash
 npm login

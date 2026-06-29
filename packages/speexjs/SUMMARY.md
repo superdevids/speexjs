@@ -51,3 +51,9 @@ SpeexJS — Fullstack TypeScript framework.
 | `speexjs/server/edge` | Edge runtime support |
 | `speexjs/server/http/cache-control` | Cache control headers |
 | `speexjs/docs` | Documentation |
+| `speexjs/server/cache/redis-store` | Redis cache store |
+| `speexjs/server/storage/s3` | S3 storage adapter |
+| `speexjs/server/queue/sqlite-driver` | SQLite queue driver |
+| `speexjs/server/http/sse-handler` | SSE broadcast handler |
+| `speexjs/server/env` | Environment validation |
+| `speexjs/schema/types` (Brand) | Branded type support |

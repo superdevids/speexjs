@@ -1,4 +1,4 @@
-# Contributing - speexkit
+# Contributing - SpeexKit
 
 ## Setup
 

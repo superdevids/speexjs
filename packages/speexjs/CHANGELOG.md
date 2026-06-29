@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.4.0 (2026-06-29)
+- Database: CTE/WITH, UPSERT, UNION/INTERSECT, LOCKING (FOR UPDATE/SHARE), subquery JOINS
+- Auth: OAuth state validation, Token refresh mechanism
+- HTTP: SSE (Server-Sent Events), Configurable body limit, Signed cookies
+- CLI: make:resource, migrate:status, Environment validation
+- Cache: Redis cache store
+- Storage: S3 storage adapter
+- Queue: SQLite persistent queue driver
+- Model: load()/loadMissing() instance methods
+- Schema: Branded types (Brand<T, B>)
+- 0 TypeScript errors, 1,990 tests passing
+
 ## v0.9.0 (2026-06-29)
 - **64+ features** — All 30 gaps from initial analysis now closed
 - **1,990 tests** — All passing, 96.3% coverage
