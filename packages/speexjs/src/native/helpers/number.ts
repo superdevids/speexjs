@@ -78,12 +78,4 @@ export class SuperNumber {
     return value % 2 !== 0
   }
 
-  static formatRupiah(value: number): string {
-    return SuperNumber.format(value, {
-      locale: 'id-ID',
-      currency: 'IDR',
-      decimals: 0,
-    })
-  }
-
 }

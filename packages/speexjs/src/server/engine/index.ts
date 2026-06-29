@@ -22,6 +22,10 @@ export interface ServerEngine {
   close(server: ServerInstance): Promise<void>
 }
 
+process.on('unhandledRejection', (reason) => {
+  console.error('[SpeexJS] Unhandled Rejection:', reason instanceof Error ? reason.message : reason)
+})
+
 export class NodeEngine implements ServerEngine {
   async createServer(handler: RequestHandler): Promise<ServerInstance> {
     const server = createHttpServer(async (nodeReq, nodeRes) => {

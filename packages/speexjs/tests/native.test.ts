@@ -1163,22 +1163,6 @@ describe('SuperNumber', () => {
     })
   })
 
-  describe('formatRupiah', () => {
-    it('formats with IDR currency', () => {
-      const result = SuperNumber.formatRupiah(25000)
-      expect(typeof result).toBe('string')
-      expect(result).toBeTruthy()
-    })
-
-    it('formats zero', () => {
-      expect(SuperNumber.formatRupiah(0)).toBeTruthy()
-    })
-
-    it('formats large numbers', () => {
-      expect(SuperNumber.formatRupiah(1000000)).toBeTruthy()
-    })
-  })
-
   describe('clamp', () => {
     it('returns value when within range', () => {
       expect(SuperNumber.clamp(5, 0, 10)).toBe(5)

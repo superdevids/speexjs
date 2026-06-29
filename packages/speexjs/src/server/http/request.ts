@@ -333,13 +333,17 @@ function parseUrlEncoded(text: string): Record<string, string> {
   const pairs = text.split('&')
   for (const pair of pairs) {
     if (!pair) continue
-    const eqIndex = pair.indexOf('=')
-    if (eqIndex === -1) {
-      result[decodeURIComponent(pair.replace(/\+/g, ' '))] = ''
-    } else {
-      const key = decodeURIComponent(pair.slice(0, eqIndex).replace(/\+/g, ' '))
-      const value = decodeURIComponent(pair.slice(eqIndex + 1).replace(/\+/g, ' '))
-      result[key] = value
+    try {
+      const eqIndex = pair.indexOf('=')
+      if (eqIndex === -1) {
+        result[decodeURIComponent(pair.replace(/\+/g, ' '))] = ''
+      } else {
+        const key = decodeURIComponent(pair.slice(0, eqIndex).replace(/\+/g, ' '))
+        const value = decodeURIComponent(pair.slice(eqIndex + 1).replace(/\+/g, ' '))
+        result[key] = value
+      }
+    } catch {
+      continue
     }
   }
   return result

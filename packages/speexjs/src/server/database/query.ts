@@ -63,76 +63,93 @@ export class QueryBuilder {
 	private ctes: { name: string; query: QueryBuilder; recursive?: boolean }[] = []
 	private unions: { query: QueryBuilder; type: 'UNION' | 'UNION ALL' | 'INTERSECT' | 'EXCEPT' }[] = []
 	private lockMode: string | null = null
+	private _sqlCache: { sql: string; bindings: any[] } | null = null
 
 	constructor(connection: QueryRunner, tableName: string) {
 		this.connection = connection;
 		this.tableName = tableName;
 	}
 
+	private dirty(): void {
+		this._sqlCache = null;
+	}
+
 	select(...columns: string[]): this {
 		this.columns = columns.length > 0 ? columns : ["*"];
+		this.dirty();
 		return this;
 	}
 
 	addSelect(...columns: string[]): this {
 		if (this.columns[0] === "*") this.columns = columns;
 		else this.columns.push(...columns);
+		this.dirty();
 		return this;
 	}
 
-	distinct(): this { this.distinctEnabled = true; return this; }
+	distinct(): this { this.distinctEnabled = true; this.dirty(); return this; }
 
-	from(table: string): this { this.fromSubquery = table; return this; }
+	from(table: string): this { this.fromSubquery = table; this.dirty(); return this; }
 
 	where(column: string, operator: any, value?: any): this {
 		if (value === undefined) { value = operator; operator = "="; }
 		this.wheres.push({ type: "basic", column, operator: String(operator), value, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	orWhere(column: string, operator: any, value?: any): this {
 		if (value === undefined) { value = operator; operator = "="; }
 		this.wheres.push({ type: "basic", column, operator: String(operator), value, boolean: "or" });
+		this.dirty();
 		return this;
 	}
 
 	whereIn(column: string, values: any[]): this {
 		this.wheres.push({ type: "in", column, values, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	whereNotIn(column: string, values: any[]): this {
 		this.wheres.push({ type: "notIn", column, values, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	whereNull(column: string): this {
 		this.wheres.push({ type: "null", column, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	whereNotNull(column: string): this {
 		this.wheres.push({ type: "notNull", column, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	whereBetween(column: string, range: [any, any]): this {
 		this.wheres.push({ type: "between", column, values: range, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	whereNotBetween(column: string, range: [any, any]): this {
 		this.wheres.push({ type: "notBetween", column, values: range, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	whereLike(column: string, pattern: string): this {
 		this.wheres.push({ type: "like", column, value: pattern, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
 	orWhereLike(column: string, pattern: string): this {
 		this.wheres.push({ type: "like", column, value: pattern, boolean: "or" });
+		this.dirty();
 		return this;
 	}
 
@@ -140,6 +157,7 @@ export class QueryBuilder {
 		const sub = new QueryBuilder(this.connection, this.tableName);
 		callback(sub);
 		this.wheres.push({ type: "nested", nested: sub.wheres, boolean: "and" });
+		this.dirty();
 		return this;
 	}
 
@@ -151,6 +169,7 @@ export class QueryBuilder {
 		type: JoinType = "inner",
 	): this {
 		this.joins.push({ table, first, operator, second, type });
+		this.dirty();
 		return this;
 	}
 
@@ -186,11 +205,13 @@ export class QueryBuilder {
 		callback(sub)
 		const { sql: subSql } = sub.toSQL()
 		this.joins.push({ table: `(${subSql}) AS ${alias}`, first, operator, second, type })
+		this.dirty();
 		return this
 	}
 
 	orderBy(column: string, direction: OrderDirection = "asc"): this {
 		this.orderBys.push({ column, direction });
+		this.dirty();
 		return this;
 	}
 
@@ -200,19 +221,19 @@ export class QueryBuilder {
 
 	oldest(column = "created_at"): this { return this.orderBy(column, "asc"); }
 
-	inRandomOrder(): this { this.orderBys.push({ column: "RANDOM()", direction: "asc" }); return this; }
+	inRandomOrder(): this { this.orderBys.push({ column: "RANDOM()", direction: "asc" }); this.dirty(); return this; }
 
-	limit(limit: number): this { this.limitValue = limit; return this; }
+	limit(limit: number): this { this.limitValue = limit; this.dirty(); return this; }
 
-	offset(offset: number): this { this.offsetValue = offset; return this; }
+	offset(offset: number): this { this.offsetValue = offset; this.dirty(); return this; }
 
 	skip(skip: number): this { return this.offset(skip); }
 
 	take(take: number): this { return this.limit(take); }
 
-	groupBy(...columns: string[]): this { this.groupBys.push(...columns); return this; }
+	groupBy(...columns: string[]): this { this.groupBys.push(...columns); this.dirty(); return this; }
 
-	having(column: string, operator: string, value: any): this { this.havings.push({ column, operator, value }); return this; }
+	having(column: string, operator: string, value: any): this { this.havings.push({ column, operator, value }); this.dirty(); return this; }
 
 	async get<T = any>(): Promise<T[]> {
 		const { sql, bindings } = this.toSQL();
@@ -395,6 +416,7 @@ export class QueryBuilder {
 		qb.ctes = [...this.ctes];
 		qb.unions = [...this.unions];
 		qb.lockMode = this.lockMode;
+		qb._sqlCache = null;
 		return qb;
 	}
 
@@ -445,6 +467,7 @@ export class QueryBuilder {
 		const sub = new QueryBuilder(this.connection, this.tableName)
 		callback(sub)
 		this.ctes.push({ name, query: sub, recursive })
+		this.dirty();
 		return this
 	}
 
@@ -456,6 +479,7 @@ export class QueryBuilder {
 		const sub = new QueryBuilder(this.connection, this.tableName)
 		callback(sub)
 		this.unions.push({ query: sub, type: 'UNION' })
+		this.dirty();
 		return this
 	}
 
@@ -463,14 +487,16 @@ export class QueryBuilder {
 		const sub = new QueryBuilder(this.connection, this.tableName)
 		callback(sub)
 		this.unions.push({ query: sub, type: 'UNION ALL' })
+		this.dirty();
 		return this
 	}
 
-	lockForUpdate(): this { this.lockMode = 'FOR UPDATE'; return this }
+	lockForUpdate(): this { this.lockMode = 'FOR UPDATE'; this.dirty(); return this }
 
-	sharedLock(): this { this.lockMode = 'FOR SHARE'; return this }
+	sharedLock(): this { this.lockMode = 'FOR SHARE'; this.dirty(); return this }
 
 	toSQL(): { sql: string; bindings: any[] } {
+		if (this._sqlCache !== null) return this._sqlCache;
 		const bindings: any[] = [];
 		const dialect = this.connection.getDialect();
 		const wrapId = (c: string) => c.includes("(") || c === "*" || c.includes(" as ") || c.includes(" AS ") ? c : dialect.wrapIdentifier(c);
@@ -496,7 +522,8 @@ export class QueryBuilder {
 			sql += ` ${u.type} ${unionSql}`
 		}
 		if (this.lockMode) sql += ` ${this.lockMode}`
-		return { sql, bindings };
+		this._sqlCache = { sql, bindings };
+		return this._sqlCache;
 	}
 
 	dd(): string {

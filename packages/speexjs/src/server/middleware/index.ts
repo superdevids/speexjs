@@ -5,6 +5,26 @@ import { gzipSync } from "node:zlib";
 import { HttpStatus } from "../http/status";
 import type { RouteContext } from "../router";
 import type { Schema } from "../../schema/types.js";
+
+const MIME_TYPES: Record<string, string> = {
+	".html": "text/html",
+	".css": "text/css",
+	".js": "application/javascript",
+	".json": "application/json",
+	".png": "image/png",
+	".jpg": "image/jpeg",
+	".jpeg": "image/jpeg",
+	".gif": "image/gif",
+	".svg": "image/svg+xml",
+	".webp": "image/webp",
+	".ico": "image/x-icon",
+	".txt": "text/plain",
+	".pdf": "application/pdf",
+	".woff": "font/woff",
+	".woff2": "font/woff2",
+	".ttf": "font/ttf",
+};
+
 export type Middleware = (
 	ctx: RouteContext,
 	next: () => Promise<void>,
@@ -275,26 +295,7 @@ export function staticFiles(root: string, options?: StaticOptions): Middleware {
 		...options,
 	};
 
-	const MIME_TYPES: Record<string, string> = {
-		".html": "text/html",
-		".css": "text/css",
-		".js": "application/javascript",
-		".json": "application/json",
-		".png": "image/png",
-		".jpg": "image/jpeg",
-		".jpeg": "image/jpeg",
-		".gif": "image/gif",
-		".svg": "image/svg+xml",
-		".webp": "image/webp",
-		".ico": "image/x-icon",
-		".txt": "text/plain",
-		".pdf": "application/pdf",
-		".woff": "font/woff",
-		".woff2": "font/woff2",
-		".ttf": "font/ttf",
-	};
-
-	return (ctx: RouteContext, next: () => Promise<void>) => {
+		return (ctx: RouteContext, next: () => Promise<void>) => {
 		const { request, response } = ctx;
 		const filePath = request.path;
 

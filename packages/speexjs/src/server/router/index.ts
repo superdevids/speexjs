@@ -49,6 +49,8 @@ export class Router {
 	private groupMiddleware: Middleware[] = [];
 	private groupPrefix = "";
 	private namedRoutes = new Map<string, RouteEntry>();
+	private resolveCache = new Map<string, ResolvedRoute | null>();
+	private resolveCacheMaxSize = 1000;
 
 	get(path: string, handler: RouteHandler): this {
 		return this.match(["GET"], path, handler);
@@ -85,6 +87,7 @@ export class Router {
 	match(methods: string[], path: string, handler: RouteHandler): this {
 		const fullPath = this.groupPrefix + normalizePath(path);
 		const { regexp, keys } = pathToRegexp(fullPath);
+		this.resolveCache.clear();
 
 		this.routes.push({
 			methods: methods.map((m) => m.toUpperCase()),
@@ -255,6 +258,10 @@ export class Router {
 	resolve(method: string, path: string): ResolvedRoute | null {
 		const normalizedPath = normalizePath(path);
 		const upperMethod = method.toUpperCase();
+		const cacheKey = `${upperMethod}:${normalizedPath}`;
+
+		const cached = this.resolveCache.get(cacheKey);
+		if (cached !== undefined) return cached;
 
 		for (const route of this.routes) {
 			if (!route.methods.includes(upperMethod)) continue;
@@ -271,13 +278,24 @@ export class Router {
 				}
 			}
 
-			return {
+			const result: ResolvedRoute = {
 				handler: route.handler,
 				params,
 				middleware: route.middleware,
 			};
+			if (this.resolveCache.size >= this.resolveCacheMaxSize) {
+				const firstKey = this.resolveCache.keys().next().value;
+				if (firstKey !== undefined) this.resolveCache.delete(firstKey);
+			}
+			this.resolveCache.set(cacheKey, result);
+			return result;
 		}
 
+		if (this.resolveCache.size >= this.resolveCacheMaxSize) {
+			const firstKey = this.resolveCache.keys().next().value;
+			if (firstKey !== undefined) this.resolveCache.delete(firstKey);
+		}
+		this.resolveCache.set(cacheKey, null);
 		return null;
 	}
 
@@ -304,7 +322,12 @@ function normalizePath(path: string): string {
 	return normalized;
 }
 
+const pathRegexCache = new Map<string, { regexp: RegExp; keys: string[] }>();
+
 function pathToRegexp(pattern: string): { regexp: RegExp; keys: string[] } {
+	const cached = pathRegexCache.get(pattern);
+	if (cached !== undefined) return cached;
+
 	const keys: string[] = [];
 
 	const regexpStr = pattern
@@ -314,7 +337,9 @@ function pathToRegexp(pattern: string): { regexp: RegExp; keys: string[] } {
 		})
 		.replace(/\*/g, ".*?");
 
-	return { regexp: new RegExp(`^${regexpStr}$`), keys };
+	const result = { regexp: new RegExp(`^${regexpStr}$`), keys };
+	pathRegexCache.set(pattern, result);
+	return result;
 }
 
 function singularize(word: string): string {
