@@ -1,8 +1,8 @@
-﻿# Contributing — speex-kit
+# Contributing — speexkit
 
 ## Setup
 `ash
-cd packages/speex-kit
+cd packages/speexkit
 npm install
 npm run build
 npm test

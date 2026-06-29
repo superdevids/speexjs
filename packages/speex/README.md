@@ -1,4 +1,4 @@
-﻿# speexkit
+# speexkit
 
 **JavaScript/TypeScript utility toolkit** — 400+ functions, 19 modules, **zero dependencies**.
 

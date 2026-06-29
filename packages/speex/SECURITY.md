@@ -1,4 +1,4 @@
-﻿# Security — speex-kit
+# Security — speexkit
 
 **Report vulnerabilities:** adityasuperdev@gmail.com (response within 48h)
 

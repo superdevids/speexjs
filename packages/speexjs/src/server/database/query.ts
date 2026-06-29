@@ -60,6 +60,9 @@ export class QueryBuilder {
 	private limitValue: number | null = null;
 	private offsetValue: number | null = null;
 	private fromSubquery: string | null = null;
+	private ctes: { name: string; query: QueryBuilder; recursive?: boolean }[] = []
+	private unions: { query: QueryBuilder; type: 'UNION' | 'UNION ALL' | 'INTERSECT' | 'EXCEPT' }[] = []
+	private lockMode: string | null = null
 
 	constructor(connection: QueryRunner, tableName: string) {
 		this.connection = connection;
@@ -178,6 +181,14 @@ export class QueryBuilder {
 		return this.join(table, first, operator, second, "cross");
 	}
 
+	joinSub(callback: (query: QueryBuilder) => void, alias: string, first: string, operator: string, second: string, type: JoinType = 'inner'): this {
+		const sub = new QueryBuilder(this.connection, this.tableName)
+		callback(sub)
+		const { sql: subSql } = sub.toSQL()
+		this.joins.push({ table: `(${subSql}) AS ${alias}`, first, operator, second, type })
+		return this
+	}
+
 	orderBy(column: string, direction: OrderDirection = "asc"): this {
 		this.orderBys.push({ column, direction });
 		return this;
@@ -290,6 +301,26 @@ export class QueryBuilder {
 
 	async insertGetId(data: Record<string, any>): Promise<number | string> { return this.insert(data); }
 
+	async upsert(data: Record<string, any>, conflictColumns: string[]): Promise<number | string> {
+		const dialect = this.connection.getDialect()
+		const { sql, bindings } = this.compileInsert(data)
+		const conflictCols = conflictColumns.map(c => dialect.wrapIdentifier(c)).join(', ')
+		const updateCols = Object.keys(data).filter(k => !conflictColumns.includes(k))
+		if (updateCols.length === 0) return this.insert(data)
+
+		const updates = updateCols.map(c => `${dialect.wrapIdentifier(c)} = VALUES(${dialect.wrapIdentifier(c)})`).join(', ')
+
+		let upsertSql: string
+		if (this.connection.getDriver() === 'postgresql') {
+			upsertSql = `${sql} ON CONFLICT (${conflictCols}) DO UPDATE SET ${updates}`
+		} else {
+			upsertSql = `${sql} ON DUPLICATE KEY UPDATE ${updates}`
+		}
+
+		const result = await this.connection.raw(upsertSql, bindings)
+		return Number((result.rows as any)?.insertId ?? 0)
+	}
+
 	async insertReturning(data: Record<string, any>): Promise<any> {
 		const { sql, bindings } = this.compileInsert(data);
 		const result = await this.connection.raw(this.connection.getDialect().compileInsertReturning(sql, bindings), bindings);
@@ -341,6 +372,9 @@ export class QueryBuilder {
 		qb.limitValue = this.limitValue;
 		qb.offsetValue = this.offsetValue;
 		qb.fromSubquery = this.fromSubquery;
+		qb.ctes = [...this.ctes];
+		qb.unions = [...this.unions];
+		qb.lockMode = this.lockMode;
 		return qb;
 	}
 
@@ -376,12 +410,48 @@ export class QueryBuilder {
 		return this;
 	}
 
+	with(name: string, callback: (query: QueryBuilder) => void, recursive = false): this {
+		const sub = new QueryBuilder(this.connection, this.tableName)
+		callback(sub)
+		this.ctes.push({ name, query: sub, recursive })
+		return this
+	}
+
+	withRecursive(name: string, callback: (query: QueryBuilder) => void): this {
+		return this.with(name, callback, true)
+	}
+
+	union(callback: (query: QueryBuilder) => void): this {
+		const sub = new QueryBuilder(this.connection, this.tableName)
+		callback(sub)
+		this.unions.push({ query: sub, type: 'UNION' })
+		return this
+	}
+
+	unionAll(callback: (query: QueryBuilder) => void): this {
+		const sub = new QueryBuilder(this.connection, this.tableName)
+		callback(sub)
+		this.unions.push({ query: sub, type: 'UNION ALL' })
+		return this
+	}
+
+	lockForUpdate(): this { this.lockMode = 'FOR UPDATE'; return this }
+
+	sharedLock(): this { this.lockMode = 'FOR SHARE'; return this }
+
 	toSQL(): { sql: string; bindings: any[] } {
 		const bindings: any[] = [];
 		const dialect = this.connection.getDialect();
 		const wrapId = (c: string) => c.includes("(") || c === "*" || c.includes(" as ") || c.includes(" AS ") ? c : dialect.wrapIdentifier(c);
 		const wrappedFrom = this.fromSubquery ?? dialect.wrapIdentifier(this.fromSubquery ?? this.tableName);
 		let sql = `${this.distinctEnabled ? "SELECT DISTINCT " : "SELECT "}${this.columns.map(wrapId).join(", ")} FROM ${wrappedFrom}`;
+		if (this.ctes.length > 0) {
+			const cteParts = this.ctes.map(cte => {
+				const { sql: subSql } = cte.query.toSQL()
+				return `${cte.recursive ? 'RECURSIVE ' : ''}${cte.name} AS (${subSql})`
+			})
+			sql = `WITH ${cteParts.join(', ')} ${sql}`
+		}
 		const joinSQL = this.compileJoins(dialect);
 		if (joinSQL) sql += joinSQL;
 		const whereSQL = this.compileWheres(dialect, bindings);
@@ -390,6 +460,11 @@ export class QueryBuilder {
 		const havingSQL = this.compileHavings(dialect, bindings);
 		if (havingSQL) sql += havingSQL;
 		sql += this.compileOrderByLimit(dialect, bindings);
+		for (const u of this.unions) {
+			const { sql: unionSql } = u.query.toSQL()
+			sql += ` ${u.type} ${unionSql}`
+		}
+		if (this.lockMode) sql += ` ${this.lockMode}`
 		return { sql, bindings };
 	}
 
@@ -401,7 +476,7 @@ export class QueryBuilder {
 
 	private compileJoins(dialect: Dialect): string {
 		if (this.joins.length === 0) return "";
-		return " " + this.joins.map(j => `${j.type.toUpperCase()} JOIN ${dialect.wrapIdentifier(j.table)} ON ${dialect.wrapIdentifier(j.first)} ${j.operator} ${this.wrap(j.second)}`).join(" ");
+		return " " + this.joins.map(j => `${j.type.toUpperCase()} JOIN ${j.table.includes("(") ? j.table : dialect.wrapIdentifier(j.table)} ON ${dialect.wrapIdentifier(j.first)} ${j.operator} ${this.wrap(j.second)}`).join(" ");
 	}
 
 	private compileWheres(dialect: Dialect, bindings: any[]): string {

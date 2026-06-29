@@ -35,6 +35,17 @@ export class Sanctum {
     this.tokens.delete(hash)
   }
 
+  refreshToken(oldToken: string): string | null {
+    const hash = this.hash(oldToken)
+    const record = this.tokens.get(hash)
+    if (!record) return null
+    this.tokens.delete(hash)
+    const newToken = `spx_${randomBytes(40).toString('hex')}`
+    const newHash = this.hash(newToken)
+    this.tokens.set(newHash, record)
+    return newToken
+  }
+
   can(token: string, ability: string): boolean {
     const hash = this.hash(token)
     const record = this.tokens.get(hash)

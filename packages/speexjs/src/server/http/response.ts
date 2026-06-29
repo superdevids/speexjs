@@ -113,7 +113,19 @@ export class SuperResponse {
 		return this
 	}
 
-	elapsed(): number { return Date.now() - this._startTime }
+  elapsed(): number { return Date.now() - this._startTime }
+
+  async sse(event: string, data: unknown): Promise<this> {
+    if (!this._headers.has('content-type')) {
+      this._headers.set('content-type', 'text/event-stream')
+      this._headers.set('cache-control', 'no-cache')
+      this._headers.set('connection', 'keep-alive')
+      this.flushHeaders()
+      this.raw.statusCode = this._statusCode
+    }
+    this.raw.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+    return this
+  }
 
 	send(body: string | Buffer, status?: number, contentType?: string): this {
 		if (status !== undefined) this._statusCode = status;

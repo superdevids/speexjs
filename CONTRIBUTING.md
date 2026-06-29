@@ -1,8 +1,8 @@
-# Contributing — speexkit
+# Contributing â€” speexjs Monorepo
 
 ## Setup
 `ash
-cd packages/speexkit
+cd packages/speexjs Monorepo
 npm install
 npm run build
 npm test

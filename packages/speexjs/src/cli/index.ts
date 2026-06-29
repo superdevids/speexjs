@@ -7,6 +7,7 @@ import { makeMiddleware } from './commands/make-middleware.js'
 import { makeSchema } from './commands/make-schema.js'
 import { makeMigration } from './commands/make-migration.js'
 import { makeModel } from './commands/make-model.js'
+import { makeResource } from './commands/make-resource.js'
 import { listRoutes } from './commands/list-routes.js'
 import { serve } from './commands/serve.js'
 import { build as buildCommand } from './commands/build.js'
@@ -21,6 +22,7 @@ function showHelp(): void {
   console.log('  SpeexJS make:middleware <name>        Generate middleware')
   console.log('  SpeexJS make:migration <name>         Generate migration')
   console.log('  SpeexJS make:model <name>             Generate model')
+  console.log('  SpeexJS make:resource <name>          Generate resource (controller + model + migration)')
   console.log('  SpeexJS make:schema <name>            Generate schema')
   console.log('  SpeexJS migrate                       Run migrations')
   console.log('  SpeexJS db:seed                       Seed the database')
@@ -91,6 +93,15 @@ async function main(): Promise<void> {
         process.exit(1)
       }
       await makeModel(parsed.args[0])
+      break
+    }
+    case 'make:resource': {
+      if (!parsed.args[0]) {
+        console.error(colors.red('Resource name required'))
+        console.log(`  ${colors.cyan('SpeexJS make:resource <name>')}`)
+        process.exit(1)
+      }
+      await makeResource(parsed.args[0])
       break
     }
     case 'migrate':

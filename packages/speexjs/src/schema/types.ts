@@ -40,6 +40,7 @@ export abstract class Schema<T> {
   default(defaultValue: T): Schema<T> { return new DefaultSchema(this, defaultValue) }
   describe(_description: string): this { return this }
   refine(fn: (val: T) => boolean, message: string): Schema<T> { return new RefineSchema(this, fn, message) }
+  brand<B extends string>(_brand?: B): Schema<T & { __brand: B }> { return this as any }
   transform<U>(fn: (val: T) => U): Schema<U> { return new TransformSchema(this, fn) }
 
   get _internal(): this {
@@ -116,6 +117,8 @@ class TransformSchema<T, U> extends Schema<U> {
     return this.fn(result)
   }
 }
+
+export type Brand<T, B> = T & { __brand: B }
 
 // ─── Infer type helper ──────────────────────────────────────
 

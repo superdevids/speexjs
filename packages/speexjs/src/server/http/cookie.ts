@@ -1,3 +1,5 @@
+import { createHmac, timingSafeEqual } from 'node:crypto'
+
 export interface CookieOptions {
   maxAge?: number
   expires?: Date
@@ -93,4 +95,19 @@ export function clearCookie(name: string, options?: CookieOptions): string {
     maxAge: 0,
     expires: new Date(0),
   })
+}
+
+export function signCookie(value: string, secret: string): string {
+  const hmac = createHmac('sha256', secret).update(value).digest('base64').slice(0, 8)
+  return `${value}.${hmac}`
+}
+
+export function unsignCookie(signed: string, secret: string): string | false {
+  const dot = signed.lastIndexOf('.')
+  if (dot === -1) return false
+  const value = signed.slice(0, dot)
+  const expected = createHmac('sha256', secret).update(value).digest('base64').slice(0, 8)
+  try {
+    return timingSafeEqual(Buffer.from(signed.slice(dot + 1)), Buffer.from(expected)) ? value : false
+  } catch { return false }
 }

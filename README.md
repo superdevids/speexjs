@@ -1,8 +1,16 @@
-﻿# speexkit
+﻿# speexjs Monorepo
 
-**400+ functions · 0 dependencies · 19 modules · 1,477 tests**
+Monorepo for **speexkit** — the JavaScript/TypeScript utility toolkit.
 
-The JavaScript/TypeScript utility toolkit — NDArray, ML, stats, validation, functional, date, async, and more.
+## Packages
+
+| Package | Description | npm |
+|---------|-------------|-----|
+| [speexkit](./packages/speex) | Utility toolkit — NDArray, ML, Stats, validation, functional, async, date. 400+ functions, zero deps. | 
+pm install speexkit |
+| [speexjs](./packages/speexjs) | Web framework for TypeScript | *(in development)* |
+
+## speexkit Quick Start
 
 `ash
 npm install speexkit
@@ -13,10 +21,18 @@ import { NDArray } from 'speexkit/nlarray'
 import { StandardScaler } from 'speexkit/ml'
 import { normalPDF, ttestInd } from 'speexkit/stats'
 import { curry, pipe } from 'speexkit/nlfunction'
-import { formatDate, timeAgo } from 'speexkit/date'
 import { isEmail, isStrongPassword } from 'speexkit/validation'
 `
 
-📖 [Full docs →](./packages/speex/SUMMARY.md)
+## Development
 
-**License:** MIT
+`ash
+pnpm install
+cd packages/speex
+npm run build
+npm test
+`
+
+## License
+
+MIT

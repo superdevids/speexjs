@@ -45,8 +45,10 @@ export class SuperRequest {
   private _params: Record<string, string> = {}
   private bodyCache: BodyCache | null = null
   private _bodyReadPromise: Promise<BodyCache> | null = null
+  private maxBodySize: number
 
-  constructor(raw: IncomingMessage) {
+  constructor(raw: IncomingMessage, options?: { maxBodySize?: number }) {
+    this.maxBodySize = options?.maxBodySize ?? 10 * 1024 * 1024
     this.raw = raw
 
     this._headers = new HeadersMap(
@@ -100,13 +102,12 @@ export class SuperRequest {
 
   private async readBodyFromStream(): Promise<BodyCache> {
     const chunks: Buffer[] = []
-    const MAX_BODY_SIZE = 10 * 1024 * 1024; // 10MB default
     let totalSize = 0;
     for await (const chunk of this.raw) {
       const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
       totalSize += buf.length;
-      if (totalSize > MAX_BODY_SIZE) {
-        throw new Error('Request body too large. Maximum size is 10MB.');
+      if (totalSize > this.maxBodySize) {
+        throw new Error('Request body too large. Maximum size is ' + this.maxBodySize + ' bytes.');
       }
       chunks.push(buf);
     }

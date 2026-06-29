@@ -1,6 +1,6 @@
 export interface OAuth2Provider {
   authorizeUrl(state: string): string
-  exchangeCode(code: string): Promise<{ accessToken: string; refreshToken?: string }>
+  exchangeCode(code: string, state?: string): Promise<{ accessToken: string; refreshToken?: string }>
   getUser(accessToken: string): Promise<{ id: string; email?: string; name?: string; avatar?: string }>
 }
 

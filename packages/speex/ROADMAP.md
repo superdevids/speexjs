@@ -1,4 +1,4 @@
-﻿# Roadmap — speex-kit
+# Roadmap — speexkit
 
 ## ✅ v0.8.0 (Current)
 - NDArray with broadcasting, slicing, matmul, axis reductions, concatenation

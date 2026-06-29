@@ -1,18 +1,18 @@
-# Publishing — speexkit
+﻿# Contributing - speexjs Monorepo
+
+See [speexkit CONTRIBUTING](./packages/speex/CONTRIBUTING.md) for guidelines.
+
+## Quick Start
 
 `ash
-npm login
-npm version patch # or minor / major
+pnpm install
+cd packages/speex
 npm run build
-npm run test:coverage
-npm publish
-git push origin master --tags
+npm test
 `
+"@ | Out-File -FilePath "C:\.data\PROJECT\VibeCoding\speexjs\CONTRIBUTING.md" -Encoding UTF8
 
-## Checklist
-- [ ] npm run lint && npm run typecheck
-- [ ] npm run build
-- [ ] npm run test:coverage
-- [ ] CHANGELOG.md updated
-- [ ] Version bumped in package.json
-- [ ] npm login verified
+@"
+# Publishing - speexjs Monorepo
+
+See [speexkit PUBLISH](./packages/speex/PUBLISH.md) for publishing instructions.

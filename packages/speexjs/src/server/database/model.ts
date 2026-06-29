@@ -216,6 +216,23 @@ export class Model {
     }
   }
 
+  async load(...relations: string[]): Promise<void> {
+    const ModelClass = this.constructor as typeof Model
+    const id = this.id
+    if (id === undefined) return
+    const fresh = await ModelClass.find(id)
+    if (fresh) {
+      for (const key of Object.keys(fresh)) {
+        if (!key.startsWith('_')) (this as any)[key] = (fresh as any)[key]
+      }
+    }
+  }
+
+  async loadMissing(...relations: string[]): Promise<void> {
+    const missing = relations.filter(r => !this._relations[r])
+    if (missing.length > 0) await this.load(...missing)
+  }
+
   // ─── Relation Loader ───────────────────────────────────────
 
   private static async loadRelations(instances: any[]): Promise<void> {
@@ -250,6 +267,8 @@ export class Model {
           inst._relations[key] = related.find((r: any) => r[def.foreignKey] === inst[def.localKey]) ?? null
         }
       }
+
+      // HasManyThrough not implemented - requires multi-table join
 
       if (def.type === 'belongsToMany' && def.pivotTable) {
         if (!def.relatedModel.queryRunner) def.relatedModel.setConnection(this.queryRunner!)

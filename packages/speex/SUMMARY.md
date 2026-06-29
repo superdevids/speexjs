@@ -1,10 +1,10 @@
-﻿# speex-kit — Module Reference
+# speexkit — Module Reference
 
 > v0.8.0 · 383 exports · 16 modules · 0 deps · 1477 tests
 
 ## Modules
 
-### speex-kit (barrel)
+### speexkit (barrel)
 deepClone, deepMerge, deepEqual, pipe, compose, debounce, throttle, memoize, retry, noop, identity, once
 
 ### math

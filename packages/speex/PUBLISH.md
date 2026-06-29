@@ -1,4 +1,4 @@
-﻿# Publishing — speex-kit
+# Publishing — speexkit
 
 `ash
 npm login
