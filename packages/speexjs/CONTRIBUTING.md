@@ -15,7 +15,7 @@ Thank you for considering contributing to **SpeexJS**!
 3. Follow the coding standards
 4. Write tests and ensure all pass (`npm test`)
 5. Use [Conventional Commits](https://www.conventionalcommits.org/)
-6. Push and open a PR against the `main` branch
+6. Push and open a PR against the `master` branch
 
 ## Development Setup
 

@@ -6,7 +6,7 @@ We take the security of SpeexJS seriously. If you discover a security vulnerabil
 
 **DO NOT** report it via public GitHub Issues.
 
-Report it via email: **security@speexjs.org** with subject `[SECURITY]` and a brief description.
+Report it via email: **adityasuperdev@gmail.com** with subject `[SECURITY]` and a brief description.
 
 Include:
 - Vulnerability description
@@ -21,9 +21,9 @@ We will respond within **48 hours** to confirm receipt.
 
 | Version | Support |
 |---------|---------|
-| 0.6.x | ✅ Active |
-| 0.2.x - 0.5.x | ⚠️ Limited |
-| < 0.2 | ❌ Not supported |
+| 1.x | ✅ Active |
+| 0.6.x - 0.9.x | ⚠️ Limited |
+| < 0.6 | ❌ Not supported |
 
 ## Responsible Disclosure
 
