@@ -1,6 +1,6 @@
 {
 	"name": "speexjs",
-	"version": "1.4.2",
+	"version": "1.4.3",
 	"description": "Fullstack JavaScript/TypeScript framework — Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies.",
 	"type": "module",
 	"main": "./dist/index.js",
@@ -126,7 +126,8 @@
 		"indonesia"
 	],
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"provenance": true
 	},
 	"repository": {
 		"type": "git",
@@ -135,6 +136,10 @@
 	"license": "MIT",
 	"engines": {
 		"node": ">=18.0.0"
+	},
+	"funding": {
+		"type": "github",
+		"url": "https://github.com/sponsors/superdevids"
 	},
 	"optionalDependencies": {}
 }
