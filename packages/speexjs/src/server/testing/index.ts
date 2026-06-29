@@ -66,7 +66,7 @@ export class TestResponse {
   constructor(res: SuperResponse) {
     this.sentStatus = res.statusCode
     this.sentHeaders = {}
-    ;(res as any).flush = async function(this: SuperResponse) {
+    ;(res as any).flush = async function(this: any) {
       this.sentStatus = this.statusCode
       this.sentData = this.body
     }.bind(res)

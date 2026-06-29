@@ -95,6 +95,7 @@ export class SmtpMailTransport implements MailTransport {
 export class NodemailerTransport implements MailTransport {
   private transporter: any = null
   constructor(config: { host: string; port: number; secure?: boolean; auth?: { user: string; pass: string } }) {
+    // @ts-expect-error - optional dependency
     import('nodemailer').then((mod: any) => {
       this.transporter = mod.default.createTransport(config)
     }).catch(() => { throw new Error('nodemailer not installed. Run: npm install nodemailer') })

@@ -1,8 +1,6 @@
-import { createServer } from 'node:http'
-import type { Server } from 'node:http'
+import type { Server, IncomingMessage } from 'node:http'
+// @ts-expect-error - optional dependency
 import { WebSocketServer, WebSocket } from 'ws'
-import type { IncomingMessage } from 'node:http'
-import type { Duplex } from 'node:stream'
 
 export type WsEventHandler = (data: unknown, socket: WebSocket) => void | Promise<void>
 
@@ -15,13 +13,11 @@ export class WsBroadcaster {
   private wss: WebSocketServer | null = null
   private channels: Map<string, Channel> = new Map()
   private handlers: Map<string, WsEventHandler[]> = new Map()
-  private serverRef: Server | null = null
 
   /**
    * Attach WebSocket server to an existing HTTP server.
    */
   attach(server: Server): void {
-    this.serverRef = server
     this.wss = new WebSocketServer({ server, path: '/ws' })
 
     this.wss.on('connection', (socket: WebSocket, req: IncomingMessage) => {
@@ -32,7 +28,7 @@ export class WsBroadcaster {
         if (ch) this.subscribe(socket, ch)
       }
 
-      socket.on('message', (raw) => {
+      socket.on('message', (raw: Buffer) => {
         let parsed: { event?: string; data?: unknown; channel?: string }
         try { parsed = JSON.parse(raw.toString()) }
         catch { return }

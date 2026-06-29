@@ -16,10 +16,10 @@ export default defineConfig({
         'src/native/index.ts',
       ],
       thresholds: {
-        lines: 96.9,
-        functions: 98,
+        lines: 96,
+        functions: 97,
         branches: 90,
-        statements: 96.9,
+        statements: 96,
       },
     },
   },

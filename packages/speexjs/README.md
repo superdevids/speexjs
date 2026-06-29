@@ -1,104 +1,71 @@
 # SpeexJS
 
-**Fullstack TypeScript Framework — Build web apps fast. Zero dependencies in production.**
+**Fullstack TypeScript Framework — Zero dependencies. 64 KB. 64+ features.**
 
 ```bash
 npm install speexjs
 ```
 
-> v0.6.0 • 67 KB • 1,849 tests • 49 features • Zero deps
+> v0.9.0 • 64.8 KB • 1,990 tests • 96.3% coverage • Zero deps
 
 ## Quick Start
 
 ```bash
 npx speexjs init my-app
 cd my-app
-npm install
 npm run dev
 ```
 
-Or manually:
+## Features (64+)
 
+### Core
+- HTTP Server, Router (groups, named, resource), Middleware Pipeline (13 built-in)
+- DI Container, Config Manager, Plugin System, Graceful Shutdown
+- Error Handling (12 HttpException classes, global handler, 404 handler)
+
+### Database & ORM
+- Query Builder (30+ methods), Migrations, Seeders, Pagination (offset + cursor)
+- 3 dialects: MySQL (pool), PostgreSQL (pool), SQLite
+- Active Record Model with 6 relations (hasOne, hasMany, belongsTo, belongsToMany, morphMany, morphOne)
+- Eager loading, Soft deletes, Model factories, Accessors/Mutators
+
+### Auth & Security
+- Session Guard (cookie + DB store), Token Guard (salted hash)
+- OAuth2 + Socialite (GitHub, Google), Sanctum SPA Auth
+- Gate/Authorization, Rate Limiting (memory + DB), CSRF, CORS, Helmet
+- Signed URLs, Maintenance Mode
+
+### Validation
+- 25+ schema types (Zod-compatible), Transform, Coerce, Refine
+- Type inference with `Infer<T>`, Request validation middleware
+
+### Enterprise
+- WebSocket Broadcasting (native + Pusher/Ably)
+- Queue/Jobs (in-memory + Redis driver + Monitor)
+- Mail (Console + SMTP + Nodemailer)
+- Task Scheduling (cron), Notifications, HTTP Client
+- Clustering, GraphQL, OpenAPI Generator
+
+### Developer Experience
+- CLI: init (4 templates), make:* (7 commands), serve, list-routes, tinker
+- TSX View Engine (`.tsx` pages with JSX, no React needed)
+- Debug Toolbar, Feature Flags, Task Runner, Cashier Billing
+- Testing Helpers (TestRequest, RefreshDatabase)
+- Benchmarks (mitata)
+
+## Quick Examples
+
+### Route with Controller
 ```typescript
-import { speexjs } from 'speexjs/server'
+import { Controller, get } from 'speexjs/server'
 
-const app = speexjs()
-app.get('/', ({ response }) => response.html('<h1>SpeexJS 🚀</h1>'))
-app.listen(3000)
+export class UserController extends Controller {
+  @get('/users')
+  async index({ response }) {
+    return response.json({ data: await User.all() })
+  }
+}
 ```
-
-## Why SpeexJS?
-
-| | SpeexJS | AdonisJS | NestJS | Hono |
-|---|---|---|---|---|
-| **Package size** | **67 KB** | ~5 MB | ~10 MB | ~50 KB |
-| **Dependencies** | **Zero** (tsx for dev) | Many | Many | Zero |
-| **Test coverage** | **96.9%** | ~70% | ~80% | ~60% |
-| **Features** | **49** all-in-one | 55+ | 40+ | 10+ |
-| **Fullstack** | Server + Client | Server only | Server only | Server only |
-
-## Features (49 total)
-
-### 🖥️ Server
-- HTTP Router with groups, resources, named routes, middleware
-- **12 HTTP Exception classes** + global error handler
-- Middleware pipeline: CORS, CSRF, Session, Auth, Throttle, Logger, Helmet, Compress, Static, Validate
-- **Plugin system** with lifecycle hooks
-- **Graceful shutdown** (SIGINT/SIGTERM)
-- **Clustering** — multi-core support
-
-### 🗄️ Database
-- **Query Builder** — chainable, 30+ methods
-- **Migrations** + **Seeders** + **Schema Builder**
-- **3 dialects**: MySQL (pool), PostgreSQL (pool), SQLite
-- **ORM Model** with Active Record pattern
-- **6 relation types**: hasOne, hasMany, belongsTo, belongsToMany, morphMany, morphTo
-- **Eager loading** — `.with()` relations
-- **Pagination** — offset + cursor-based
-- **Soft deletes**, **Model factories**
-
-### 🔐 Auth
-- **Session Guard** — cookie-based + database store
-- **Token Guard** — API tokens with salted hashing
-- **OAuth2** — pluggable provider pattern
-- **Gate / Authorization** — policies, abilities
-- **Rate limiting** — memory + database store
-
-### ✅ Validation
-- **25+ schema types** — Zod-compatible API
-- Type inference with `Infer<typeof schema>`
-- Transform, coerce, refine pipelines
-- i18n error messages (English)
-
-### 🔄 Real-time
-- **WebSocket broadcasting** — channel-based pub/sub
-- **RPC** — type-safe server-client communication
-
-### 📧 Enterprise
-- **Queue / Jobs** — in-memory with handler system
-- **Mail** — pluggable transports + templates
-- **Task Scheduling** — cron-style
-- **Notifications** — database-backed
-- **HTTP Client** — fetch wrapper with timeout
-
-### 🛠️ CLI
-| Command | Description |
-|---|---|
-| `speexjs init` | Create new project (4 templates) |
-| `speexjs serve` | Development server |
-| `speexjs make:controller` | Generate controller |
-| `speexjs make:model` | Generate model |
-| `speexjs make:migration` | Generate migration |
-| `speexjs make:middleware` | Generate middleware |
-| `speexjs make:schema` | Generate schema |
-| `speexjs list-routes` | Display all routes |
-
-### 📦 Bundle Optimized
-- **67 KB** compressed (was 433 KB — **84% smaller**)
-- Code splitting + tree shaking + minification
-- Zero runtime dependencies
-
-## Examples
 
 ### Validation
 ```typescript
@@ -107,63 +74,43 @@ import { schema } from 'speexjs/schema'
 const UserSchema = schema.object({
   name: schema.string().min(3),
   email: schema.string().email(),
-  age: schema.number().min(18).optional(),
+  age: schema.number().min(18),
 })
-
-const user = UserSchema.parse({ name: 'John', email: 'john@test.com', age: 25 })
 ```
 
-### Controller with Decorators
+### TSX Page
 ```typescript
-import { Controller, get, post } from 'speexjs/server'
+import type { VNode } from 'speexjs/client/vdom'
 
-export class UserController extends Controller {
-  @get('/users')
-  async index({ response }) {
-    return response.json({ data: await User.all() })
-  }
-
-  @post('/users')
-  async store({ request, response }) {
-    const data = await request.json()
-    const user = await User.create(data)
-    return response.json({ data: user }, 201)
-  }
+export default function Home({ name }: { name?: string }): VNode {
+  return <html><body><h1>Hello {name}!</h1></body></html>
 }
 ```
 
-### WebSocket Broadcasting
-```typescript
-import { WsBroadcaster } from 'speexjs/server/websocket'
+## Benchmarks vs Competitors
 
-const ws = new WsBroadcaster()
-ws.attach(server)
+| | SpeexJS | Hono | Fastify | Express |
+|---|---|---|---|---|
+| Bundle size | **64 KB** | 50 KB | 1 MB | 2 MB |
+| Dependencies | **Zero** | Zero | 30+ | 40+ |
+| Features | **64+** | 10+ | 15+ | 20+ |
+| Tests | **1,990** | ~500 | ~800 | ~1,000 |
+| Coverage | **96.3%** | ~75% | ~80% | ~70% |
 
-// Broadcast to channel
-ws.broadcast('chat:room1', 'message', { text: 'Hello!' })
-```
+## CLI
 
-### Queue
-```typescript
-import { Queue } from 'speexjs/server/queue'
-
-const queue = new Queue()
-queue.register('send-email', async (payload) => {
-  console.log('Sending email to:', payload)
-})
-queue.push('send-email', { to: 'user@test.com' })
-```
-
-## Documentation
-
-Full documentation: [docs.speexjs.dev](https://docs.speexjs.dev) (coming soon)
-
-## Benchmarks
-
-```bash
-# Run benchmarks locally
-npx mitata benchmarks/index.bench.ts
-```
+| Command | Description |
+|---|---|
+| `speexjs init` | Create new project (4 templates) |
+| `speexjs serve` | Start dev server |
+| `speexjs make:controller` | Generate controller |
+| `speexjs make:model` | Generate model |
+| `speexjs make:migration` | Generate migration |
+| `speexjs make:middleware` | Generate middleware |
+| `speexjs make:schema` | Generate schema |
+| `speexjs make:admin` | Generate admin pages |
+| `speexjs list-routes` | Display all routes |
+| `speexjs tinker` | Interactive REPL |
 
 ## License
 

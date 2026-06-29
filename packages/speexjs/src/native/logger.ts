@@ -17,15 +17,11 @@ const LOG_LEVELS: Record<LogLevel, number> = {
   error: 3,
 }
 
-const TIMEZONE_OFFSETS: Record<string, number> = {
-  UTC: 0,
-}
-
 function pad(n: number): string {
   return n.toString().padStart(2, '0')
 }
 
-export function formatTimestamp(tz?: string): string {
+export function formatTimestamp(): string {
   const now = new Date()
   const y = now.getUTCFullYear()
   const M = pad(now.getUTCMonth() + 1)
@@ -70,7 +66,7 @@ export class Logger {
     const parts: string[] = []
 
     if (this._useTimestamps) {
-      parts.push(formatTimestamp(this._timezone))
+      parts.push(formatTimestamp())
     }
 
     if (this._useColors) {

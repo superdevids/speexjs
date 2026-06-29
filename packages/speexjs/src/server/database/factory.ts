@@ -35,8 +35,8 @@ export class Factory<T = Record<string, unknown>> {
     const results: T[] = []
     for (let i = 0; i < this.countValue; i++) {
       const data = this.make(i)
-      const columns = Object.keys(data)
-      const values = Object.values(data)
+      const columns = Object.keys(data as Record<string, unknown>)
+      const values = Object.values(data as Record<string, unknown>)
       const bindings: any[] = []
       const placeholders = values.map(v => { bindings.push(v); return '?' }).join(', ')
       const sql = `INSERT INTO ${dialect.wrapIdentifier(table)} (${columns.map(c => dialect.wrapIdentifier(c)).join(', ')}) VALUES (${placeholders})`
@@ -79,7 +79,7 @@ export class Faker {
 
   boolean(): boolean { return Math.random() > 0.5 }
 
-  pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)] }
+  pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]! }
 
   unique(prefix = 'val'): string {
     let val: string

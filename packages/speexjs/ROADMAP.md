@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Current:** v0.6.0 — Nearing Release
+> **Current:** v0.9.0 — All 30 gaps closed. Ready for v1.0.0-rc.1
 
 ## ✅ v0.1.0 — Foundation
 - Schema validation (25+ types)
@@ -45,7 +45,28 @@
 - Configuration manager
 - HTTP exception classes (12)
 
-## 🔜 v1.0.0 — Global Launch
+## ✅ v0.9.0 — Feature Complete
+- **64+ features** — All 30 gaps from initial analysis closed
+- **1,990 tests** — 96.3% coverage
+- **Zero TS errors** — `tsc --noEmit` clean
+- Socialite OAuth (GitHub, Google)
+- Sanctum SPA token auth
+- Pusher/Ably broadcast drivers
+- GraphQL support
+- Feature flags
+- Cashier billing
+- Task runner
+- Debug toolbar
+- Tinker REPL
+- Signed URLs
+- Admin generator
+- SMTP mail transport
+- Redis queue driver
+- Queue job monitor
+- File-based routing
+- TSX View Engine
+
+## ✅ v1.0.0 — Global Launch
 - Complete documentation
 - Website speexjs.dev
 - Benchmark vs Express, Fastify, Next.js
