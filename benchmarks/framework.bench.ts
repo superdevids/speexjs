@@ -71,7 +71,6 @@ group('Routing', () => {
     const req = new SuperRequest(msg as any)
     const res = new SuperResponse(new ServerResponse(msg) as any)
 
-    // Push body chunks to simulate async stream
     const chunk = Buffer.from(JSON.stringify({ key: 'value', num: 42 }))
     msg.emit('data', chunk)
     msg.emit('end')
@@ -216,9 +215,7 @@ group('Schema Validation', () => {
   bench('string email parse invalid', () => {
     try {
       EmailSchema.parse('not-an-email')
-    } catch {
-      // expected
-    }
+    } catch {}
   })
 
   bench('number parse', () => {
@@ -232,9 +229,7 @@ group('Schema Validation', () => {
   bench('object parse invalid', () => {
     try {
       UserSchema.parse(invalidUser)
-    } catch {
-      // expected
-    }
+    } catch {}
   })
 
   bench('deeply nested object', () => {
@@ -252,8 +247,8 @@ function buildSimpleSelect(table: string, fields: string[], where?: Record<strin
   if (where !== undefined) {
     const clauses = Object.entries(where).map(([k, v]) => {
       if (v === null) return `${k} IS NULL`
-      if (Array.isArray(v)) return `${k} IN (${v.map((x) => `'${String(x)}'`).join(', ')})`
-      if (typeof v === 'string') return `${k} = '${v.replace(/'/g, "''")}'`
+      if (Array.isArray(v)) return `${k} IN (${v.map((x: unknown) => `'${String(x)}'`).join(', ')})`
+      if (typeof v === 'string') return `${k} = '${(v as string).replace(/'/g, "''")}'`
       return `${k} = ${v}`
     })
     sql += ` WHERE ${clauses.join(' AND ')}`
@@ -269,7 +264,7 @@ function buildJoinSelect(
 ): string {
   const main = tables[0]
   const f = fields.length > 0 ? fields.join(', ') : '*'
-  let sql = `SELECT ${f} FROM ${main.name}${main.alias ? ` AS ${main.alias}` : ''}`
+  let sql = `SELECT ${f} FROM ${main!.name}${main!.alias ? ` AS ${main!.alias}` : ''}`
   for (const j of joins) {
     sql += ` ${j.type.toUpperCase()} JOIN ${j.table} ON ${j.on}`
   }

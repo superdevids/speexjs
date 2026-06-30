@@ -1,91 +1,87 @@
-# REFACTOR LOG — SpeexJS
+# REFACTOR LOG — FASE 2: Performance, Stability & Security
 
-## Initial State (Pre-Phase 1)
-- Source files: 153 files in src/
-- Test files: 11 files in tests/
-- Bundle size: 219.0 KB package, 917.3 KB unpacked, 100 files
-- TypeScript errors: 0 (`tsc --noEmit` clean)
-- Test pass rate: 1990 passed, 11 test files — all green
+## 2.1 Performance Refactor
 
-## Phase 1 — Dead Code Elimination
+### toSQL caching (`src/server/database/query.ts`)
+- Added `_sqlCache` field to `QueryBuilder`
+- Added `dirty()` method that invalidates cache on mutation
+- All mutating methods now call `dirty()`: select, addSelect, where*, join*, orderBy*, limit, offset, groupBy, having, with, union, lock*, etc.
+- `toSQL()` returns cached result when available
 
-### Removed
-1. **`src/native/helpers/number.ts` — `formatRupiah` method** — Indonesia-specific currency formatter. Never called from any production code. Only referenced in tests. Method deleted.
-2. **`src/cli/templates/pages/about.tsx`** — Standalone template file. Not imported or referenced by any source file. The `init.ts` CLI command uses inline templates (`TEMPLATES` object). Deleted.
-3. **`src/cli/templates/pages/home.tsx`** — Same as above. Deleted.
-4. **`src/cli/templates/pages/`** — Directory emptied and removed.
-5. **`src/cli/templates/`** — Directory removed (parent became empty).
-6. **`tests/native.test.ts` — `formatRupiah` test block** (3 tests) — Removed alongside the production method.
+### MIME_TYPES hoisted (`src/server/middleware/index.ts`)
+- Moved `MIME_TYPES` object from inside `staticFiles()` to module-level constant
+- Prevents re-creation on every request
 
-### Dependency Audit
-| Dependency | Type | Status |
-|---|---|---|
-| `tsx` | devDependency (correct) | Used in `serve.ts` for TS runtime loading |
-| `@types/node` | devDependency | Required for TypeScript compilation |
-| `typescript` | devDependency | Required for TypeScript compilation |
-| `tsup` | devDependency | Build tool, used in `tsup.config.ts` |
-| `vitest` | devDependency | Test runner, used in all test files |
-| `vite` | devDependency | Used by vitest under the hood |
-| `@biomejs/biome` | devDependency | Referenced in init.ts template configs |
-| `@vitest/coverage-v8` | devDependency | Configured in `vitest.config.ts` |
-| `mitata` | devDependency | Used in `benchmarks/index.bench.ts` |
+### pathToRegexp cache (`src/server/router/index.ts`)
+- Added `pathRegexCache` Map to cache compiled regex patterns
+- Avoids re-compiling the same route pattern
 
-All dependencies verified as used. No dependency removals.
+### Router resolve LRU cache (`src/server/router/index.ts`)
+- Added `resolveCache` Map with max 1000 entries
+- Cache cleared when new routes are registered via `match()`
+- Cached both hit (ResolvedRoute) and miss (null) results
 
-### Validation Results
-- Tests: **1987 passed** (3 fewer from formatRupiah test removal) — all 11 test files green
-- TypeScript: `tsc --noEmit` — **0 errors**
-- Build: ESM + DTS success
+### emitParallel already existed (`src/server/events/index.ts`)
+- `emitParallel()` was already implemented
+- Used `Promise.all()` for concurrent handler execution
 
-### File Count Changes
-- Before: 153 src files, 11 test files
-- After: 151 src files (-2 templates), 11 test files
-- Directories removed: 2 (`templates/pages/`, `templates/`)
+## 2.2 Stability Refactor
 
----
+### URIError safety (`src/server/http/request.ts`)
+- Wrapped `parseUrlEncoded()` decodeURIComponent calls in try/catch
+- Malformed URL encoding now safely continues parsing remaining pairs
 
-## Phase 2 — Refactor: Performance, Stability, Security
+### JSON.parse safety (`src/server/http/request.ts`)
+- Already had try/catch around JSON.parse in readBodyFromStream()
 
-### 2.1 Performance
-| Change | File | Impact |
-|--------|------|--------|
-| toSQL result caching | `database/query.ts` | Avoids rebuilding SQL string on every access |
-| MIME_TYPES hoisted to module-level | `middleware/index.ts` | No longer creates object per request |
-| pathToRegexp pattern cache | `router/index.ts` | Route patterns compiled once, cached in Map |
-| Router resolve LRU cache | `router/index.ts` | Resolved routes cached (max 1000 entries) |
-| emitParallel() | `events/index.ts` | Already existed |
+### Global unhandledRejection handler (`src/server/engine/index.ts`)
+- Added `process.on('unhandledRejection', ...)` with console.error logging
+- Prevents silent crash on unhandled promise rejections
 
-### 2.2 Stability
-| Change | File | Impact |
-|--------|------|--------|
-| parseUrlEncoded try/catch | `http/request.ts` | Prevents URIError crash on malformed encoding |
-| UnhandledRejection handler | `engine/index.ts` | Global handler prevents silent crash |
-| Removed ~15 `as any` casts | Multiple files | Better type safety |
+### `as any` audit
+- **database/query.ts**: Raw WhereClause fields made optional; removed `as any` from 4 raw clause push operations
+- **database/model.ts**: Replaced `as any` with `as InstanceType<T>[]`, `as InstanceType<T>`, and `as Record<string, unknown>`
+- **database/model-factory.ts**: Replaced `as any` with `as unknown as Factory<...>`
+- **schema/index.ts**: Replaced `as any` with `as unknown as TupleSchema<T>` and `as unknown as UnionSchema<Infer<T[number]>>`
+- Remaining `as any` in query.ts (5) are for MySQL OkPacket driver differences — unavoidable without changing driver interface
+- Remaining `as any` in engine/edge/index.ts, middleware/index.ts (compress), testing/index.ts — all necessary for monkey-patching or raw Node.js type gaps
 
-### 2.3 Security
-- All debug logs confirmed as intentional
-- No hardcoded secrets found (dev-only fallbacks documented)
+## 2.3 Security Refactor
 
-### 2.4 Type Safety
-- `schema/index.ts`: Fixed tuple/union type assertions
-- `container/index.ts`: Added `satisfies Binding<T>` assertions
+### console.log audit
+- Removed 0 debug logs from production code — only `ConsoleMailTransport.send` logs intentionally, kept (it's a debug/log transport by design)
+- Logger middleware, migration CLI, cluster lifecycle, and server startup/shutdown logs preserved as intentional structured logging
 
-### 2.5 Code Quality
-- `response.ts`: Extracted `pipeStream()` to eliminate duplicate stream piping
+### Hardcoded secrets check
+- `'speexjs-dev-secret'` in session middleware: development-only default, documented fallback
+- `'speexjs-dev-token'` in token-guard: development-only fallback, guarded by production env check
+- All auth tokens are properly hashed via HMAC-SHA256
+- No real secrets or credentials found in code
 
-### Validation Results
-- Tests: **1987 passed**, 11/11 files
-- TypeScript: `tsc --noEmit` — **0 errors**
-- Build: ESM + DTS success
+## 2.4 Type Safety
 
----
+### schema/index.ts
+- Removed `as any` from `tuple()` and `union()` factory methods
+- Added proper `Infer` type import for UnionSchema generic
 
-## Phase 3 — Final State
-- Tests: 1987/1987 passed ✅
-- TypeScript: 0 errors ✅
-- Build: ESM + DTS ✅
-- Bundle: 219 KB ✅
-- Dead code eliminated: 2 directories, 3 files, 1 function ✅
-- Performance optimizations: 4 improvements ✅
-- Type safety: 15+ `as any` removed ✅
-- Stability: error handling hardened ✅
+### container/index.ts
+- Added `satisfies Binding<T>` assertions on bind/singleton/instance methods
+- Removed redundant `Factory<T>` casts in resolve()
+
+### helpers.ts — macro system
+- `responseMacros()` iterates `Object.entries(macroFns)` dynamically
+- `registerMacro()` uses typed `this: SuperResponse` parameter
+
+## 2.5 Code Quality
+
+### response.ts — DRY stream piping
+- Extracted `pipeStream()` private method from duplicate code in `stream()` and `file()`
+- Both now delegate to `pipeStream()` for pipe/end/error handling
+
+### model.ts
+- Checked for unused imports: all imports (QueryBuilder, QueryRunner) are actively used
+
+## 2.6 Validation
+
+- `npx tsc --noEmit`: ✅ 0 errors
+- `npx vitest run`: ✅ 1987 tests passed (11 test files)

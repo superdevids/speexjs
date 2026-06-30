@@ -1,1 +1,0 @@
-﻿export function isCreditCard(value:string):boolean{if(typeof value!=='string'||value.length===0)return false;const d=value.replace(/[\s-]/g,'');if(!/^\d{13,19}$/.test(d))return false;let s=0,alt=false;for(let i=d.length-1;i>=0;i--){let n=parseInt(d[i]!,10);if(alt){n*=2;if(n>9)n-=9}s+=n;alt=!alt}return s%10===0}

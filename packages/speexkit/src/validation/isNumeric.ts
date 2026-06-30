@@ -1,1 +1,0 @@
-﻿export interface IsNumericOptions{noSymbols?:boolean}export function isNumeric(value:string,options?:IsNumericOptions):boolean{if(typeof value!=='string'||value.length===0)return false;const re=options?.noSymbols?/^\d+$/:/^[+-]?\d+$/;return re.test(value)}

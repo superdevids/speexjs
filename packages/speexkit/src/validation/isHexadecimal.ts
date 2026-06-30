@@ -1,1 +1,0 @@
-﻿export function isHexadecimal(value:string):boolean{if(typeof value!=='string'||value.length===0)return false;return/^[0-9a-fA-F]+$/.test(value)}

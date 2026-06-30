@@ -1,193 +1,349 @@
 {
-	"name": "speexjs-monorepo",
-	"version": "0.8.2",
-	"description": "Monorepo for speexkit utility toolkit and speexjs web framework.",
-	"type": "module",
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"bin": {
-		"dep-exray": "dist/dep-exray/cli.js"
-	},
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./core": {
-			"import": "./dist/core/index.js",
-			"types": "./dist/core/index.d.ts"
-		},
-		"./math": {
-			"import": "./dist/math/index.js",
-			"types": "./dist/math/index.d.ts"
-		},
-		"./date": {
-			"import": "./dist/date/index.js",
-			"types": "./dist/date/index.d.ts"
-		},
-		"./collection": {
-			"import": "./dist/collection/index.js",
-			"types": "./dist/collection/index.d.ts"
-		},
-		"./string": {
-			"import": "./dist/string/index.js",
-			"types": "./dist/string/index.d.ts"
-		},
-		"./async": {
-			"import": "./dist/async/index.js",
-			"types": "./dist/async/index.d.ts"
-		},
-		"./io": {
-			"import": "./dist/io/index.js",
-			"types": "./dist/io/index.d.ts"
-		},
-		"./type": {
-			"import": "./dist/type/index.js",
-			"types": "./dist/type/index.d.ts"
-		},
-		"./crypto": {
-			"import": "./dist/crypto/index.js",
-			"types": "./dist/crypto/index.d.ts"
-		},
-		"./path": {
-			"import": "./dist/path/index.js",
-			"types": "./dist/path/index.d.ts"
-		},
-		"./dep-exray": {
-			"import": "./dist/dep-exray/index.js",
-			"types": "./dist/dep-exray/index.d.ts"
-		},
-		"./dep-exray/scanner": {
-			"import": "./dist/dep-exray/scanner/index.js",
-			"types": "./dist/dep-exray/scanner/index.d.ts"
-		},
-		"./dep-exray/analyzer": {
-			"import": "./dist/dep-exray/analyzer/index.js",
-			"types": "./dist/dep-exray/analyzer/index.d.ts"
-		},
-		"./dep-exray/reporter": {
-			"import": "./dist/dep-exray/reporter/index.js",
-			"types": "./dist/dep-exray/reporter/index.d.ts"
-		},
-		"./dep-exray/types": {
-			"import": "./dist/dep-exray/types.js",
-			"types": "./dist/dep-exray/types.d.ts"
-		},
-		"./dep-exray/known-mappings": {
-			"import": "./dist/dep-exray/known-mappings.js",
-			"types": "./dist/dep-exray/known-mappings.d.ts"
-		},
-		"./dep-exray/cli": {
-			"import": "./dist/dep-exray/cli.js",
-			"types": "./dist/dep-exray/cli.d.ts"
-		},
-		"./validation": {
-			"import": "./dist/validation/index.js",
-			"types": "./dist/validation/index.d.ts"
-		},
-		"./error": {
-			"import": "./dist/error/index.js",
-			"types": "./dist/error/index.d.ts"
-		},
-		"./logger": {
-			"import": "./dist/logger/index.js",
-			"types": "./dist/logger/index.d.ts"
-		},
-		"./logger/transports": {
-			"import": "./dist/logger/transports.js",
-			"types": "./dist/logger/transports.d.ts"
-		},
-		"./color": {
-			"import": "./dist/color/index.js",
-			"types": "./dist/color/index.d.ts"
-		},
-		"./nlfunction": {
-			"import": "./dist/nlfunction/index.js",
-			"types": "./dist/nlfunction/index.d.ts"
-		},
-		"./ml": {
-			"import": "./dist/ml/index.js",
-			"types": "./dist/ml/index.d.ts"
-		},
-		"./stats": {
-			"import": "./dist/stats/index.js",
-			"types": "./dist/stats/index.d.ts"
-		},
-		"./viz-data": {
-			"import": "./dist/viz-data/index.js",
-			"types": "./dist/viz-data/index.d.ts"
-		},
-		"./nlarray": {
-			"import": "./dist/nlarray/index.js",
-			"types": "./dist/nlarray/index.d.ts"
-		}
-	},
-	"sideEffects": false,
-	"files": [
-		"dist",
-		"*.md"
-	],
-	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch",
-		"test": "vitest run",
-		"test:watch": "vitest",
-		"test:coverage": "vitest run --coverage",
-		"lint": "biome check src/",
-		"lint:fix": "biome check --write src/",
-		"typecheck": "tsc --noEmit",
-		"clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
-		"size": "size-limit",
-		"bench": "vitest bench",
-		"ci": "npm run lint && npm run typecheck && npm run build && npm run test:coverage"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.5.1",
-		"@size-limit/file": "^11.0.0",
-		"@types/node": "^26.0.1",
-		"@vitest/coverage-v8": "^2.1.9",
-		"size-limit": "^11.0.0",
-		"tsup": "^8.3.0",
-		"typescript": "^5.7.0",
-		"vite": "^8.1.0",
-		"vitest": "^2.1.0"
-	},
-	"size-limit": [
-		{
-			"path": "dist/index.js",
-			"limit": "60 KB"
-		}
-	],
-	"keywords": [
-		"utilities",
-		"standard-library",
-		"typescript",
-		"dependency-scanner",
-		"npm-audit",
-		"bloat-detection",
-		"security",
-		"validation",
-		"ndarray",
-		"numpy",
-		"functional",
-		"data-science",
-		"utilities",
-		"lodash-alternative"
-	],
-	"publishConfig": {
-		"access": "public"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/superdevids/speexjs.git"
-	},
-	"bugs": {
-		"url": "https://github.com/superdevids/speexjs/issues"
-	},
-	"homepage": "https://github.com/superdevids/speexjs#readme",
-	"license": "MIT",
-	"engines": {
-		"node": ">=18.0.0"
-	}
+  "name": "speexjs",
+  "version": "2.1.0",
+  "description": "Fullstack JavaScript/TypeScript framework — Server, Client, RPC, Schema, CLI, Database, Auth, Cache, Storage. Zero dependencies.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "speexjs": "dist/cli/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    },
+    "./server/http": {
+      "types": "./dist/server/http/index.d.ts",
+      "import": "./dist/server/http/index.js",
+      "default": "./dist/server/http/index.js"
+    },
+    "./server/router": {
+      "types": "./dist/server/router/index.d.ts",
+      "import": "./dist/server/router/index.js",
+      "default": "./dist/server/router/index.js"
+    },
+    "./server/middleware": {
+      "types": "./dist/server/middleware/index.d.ts",
+      "import": "./dist/server/middleware/index.js",
+      "default": "./dist/server/middleware/index.js"
+    },
+    "./server/controller": {
+      "types": "./dist/server/controller/index.d.ts",
+      "import": "./dist/server/controller/index.js",
+      "default": "./dist/server/controller/index.js"
+    },
+    "./server/container": {
+      "types": "./dist/server/container/index.d.ts",
+      "import": "./dist/server/container/index.js",
+      "default": "./dist/server/container/index.js"
+    },
+    "./server/auth": {
+      "types": "./dist/server/auth/index.d.ts",
+      "import": "./dist/server/auth/index.js",
+      "default": "./dist/server/auth/index.js"
+    },
+    "./server/gate": {
+      "types": "./dist/server/gate/index.d.ts",
+      "import": "./dist/server/gate/index.js",
+      "default": "./dist/server/gate/index.js"
+    },
+    "./server/cache": {
+      "types": "./dist/server/cache/index.d.ts",
+      "import": "./dist/server/cache/index.js",
+      "default": "./dist/server/cache/index.js"
+    },
+    "./server/storage": {
+      "types": "./dist/server/storage/index.d.ts",
+      "import": "./dist/server/storage/index.js",
+      "default": "./dist/server/storage/index.js"
+    },
+    "./server/events": {
+      "types": "./dist/server/events/index.d.ts",
+      "import": "./dist/server/events/index.js",
+      "default": "./dist/server/events/index.js"
+    },
+    "./server/database": {
+      "types": "./dist/server/database/index.d.ts",
+      "import": "./dist/server/database/index.js",
+      "default": "./dist/server/database/index.js"
+    },
+    "./server/plugin": {
+      "types": "./dist/server/plugin/index.d.ts",
+      "import": "./dist/server/plugin/index.js",
+      "default": "./dist/server/plugin/index.js"
+    },
+    "./server/plugin/presets": {
+      "types": "./dist/server/plugin/presets.d.ts",
+      "import": "./dist/server/plugin/presets.js",
+      "default": "./dist/server/plugin/presets.js"
+    },
+    "./server/plugin/registry": {
+      "types": "./dist/server/plugin/registry.d.ts",
+      "import": "./dist/server/plugin/registry.js",
+      "default": "./dist/server/plugin/registry.js"
+    },
+    "./server/testing": {
+      "types": "./dist/server/testing/index.d.ts",
+      "import": "./dist/server/testing/index.js",
+      "default": "./dist/server/testing/index.js"
+    },
+    "./server/testing/bootstrap": {
+      "types": "./dist/server/testing/bootstrap.d.ts",
+      "import": "./dist/server/testing/bootstrap.js",
+      "default": "./dist/server/testing/bootstrap.js"
+    },
+    "./server/testing/database": {
+      "types": "./dist/server/testing/database.d.ts",
+      "import": "./dist/server/testing/database.js",
+      "default": "./dist/server/testing/database.js"
+    },
+    "./server/audit": {
+      "types": "./dist/server/audit/index.d.ts",
+      "import": "./dist/server/audit/index.js",
+      "default": "./dist/server/audit/index.js"
+    },
+    "./server/webhook": {
+      "types": "./dist/server/webhook/index.d.ts",
+      "import": "./dist/server/webhook/index.js",
+      "default": "./dist/server/webhook/index.js"
+    },
+    "./server/search": {
+      "types": "./dist/server/search/index.d.ts",
+      "import": "./dist/server/search/index.js",
+      "default": "./dist/server/search/index.js"
+    },
+    "./server/ai": {
+      "types": "./dist/server/ai/index.d.ts",
+      "import": "./dist/server/ai/index.js",
+      "default": "./dist/server/ai/index.js"
+    },
+    "./server/admin": {
+      "types": "./dist/server/admin/index.d.ts",
+      "import": "./dist/server/admin/index.js",
+      "default": "./dist/server/admin/index.js"
+    },
+    "./server/graphql": {
+      "types": "./dist/server/graphql/index.d.ts",
+      "import": "./dist/server/graphql/index.js",
+      "default": "./dist/server/graphql/index.js"
+    },
+    "./server/openapi": {
+      "types": "./dist/server/openapi/index.d.ts",
+      "import": "./dist/server/openapi/index.js",
+      "default": "./dist/server/openapi/index.js"
+    },
+    "./server/isr": {
+      "types": "./dist/server/isr/index.d.ts",
+      "import": "./dist/server/isr/index.js",
+      "default": "./dist/server/isr/index.js"
+    },
+    "./server/flags": {
+      "types": "./dist/server/flags/index.d.ts",
+      "import": "./dist/server/flags/index.js",
+      "default": "./dist/server/flags/index.js"
+    },
+    "./server/schedule": {
+      "types": "./dist/server/schedule/index.d.ts",
+      "import": "./dist/server/schedule/index.js",
+      "default": "./dist/server/schedule/index.js"
+    },
+    "./server/profiler": {
+      "types": "./dist/server/profiler/index.d.ts",
+      "import": "./dist/server/profiler/index.js",
+      "default": "./dist/server/profiler/index.js"
+    },
+    "./server/observability": {
+      "types": "./dist/server/observability/index.d.ts",
+      "import": "./dist/server/observability/index.js",
+      "default": "./dist/server/observability/index.js"
+    },
+    "./server/i18n": {
+      "types": "./dist/server/i18n/index.d.ts",
+      "import": "./dist/server/i18n/index.js",
+      "default": "./dist/server/i18n/index.js"
+    },
+    "./server/billing": {
+      "types": "./dist/server/billing/index.d.ts",
+      "import": "./dist/server/billing/index.js",
+      "default": "./dist/server/billing/index.js"
+    },
+    "./server/edge": {
+      "types": "./dist/server/edge/index.d.ts",
+      "import": "./dist/server/edge/index.js",
+      "default": "./dist/server/edge/index.js"
+    },
+    "./server/health": {
+      "types": "./dist/server/health/index.d.ts",
+      "import": "./dist/server/health/index.js",
+      "default": "./dist/server/health/index.js"
+    },
+    "./server/notifications": {
+      "types": "./dist/server/notifications/index.d.ts",
+      "import": "./dist/server/notifications/index.js",
+      "default": "./dist/server/notifications/index.js"
+    },
+    "./server/view": {
+      "types": "./dist/server/view/index.d.ts",
+      "import": "./dist/server/view/index.js",
+      "default": "./dist/server/view/index.js"
+    },
+    "./server/debug": {
+      "types": "./dist/server/debug/index.d.ts",
+      "import": "./dist/server/debug/index.js",
+      "default": "./dist/server/debug/index.js"
+    },
+    "./server/env": {
+      "types": "./dist/server/env/index.d.ts",
+      "import": "./dist/server/env/index.js",
+      "default": "./dist/server/env/index.js"
+    },
+    "./server/rbac": {
+      "types": "./dist/server/rbac/index.d.ts",
+      "import": "./dist/server/rbac/index.js",
+      "default": "./dist/server/rbac/index.js"
+    },
+    "./server/tasks": {
+      "types": "./dist/server/tasks/index.d.ts",
+      "import": "./dist/server/tasks/index.js",
+      "default": "./dist/server/tasks/index.js"
+    },
+    "./server/queue": {
+      "types": "./dist/server/queue/index.d.ts",
+      "import": "./dist/server/queue/index.js",
+      "default": "./dist/server/queue/index.js"
+    },
+    "./server/mail": {
+      "types": "./dist/server/mail/index.d.ts",
+      "import": "./dist/server/mail/index.js",
+      "default": "./dist/server/mail/index.js"
+    },
+    "./server/websocket": {
+      "types": "./dist/server/websocket/index.d.ts",
+      "import": "./dist/server/websocket/index.js",
+      "default": "./dist/server/websocket/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js",
+      "default": "./dist/client/index.js"
+    },
+    "./client/signals": {
+      "types": "./dist/client/signals/index.d.ts",
+      "import": "./dist/client/signals/index.js",
+      "default": "./dist/client/signals/index.js"
+    },
+    "./client/vdom": {
+      "types": "./dist/client/vdom/index.d.ts",
+      "import": "./dist/client/vdom/index.js",
+      "default": "./dist/client/vdom/index.js"
+    },
+    "./client/vdom/jsx-runtime": {
+      "types": "./dist/client/vdom/jsx-runtime.d.ts",
+      "import": "./dist/client/vdom/jsx-runtime.js",
+      "default": "./dist/client/vdom/jsx-runtime.js"
+    },
+    "./rpc": {
+      "types": "./dist/rpc/index.d.ts",
+      "import": "./dist/rpc/index.js",
+      "default": "./dist/rpc/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js",
+      "default": "./dist/schema/index.js"
+    },
+    "./native": {
+      "types": "./dist/native/index.d.ts",
+      "import": "./dist/native/index.js",
+      "default": "./dist/native/index.js"
+    },
+    "./native/hashing": {
+      "types": "./dist/native/hashing.d.ts",
+      "import": "./dist/native/hashing.js",
+      "default": "./dist/native/hashing.js"
+    },
+    "./native/crypto": {
+      "types": "./dist/native/crypto.d.ts",
+      "import": "./dist/native/crypto.js",
+      "default": "./dist/native/crypto.js"
+    },
+    "./edge": {
+      "types": "./dist/edge/index.d.ts",
+      "import": "./dist/edge/index.js",
+      "default": "./dist/edge/index.js"
+    },
+    "./bun": {
+      "types": "./dist/bun/index.d.ts",
+      "import": "./dist/bun/index.js",
+      "default": "./dist/bun/index.js"
+    }
+  },
+  "sideEffects": false,
+  "preferUnplugged": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:edge": "tsup --config tsup.edge.config.ts",
+    "build:bun": "tsup --config tsup.bun.config.ts",
+    "build:all": "npm run build",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "@biomejs/biome": "^2.5.1",
+    "@types/node": "^26.0.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.1.0",
+    "vitest": "^2.1.0",
+    "mitata": "^1.0.0"
+  },
+  "keywords": [
+    "fullstack",
+    "framework",
+    "typescript",
+    "server",
+    "client",
+    "rpc",
+    "validation",
+    "database",
+    "auth",
+    "indonesia"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/superdevids/speexjs#readme",
+  "bugs": {
+    "url": "https://github.com/superdevids/speexjs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superdevids/speexjs.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/superdevids"
+  },
+  "optionalDependencies": {}
 }

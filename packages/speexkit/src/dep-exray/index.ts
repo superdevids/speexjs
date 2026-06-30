@@ -1,5 +1,0 @@
-export { scanProject } from './scanner/index.js'
-export { generateReport } from './reporter/index.js'
-export { analyzeUsage } from './analyzer/index.js'
-export type { ScanResult, ReplacementSuggestion, SecurityIssue, DependencyInfo, ScannerConfig } from './types.js'
-export { KNOWN_MAPPINGS, KNOWN_CVES } from './known-mappings.js'
