@@ -1,8 +1,8 @@
 # Product Requirements Document — SpeexJS v2.x
 ## Volume 5 — AI-Native Developer Platform
 
-> **Version:** 2.1.1
-> **Status:** 🚧 In Progress — Foundation Implemented, Full features H2 2026 / Q1 2027
+> **Version:** 2.1.3
+> **Status:** 🚧 8/10 Features Implemented — F1-F7, F9, F10 done; F8 pending
 > **Last Updated:** 2026-06-30
 > **Filosofi:** "Framework yang tidak hanya mengeksekusi kode, tapi memahami intent developer."
 
@@ -502,16 +502,16 @@ speexjs ai --interactive
 | NL Query Engine | 🟢 Implemented | `nlquery.ts` — English-to-DB-query parser |
 | Vector Search | 🟢 Implemented | `vector.ts` — cosine similarity, VectorStore |
 | RAG Pipeline | 🟢 Implemented | `rag.ts` — ingestion, retrieval, context building |
-| F1 — Prompt Management | 🔴 Not Started | Next priority |
-| F2 — Embedding Providers | 🟡 Partially | VectorStore exists, but no external provider integration |
-| F3 — LLM Provider SDK | 🔴 Not Started | Agent.ts has generic `llm()` pattern, no provider abstraction |
-| F4 — Semantic Caching | 🔴 Not Started | |
-| F5 — AI Code Generation | 🔴 Not Started | |
-| F6 — Content Moderation | 🔴 Not Started | |
-| F7 — AI Agent Platform | 🟡 Partially | Basic agent exists, needs memory, multi-agent, monitoring |
-| F8 — AI Admin Panel | 🔴 Not Started | |
-| F9 — Autonomous Loop | 🔴 Not Started | |
-| F10 — AI CLI Assistant | 🔴 Not Started | |
+| F1 — Prompt Management | 🟢 Implemented | `prompts.ts` — template engine, versioning, A/B testing, tracking |
+| F2 — Embedding Providers | 🟢 Implemented | `embedding.ts` — OpenAI, Anthropic, Cohere, Ollama + fallback |
+| F3 — LLM Provider SDK | 🟢 Implemented | `llm.ts` — 4 providers, streaming, structured output, tool calling |
+| F4 — Semantic Caching | 🟢 Implemented | `semantic-cache.ts` — cosine similarity, hybrid cache, LRU, TTL |
+| F5 — AI Code Generation | 🟢 Implemented | `ai-commands.ts` — template-based `ai:generate` with field detection |
+| F6 — Content Moderation | 🟢 Implemented | `moderator.ts` — PII, spam, toxicity, custom rules |
+| F7 — AI Agent Platform | 🟢 Implemented | `agent.ts`, `agent-memory.ts`, `agent-orchestrator.ts` — full platform |
+| F8 — AI Admin Panel | 🔴 Not Started | Future scope |
+| F9 — Autonomous Loop | 🟢 Implemented | `autonomous-loop.ts` — Plan→Execute→Evaluate→Iterate + learning |
+| F10 — AI CLI Assistant | 🟢 Implemented | `ai-commands.ts` — `ai:generate`, `ai:explain`, `ai:review`, `ai:test`, `ai:fix` |
 
 ---
 

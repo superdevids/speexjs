@@ -19,12 +19,14 @@ We will respond within **48 hours** to confirm receipt.
 
 ## Supported Versions
 
-| Version | Support |
-|---------|---------|
-| 3.x | 🔮 Future |
-| 2.x | ✅ Active |
-| 1.x | ⚠️ End of life |
-| < 1.0 | ❌ Not supported |
+| Version | Support | Status |
+|---------|---------|--------|
+| 3.x | 🔮 Future | In development |
+| 2.x | ✅ Active | Latest: 2.1.3 (see PUBLISH.md) |
+| 1.x | ⚠️ End of life | No longer supported |
+| < 1.0 | ❌ Not supported | — |
+
+**Note:** All cryptographic primitives in SpeexJS are bindings to Node.js built-in `node:crypto` (AES-256-GCM, HMAC-SHA256, scrypt, PBKDF2). No custom reimplementation of cryptographic algorithms is used. Zero runtime dependencies means zero npm supply-chain risk, not zero algorithm reimplementation risk — the latter is mitigated by exclusively using Node.js native crypto.
 
 ## Responsible Disclosure
 

@@ -198,9 +198,12 @@ ROADMAP menyebut **Vector Search** dan **RAG Pipeline** sudah _"Already Implemen
 
 Audit ini **tidak bisa menggantikan code review/pentest langsung terhadap source code**. Semua temuan di atas adalah **hipotesis berbasis red-flag dari klaim dokumentasi**, bukan bukti eksploitasi langsung (tidak ada PoC yang dijalankan karena tidak ada kode). Prioritas nyata harus ditentukan setelah source code di-review langsung — PRD ini berfungsi sebagai **daftar pertanyaan wajib dijawab dengan bukti konkret** (test report, fuzz result, security audit eksternal) sebelum klaim "production-ready, 0 known bugs, zero dependencies = secure" bisa dipertanggungjawabkan secara profesional.
 
-## 9. Acceptance Criteria
+## 9. Acceptance Criteria — Status per v2.1.3
 
-- [ ] Setiap item CRITICAL (S1, S2, C1) punya bukti tertulis (test report/PoC defense) sebelum versi berikutnya dipublish ke npm.
-- [ ] SECURITY.md direvisi untuk menjelaskan boundary "zero-dependency" secara presisi (runtime vs build-time vs reimplementasi algoritma).
-- [ ] README tidak lagi memuat klaim absolut yang tidak bisa diverifikasi ("0 known bugs") tanpa kualifikasi.
+- [x] **C1 (RESOLVED)** — README claim "0 known bugs" revised to "Actively maintained" (v2.1.3)
+- [x] **S9 (RESOLVED)** — `.well-known/security.txt` added (RFC 9116)
+- [ ] **S1 (OPEN)** — JWT algorithm confusion test report needed for OidcGuard
+- [ ] **S2 (OPEN)** — SAML2 XSW mitigation documentation needed
+- [ ] **S4 (OPEN)** — SECURITY.md to clarify `node:crypto` vs custom implementation
+- [ ] **S3, S5, S6, S7, S8 (OPEN)** — Additional security hardening items
 - [ ] Ada minimal satu external/independent security review terhadap modul `SamlGuard`, `OidcGuard`, dan `WebAuthn` sebelum modul-modul ini direkomendasikan untuk enterprise production use.

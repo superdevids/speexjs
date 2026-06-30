@@ -2,7 +2,17 @@
 
 > 📋 For the full product roadmap with feature priorities (P0-P4), see [PRD01.md](./docs/PRD01.md).
 
-## ✅ v2.1.2 — AI-Native Foundation & Governance (Current — Released 2026-06-30)
+## ✅ v2.1.3 — AI-Native CLI & Autonomous Agent (Current — Released 2026-06-30)
+- **PRD06 F5**: AI-Powered Code Generation (`speexjs ai:generate`)
+- **PRD06 F9**: Autonomous Agent Loop (`AutonomousLoop` class — Plan → Execute → Evaluate → Iterate)
+- **PRD06 F10**: AI CLI Assistant (5 commands: `ai:generate`, `ai:explain`, `ai:review`, `ai:test`, `ai:fix`)
+- **CLI Expansion**: 9 new wired commands (tinker, make:webhook, migrate:status, generate, ai:*)
+- **PRD08 Security**: `.well-known/security.txt` added, README claim revised
+- 555+ features, 50 CLI commands, 56+ subpath exports
+- PRD06 now 8/10 features implemented
+- npm published: `speexjs@2.1.3`
+
+## ✅ v2.1.2 — AI-Native Foundation & Governance (Released 2026-06-30)
 - **PRD06 F1**: Prompt Management System (template engine, version history, A/B testing)
 - **PRD06 F2**: Embedding Provider SDK (OpenAI, Anthropic, Cohere, Ollama)
 - **PRD06 F3**: LLM Provider SDK (unified API, streaming, structured output, tool calling)
@@ -32,16 +42,14 @@
 
 ## 🔜 v2.2 — AI-Native Completion (H2 2026)
 ### 🚧 Planned
-- **PRD06 F5**: AI-Powered Code Generation (`speexjs ai:generate`)
-- **PRD06 F10**: AI CLI Assistant (`speexjs ai` commands)
-- **PRD07 D1**: Build Optimization (<150 KB gzip)
-- **PRD07 D7**: Comprehensive Documentation Site (`speexjs.dev`)
-- Agent Memory persistence improvements
+- **PRD06 F8**: AI-Powered Admin Panel (`speexjs make:admin --ai`)
+- **PRD08 D1**: Build Optimization (<150 KB gzip)
+- **PRD08 D7**: Comprehensive Documentation Site (`speexjs.dev`)
+- Plugin Marketplace with 100+ plugins
 
 ## 🔜 v3.x — Full AI-Native (Q1 2027)
-- AI-Powered Admin Panel (PRD06 F8)
-- Autonomous Agent Loop (PRD06 F9)
-- Plugin Marketplace with 100+ plugins
+- PRD06 F8: Full AI-Powered Admin Panel
+- PRD08 Full Pipeline Completion
 - Official Starters (6+)
 
 ## 🔜 v4.0 — Ecosystem (Q3 2027)

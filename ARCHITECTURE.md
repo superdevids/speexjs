@@ -1,6 +1,6 @@
 # Architecture — SpeexJS Web Framework
 
-> **Package:** speexjs · **Version:** 2.1.1 · **Zero Dependencies**
+> **Package:** speexjs · **Version:** 2.1.3 · **Zero Dependencies**
 > **Last Updated:** 2026-06-30
 
 ---
@@ -85,7 +85,19 @@ speexjs/
 │   │   ├── cluster/          #   Multi-core clustering
 │   │   ├── edge/             #   Edge runtime support
 │   │   ├── health/           #   Health check endpoint
-│   │   └── ...               #   ~40+ server submodules
+│   │   └── ...               #   ~45+ server submodules
+│   │
+│   │   # AI-Native modules (PRD06)
+│   │   ├── ai/prompts.ts           #   Prompt Manager (F1)
+│   │   ├── ai/embedding.ts         #   Embedding Providers (F2)
+│   │   ├── ai/llm.ts               #   LLM Provider SDK (F3)
+│   │   ├── ai/agent.ts             #   AI Agent SDK (F7)
+│   │   ├── ai/agent-memory.ts      #   Agent Memory (F7)
+│   │   ├── ai/agent-orchestrator.ts #   Multi-agent orchestration (F7)
+│   │   ├── ai/moderator.ts         #   Content Moderation (F6)
+│   │   ├── ai/autonomous-loop.ts   #   Autonomous Agent Loop (F9)
+│   │   ├── ai/nlquery.ts           #   NL Query Engine
+│   │   ├── cache/semantic-cache.ts #   Semantic Caching (F4)
 │   │
 │   ├── client/               # Client-side framework
 │   │   ├── signals/          #   Reactive signals (signal/computed/effect)
@@ -567,7 +579,16 @@ speexjs (bin)
 ├── plugin:list       # List installed plugins
 ├── plugin:search     # Search plugin marketplace
 ├── build:function    # Build serverless function
-└── notifications:table  # Create notifications table migration
+├── notifications:table  # Create notifications table migration
+├── tinker            # Interactive REPL
+├── make:webhook      # Generate webhook handler
+├── migrate:status    # Show migration status
+├── generate          # SSG output generator
+├── ai:generate       # AI: Generate code from description
+├── ai:explain        # AI: Explain code
+├── ai:review         # AI: Review code (--fix)
+├── ai:test           # AI: Generate tests from controller
+└── ai:fix            # AI: Analyze failures + suggest fixes
 ```
 
 ---
@@ -627,8 +648,9 @@ speexjs/server/env            → dist/server/env/index.js
 | **HTTP** | TestRequest | Full request → middleware → response cycle | `server.test.ts` |
 | **Coverage** | @vitest/coverage-v8 | Minimum 85%, target >90% | `coverage-gaps.test.ts` |
 
-### Test Count: 3,000+ (97.1% coverage)
-### TypeScript: 0 errors (`tsc --noEmit`)
+### Test Count: ~2,400 (97.1% coverage — 2,357 passing, 18 skipped across 21 test files)
+### TypeScript: 0 errors (`tsc --noEmit` strict mode)
+### CLI Commands: 50 (49 wired, 1 stub)
 
 ---
 
