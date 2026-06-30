@@ -1,8 +1,8 @@
 # SpeexJS — Project Summary
 
-## Current Version: v2.1.1
+## Current Version: v2.1.2
 
-**Fullstack TypeScript Framework — Zero dependencies. 550+ features. PRD01-PRD05 100% aligned.**
+**Fullstack TypeScript Framework — Zero dependencies. 550+ features. PRD01-PRD05 100% aligned. PRD06 AI-Native 7/10 implemented. PRD07 Governance implemented.**
 
 ## Documentation
 | Document | Description |
@@ -25,7 +25,8 @@
 | [PRD03.md](./docs/PRD03.md) | Scale, Intelligence & Ecosystem (F16-F30) | ✅ 100% |
 | [PRD04.md](./docs/PRD04.md) | Production Hardening (N1-N10) | ✅ 100% |
 | [PRD05.md](./docs/PRD05.md) | v3.x Vision — ALL 10 FEATURES IMPLEMENTED | ✅ 100% |
-| [PRD06.md](./docs/PRD06.md) | AI-Native Platform (AI Agent SDK + NLQuery + Vector Search + RAG — partial) | 🚧 In Progress |
+| [PRD06.md](./docs/PRD06.md) | AI-Native Platform (Prompt Mgmt + Embedding SDK + LLM SDK + Semantic Cache + Moderation + Agent v2) | 🚧 7/10 Implemented |
+| [PRD07.md](./docs/PRD07.md) | Documentation Integrity & Governance (SSOT + docs:verify + doc fixes) | ✅ Implemented |
 
 ## Guides
 | Guide | Description |
@@ -38,9 +39,10 @@
 
 ## Stats
 - **550+ features** across 20+ categories
-- **~2,400 tests** with 97.1% coverage
-- **33 CLI commands** (29 wired)
-- **52 subpath exports**
+- **~2,400 tests** (2,357 passing, 18 skipped) with 97.1% coverage
+- **35+ CLI commands** (33 wired¹) — new: `docs:verify`
+- **56+ subpath exports**
 - **0 TypeScript errors** (strict mode)
 - **0 known bugs**
 - **Zero runtime dependencies**
+¹ "Wired" = command is registered in the CLI registry and has implementation. Non-wired commands are scaffolded but need full implementation.

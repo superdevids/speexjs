@@ -301,6 +301,9 @@ export class Cache {
 
 const responseCache = new Cache({ store: 'memory' })
 
+export { SemanticCache } from './semantic-cache.js'
+export type { SemanticCacheConfig, CacheStats } from './semantic-cache.js'
+
 export function cacheResponse(ttl?: number): Middleware {
   const cache = responseCache
 

@@ -6,7 +6,7 @@
 npm install speexjs
 ```
 
-> v2.1.1 • 550+ features • ~2,400 tests • 0 TypeScript errors • 0 known bugs • Zero deps
+> v2.1.2 • 550+ features • ~2,400 tests • 0 TypeScript errors • 0 known bugs • Zero deps • AI-Native SDK
 
 ---
 
@@ -233,6 +233,8 @@ Open `http://localhost:3000` — you're running.
 | Cloud function adapters | ✅ 100% |
 | Plugin ecosystem | ✅ 100% |
 | Migration safety | ✅ 100% |
+
+> **Note:** PRD01-PRD05 are 100% aligned. [PRD06 (AI-Native)](./docs/PRD06.md) is 🚧 in progress — foundation complete, full features targeting H2 2026.
 
 ---
 

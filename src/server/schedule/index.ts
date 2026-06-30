@@ -33,9 +33,18 @@ function parseCronField(field: string, min: number, max: number): number[] {
   if (field.includes('/')) {
     const [range, stepStr] = field.split('/')
     const step = parseInt(stepStr!, 10)
-    const [rangeStart, rangeEnd] = range === '*' ? [min, max] : range!.includes('-')
-      ? range!.split('-').map(Number)
-      : [Number(range), Number(range)]
+    let rangeStart: number, rangeEnd: number
+    if (range === '*') {
+      rangeStart = min
+      rangeEnd = max
+    } else if (range!.includes('-')) {
+      const parts = range!.split('-').map(Number)
+      rangeStart = parts[0]!
+      rangeEnd = parts[1]!
+    } else {
+      rangeStart = Number(range)
+      rangeEnd = Number(range)
+    }
     
     const values: number[] = []
     for (let i = rangeStart; i <= rangeEnd; i += step) {
@@ -53,7 +62,9 @@ function parseCronField(field: string, min: number, max: number): number[] {
 
   // Handle range: 1-5
   if (field.includes('-')) {
-    const [start, end] = field.split('-').map(Number)
+    const rangeParts = field.split('-').map(Number)
+    const start = rangeParts[0]!
+    const end = rangeParts[1]!
     const values: number[] = []
     for (let i = start; i <= end; i++) values.push(i)
     return values

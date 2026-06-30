@@ -23,6 +23,7 @@ import { pluginInstall, pluginList, pluginSearch } from './commands/plugin.js'
 import { serve } from './commands/serve.js'
 import { envGenerate } from './commands/env-generate.js'
 import { envCheck } from './commands/env-check.js'
+import { docsVerify } from './commands/docs-verify.js'
 import { schemaDiff } from './commands/schema-diff.js'
 import { schemaMigrate } from './commands/schema-migrate.js'
 import { buildFunction } from './commands/build-function.js'
@@ -73,6 +74,7 @@ function showHelp(): void {
   console.log('  speexjs deploy --rollback                  Rollback to previous deployment')
   console.log('  speexjs env:generate [--overwrite]         Generate typed src/env.ts from .env')
   console.log('  speexjs env:check                          Validate environment variables')
+  console.log('  speexjs docs:verify                        Verify docs against project.meta.json SSOT')
   console.log('  speexjs schema:diff [--verbose]             Compare models vs database schema')
   console.log('  speexjs schema:migrate [--dry-run]          Generate migration from schema diff')
   console.log('  speexjs profile [options]                  Profile route performance')
@@ -329,6 +331,10 @@ async function main(): Promise<void> {
     }
     case 'env:check': {
       await envCheck()
+      break
+    }
+    case 'docs:verify': {
+      await docsVerify()
       break
     }
     case 'schema:diff': {

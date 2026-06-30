@@ -79,14 +79,15 @@ export class SamlGuard {
 
     const attributes: Record<string, string> = {}
     const attrRegex = /<(?:\w+:)?Attribute\s+[^>]*Name="([^"]*)"[^>]*>([\s\S]*?)<\/(?:\w+:)?Attribute>/g
-    let match: RegExpExecArray | null
-    while ((match = attrRegex.exec(xml)) !== null) {
-      const attrName = match[1]
-      const attrBody = match[2]
+    let match: RegExpExecArray | null = attrRegex.exec(xml)
+    while (match !== null) {
+      const attrName = match[1]!
+      const attrBody = match[2]!
       const valueMatch = attrBody.match(/<(?:\w+:)?AttributeValue[^>]*>([^<]*)<\/(?:\w+:)?AttributeValue>/)
       if (valueMatch !== null) {
-        attributes[attrName] = valueMatch[1]
+        attributes[attrName] = valueMatch[1]!
       }
+      match = attrRegex.exec(xml)
     }
 
     return { nameId, attributes }

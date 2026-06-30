@@ -630,7 +630,7 @@ function createChoicePrompt(question: string, choices: { id: string; name: strin
       const parts = input.split(',').map(p => p.trim())
       const selected = parts.map(p => {
         const idx = parseInt(p, 10) - 1
-        return idx >= 0 && idx < choices.length ? choices[idx].id : null
+        return idx >= 0 && idx < choices.length ? choices[idx]!.id : null
       }).filter(Boolean) as string[]
       resolve(selected)
     })

@@ -258,7 +258,7 @@ export class WebAuthn {
   ): { publicKeyPem: string; algorithm: number } {
     const coseKey = this.parseCoseKey(buffer.subarray(16))
     const publicKeyPem = this.coseKeyToPem(coseKey)
-    return { publicKeyPem, algorithm: coseKey[3] as number }
+    return { publicKeyPem, algorithm: coseKey.get(3) as number }
   }
 
   private parseCoseKey(buffer: Buffer): Map<number, unknown> {

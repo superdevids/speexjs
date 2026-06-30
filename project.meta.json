@@ -1,0 +1,16 @@
+{
+  "version": "2.1.1",
+  "releaseDate": "2026-06-30",
+  "testCount": 2375,
+  "coverage": "97.1",
+  "cliCommands": 44,
+  "cliWired": 42,
+  "subpathExports": 55,
+  "features": 550,
+  "knownBugs": 0,
+  "typescriptErrors": 0,
+  "zeroDependencies": true,
+  "bundleSize": "218 KB",
+  "bundleSizeGzip": "69 KB",
+  "lastUpdated": "2026-06-30"
+}

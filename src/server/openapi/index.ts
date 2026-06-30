@@ -140,10 +140,11 @@ function schemaToJsonSchema(schema?: Schema<unknown>): Record<string, unknown> |
     }
     if (name === 'DefaultSchema') {
       const base = schemaToJsonSchema((anySchema as any).inner)
+      const defaultVal = (anySchema as any).defaultValue
       if (base) {
-        return { ...base, default: anySchema.defaultValue }
+        return { ...base, default: defaultVal }
       }
-      return { default: anySchema.defaultValue }
+      return { default: defaultVal }
     }
     if (name === 'UnionSchema') {
       return schemaToOpenApi(anySchema)

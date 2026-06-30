@@ -17,9 +17,25 @@ vi.mock('node:fs', () => ({
   readFileSync: vi.fn(),
 }))
 
-vi.mock('child_process', () => ({
-  execSync: vi.fn(),
-}))
+vi.mock('child_process', () => {
+  const handlers = new Map<string, (...args: any[]) => void>()
+  return {
+    execSync: vi.fn(),
+    spawn: vi.fn(() => ({
+      on: vi.fn((event: string, handler: (...args: any[]) => void) => {
+        handlers.set(event, handler)
+        if (event === 'spawn') {
+          // Fire synchronously on next tick
+          setTimeout(() => handler(), 0)
+        }
+      }),
+      stdout: { on: vi.fn() },
+      stderr: { on: vi.fn() },
+      kill: vi.fn(),
+      pid: 12345,
+    })),
+  }
+})
 
 // ─── parseArgs ───────────────────────────────────────────────
 

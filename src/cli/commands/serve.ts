@@ -198,7 +198,7 @@ class HmrEngine {
   }
 
   async startProcess(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((pmResolve, reject) => {
       this.state = 'starting'
       const tsxPath = resolve(process.cwd(), 'node_modules', '.bin', process.platform === 'win32' ? 'tsx.cmd' : 'tsx')
 
@@ -217,20 +217,20 @@ class HmrEngine {
         })
       }
 
-      this.process.on('spawn', () => {
+      this.process?.on('spawn', () => {
         this.state = 'running'
         console.log(`  ${colors.green(`✅ Server started on http://${this.host}:${this.port}`)}`)
         console.log(`  ${colors.dim('  HMR 2.0 active — selective reload enabled')}`)
-        resolve()
+        pmResolve()
       })
 
-      this.process.on('error', (err) => {
+      this.process?.on('error', (err) => {
         this.state = 'stopped'
         console.error(`  ${colors.red(`✗ Failed to start server: ${err.message}`)}`)
         reject(err)
       })
 
-      this.process.on('exit', (code) => {
+      this.process?.on('exit', (code) => {
         if (this.state !== 'restarting') {
           this.state = 'stopped'
           if (code !== 0 && code !== null) {

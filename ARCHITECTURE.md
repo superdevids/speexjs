@@ -77,15 +77,12 @@ speexjs/
 │   │   ├── audit/            #   Audit logging
 │   │   ├── webhook/          #   Webhook system
 │   │   ├── devtools/          #   DevTools Dashboard (SSE, query inspect, cache, routes, queue, env)
-│   │   ├── search/            #   Full-Text Search Engine (TF-IDF, fuzzy, highlight)
-│   │   ├── storage/           #   Storage v2 (validation, image processing, signed URLs)
 │   │   ├── isr/              #   Incremental Static Regeneration
 │   │   ├── actions/          #   Form action handling
 │   │   ├── tasks/            #   Task runner
 │   │   ├── database-mesh/    #   SQL/CSV/REST data sources
 │   │   ├── experiments/      #   A/B experiments
 │   │   ├── cluster/          #   Multi-core clustering
-│   │   ├── router/deprecation.ts  #   API deprecation management
 │   │   ├── edge/             #   Edge runtime support
 │   │   ├── health/           #   Health check endpoint
 │   │   └── ...               #   ~40+ server submodules

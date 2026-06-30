@@ -126,9 +126,9 @@ export class OidcGuard {
     const parts = idToken.split('.')
     if (parts.length !== 3) throw new Error('Invalid JWT format')
 
-    const header = this.base64UrlDecodeToJson<JwtHeader>(parts[0])
-    const payload = this.base64UrlDecodeToJson<JwtPayload>(parts[1])
-    const signature = parts[2]
+    const header = this.base64UrlDecodeToJson<JwtHeader>(parts[0]!)
+    const payload = this.base64UrlDecodeToJson<JwtPayload>(parts[1]!)
+    const signature = parts[2]!
 
     if (!header.alg || header.alg === 'none') {
       throw new Error('JWT algorithm not supported')
@@ -161,7 +161,7 @@ export class OidcGuard {
       throw new Error('No matching JWK found')
     }
 
-    const valid = await this.verifyJwtSignature(header.alg, `${parts[0]}.${parts[1]}`, signature, jwk)
+    const valid = await this.verifyJwtSignature(header.alg, `${parts[0]!}.${parts[1]!}`, signature, jwk)
     if (!valid) throw new Error('JWT signature verification failed')
 
     return payload

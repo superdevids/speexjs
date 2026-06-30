@@ -21,8 +21,8 @@ We will respond within **48 hours** to confirm receipt.
 
 | Version | Support |
 |---------|---------|
-| 3.x | ✅ Active |
-| 2.x | ✅ Limited |
+| 3.x | 🔮 Future |
+| 2.x | ✅ Active |
 | 1.x | ⚠️ End of life |
 | < 1.0 | ❌ Not supported |
 
