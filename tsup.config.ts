@@ -63,5 +63,5 @@ export default defineConfig({
   splitting: true,
   minify: true,
   treeshake: true,
-  external: ['tsx', 'ws', 'better-sqlite3'],
+  external: ['tsx', 'ws', 'better-sqlite3', 'sharp'],
 })
